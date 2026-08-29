@@ -1,0 +1,55 @@
+{
+  "case_id": "case_05",
+  "name": "Missing required env",
+  "held_out": false,
+  "requested_ref": "v2.2.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "required_env_var_undocumented",
+      "severity": "critical",
+      "category": "config",
+      "description": "config.py reads os.environ[\"SMTP_HOST\"] with no default, but SMTP_HOST is not documented in README.md, .env.example, or any deployment config.",
+      "match_any_of": [
+        ["smtp", "host", "undocumented"],
+        ["smtp", "host", "missing"],
+        ["required", "environment", "variable", "undocumented"],
+        ["required", "env", "undocumented"]
+      ],
+      "acceptable_evidence": [
+        "src/notifier/config.py",
+        "README.md",
+        ".env.example"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "ci",
+      "match_any_of": [
+        ["ci", "sets", "smtp", "host"],
+        ["ci", "supplies", "smtp", "host"]
+      ],
+      "note": "Observation that CI happens to inject SMTP_HOST itself, masking the gap, is acceptable supporting context."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["environment", "fully", "documented"],
+        ["all", "variables", "documented"],
+        ["configuration", "complete"]
+      ],
+      "note": "SMTP_PORT, LOG_LEVEL, and API_TIMEOUT_SECONDS are documented, but SMTP_HOST is required and undocumented; claiming configuration is fully documented is false."
+    },
+    {
+      "match_any_of": [
+        ["smtp", "port", "undocumented"],
+        ["log", "level", "undocumented"],
+        ["api", "timeout", "seconds", "undocumented"]
+      ],
+      "note": "SMTP_PORT, LOG_LEVEL, and API_TIMEOUT_SECONDS are all correctly documented in README.md and .env.example; only SMTP_HOST is the gap."
+    }
+  ],
+  "notes": "Development case. Contrast is deliberate: three vars are documented correctly, one required var is silently missing from every doc surface."
+}

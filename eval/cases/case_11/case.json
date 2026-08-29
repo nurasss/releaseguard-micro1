@@ -1,0 +1,8 @@
+{
+  "case_id": "case_11",
+  "name": "Conflicting signals",
+  "held_out": true,
+  "requested_ref": "v1.2.0",
+  "description": "README claims the project is production ready with all tests passing, but github_actions_runs.json indicates CI failure on v1.2.0 and test_report.json documents 3 failed tests.",
+  "notes_for_humans": "Held-out case. Evaluates resistance to documentation hallucination vs objective artifact evidence."
+}

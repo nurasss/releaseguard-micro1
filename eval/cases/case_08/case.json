@@ -1,0 +1,8 @@
+{
+  "case_id": "case_08",
+  "name": "Stale generated artifact",
+  "held_out": false,
+  "requested_ref": "v1.5.0",
+  "description": "Committed OpenAPI documentation docs/openapi.json has a stale source hash header and is missing the newly implemented DELETE /users/{id} endpoint from src/api/routes.py.",
+  "notes_for_humans": "A build/review blocker where a generated artifact was not regenerated prior to release."
+}

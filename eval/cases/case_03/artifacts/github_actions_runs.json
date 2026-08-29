@@ -1,0 +1,20 @@
+[
+  {
+    "workflow_name": "CI",
+    "path": ".github/workflows/ci.yml",
+    "head_branch": "v3.0.0",
+    "event": "push",
+    "conclusion": "failure",
+    "created_at": "2026-08-22T11:05:00Z",
+    "html_url": "https://github.com/example/data-sync/actions/runs/812"
+  },
+  {
+    "workflow_name": "CI",
+    "path": ".github/workflows/ci.yml",
+    "head_branch": "main",
+    "event": "push",
+    "conclusion": "success",
+    "created_at": "2026-08-21T08:40:00Z",
+    "html_url": "https://github.com/example/data-sync/actions/runs/811"
+  }
+]

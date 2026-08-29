@@ -1,0 +1,8 @@
+{
+  "case_id": "case_01",
+  "name": "Clean release",
+  "held_out": false,
+  "requested_ref": "v1.4.0",
+  "description": "Small Python CLI where every release signal is consistent: manifest version matches the requested tag, three real tests pass, CI is configured for both pushes and tags and succeeded for this tag, a lock file is committed, and README/.env.example fully document configuration.",
+  "notes_for_humans": "Reference 'everything is fine' case. Exists to catch a system that invents blockers under pressure to report something."
+}

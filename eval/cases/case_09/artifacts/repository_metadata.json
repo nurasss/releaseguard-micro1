@@ -1,0 +1,8 @@
+{
+  "default_branch": "main",
+  "branches": ["main", "release/v2.4.0"],
+  "description": "Data pipeline processing engine",
+  "tags": ["v2.3.0", "v2.4.0"],
+  "releases": [],
+  "topics": ["data", "pipeline"]
+}

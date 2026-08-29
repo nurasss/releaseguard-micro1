@@ -1,0 +1,8 @@
+{
+  "case_id": "case_07",
+  "name": "Version mismatch",
+  "held_out": false,
+  "requested_ref": "v2.1.0",
+  "description": "Release version in manifest (pyproject.toml) is 2.0.3, but requested ref is v2.1.0 and CHANGELOG contains 2.1.0.",
+  "notes_for_humans": "A three-way contradiction between git tag v2.1.0, CHANGELOG.md 2.1.0, and pyproject.toml 2.0.3."
+}

@@ -1,0 +1,15 @@
+{
+  "default_branch": "main",
+  "branches": ["main"],
+  "description": "Authentication and authorization microservice",
+  "tags": ["v2.0.0", "v2.0.3", "v2.1.0"],
+  "releases": [
+    {
+      "tag_name": "v2.1.0",
+      "name": "Release 2.1.0",
+      "draft": false,
+      "prerelease": false
+    }
+  ],
+  "topics": ["auth", "security", "oauth2"]
+}

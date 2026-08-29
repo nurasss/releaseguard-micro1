@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auth-service"
+version = "2.0.3"
+description = "Authentication and authorization microservice"
+authors = [{ name = "Core Team", email = "team@example.com" }]
+dependencies = [
+    "pydantic>=2.0",
+    "fastapi>=0.100.0"
+]

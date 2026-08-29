@@ -1,0 +1,8 @@
+{
+  "case_id": "case_03",
+  "name": "CI red",
+  "held_out": false,
+  "requested_ref": "v3.0.0",
+  "description": "The repository itself is healthy (source and tests would pass locally), but the most recent GitHub Actions run recorded for the requested ref v3.0.0 has conclusion=failure. No other defects are present.",
+  "notes_for_humans": "Signal comes purely from github_actions_runs.json; repo/ contains no bug and no missing configuration."
+}

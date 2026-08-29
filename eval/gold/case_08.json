@@ -1,0 +1,51 @@
+{
+  "case_id": "case_08",
+  "name": "Stale generated artifact",
+  "held_out": false,
+  "requested_ref": "v1.5.0",
+  "expected_decision": "REVIEW",
+  "blockers": [
+    {
+      "blocker_id": "stale_generated_openapi_spec",
+      "severity": "high",
+      "category": "build",
+      "description": "Committed OpenAPI specification docs/openapi.json is stale compared to src/api/routes.py and missing the new DELETE /users/{id} endpoint.",
+      "match_any_of": [
+        ["stale", "generated", "artifact"],
+        ["stale", "openapi", "json"],
+        ["generated", "schema", "outdated"],
+        ["openapi", "spec", "outdated"],
+        ["stale", "generated", "file"],
+        ["openapi", "out", "of", "date"],
+        ["generated", "openapi", "out", "date"],
+        ["generated", "file", "not", "match"],
+        ["generated", "file", "not", "match", "source"],
+        ["document", "generated", "older", "revision"]
+      ],
+      "acceptable_evidence": [
+        "docs/openapi.json",
+        "src/api/routes.py",
+        "scripts/generate_openapi.py"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "docs",
+      "match_any_of": [
+        ["openapi", "documentation"]
+      ],
+      "note": "Observation regarding documentation sync."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["generated", "artifacts", "fresh"],
+        ["openapi", "up", "to", "date"]
+      ],
+      "note": "Claiming generated files are up to date is false."
+    }
+  ],
+  "notes": "Development case. Generated OpenAPI spec is missing newly added route and contains outdated source hash."
+}

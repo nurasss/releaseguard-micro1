@@ -1,0 +1,53 @@
+{
+  "case_id": "case_12",
+  "name": "Challenging",
+  "held_out": true,
+  "requested_ref": "v4.0.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "integration_tests_excluded_from_ci",
+      "severity": "critical",
+      "category": "tests",
+      "description": "Critical integration tests are excluded from CI test execution via pytest marker filter flag (-m 'not integration'), leaving the integration path unverified despite green CI.",
+      "match_any_of": [
+        ["integration", "test", "not", "run"],
+        ["integration", "tests", "not", "run"],
+        ["integration", "tests", "excluded"],
+        ["integration", "tests", "skipped"],
+        ["integration", "tests", "missing"],
+        ["untested", "integration", "path"],
+        ["integration", "tests", "not", "executed"],
+        ["integration", "tests", "never", "run"],
+        ["integration", "path", "not", "verified"],
+        ["integration", "test", "filtered", "out"],
+        ["integration", "tests", "omitted"]
+      ],
+      "acceptable_evidence": [
+        ".github/workflows/ci.yml",
+        "tests/test_payment_gateway_integration.py",
+        "artifacts/test_report.json"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "ci",
+      "match_any_of": [
+        ["ci", "test", "filter"]
+      ],
+      "note": "Observation categorizing the pytest marker exclusion under CI configuration."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["all", "tests", "executed"],
+        ["integration", "tests", "passed"],
+        ["full", "test", "coverage"]
+      ],
+      "note": "Claiming integration tests ran successfully is false."
+    }
+  ],
+  "notes": "Flagship held-out case. CI conclusion is success and test_report has 0 failures, but integration tests are excluded by workflow filter (-m 'not integration') and omitted from test_report."
+}

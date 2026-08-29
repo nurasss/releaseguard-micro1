@@ -1,0 +1,32 @@
+{
+  "case_id": "case_09",
+  "name": "Misconfigured workflow",
+  "held_out": true,
+  "requested_ref": "release/v2.4.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "ci_release_trigger_missing",
+      "severity": "critical",
+      "category": "ci",
+      "description": "The release workflow is not triggered for the release branch or release tag.",
+      "match_any_of": [
+        ["release", "workflow", "trigger"],
+        ["release", "branch", "not", "run"],
+        ["release", "tag", "not", "run"],
+        ["release", "ci", "not", "execute"],
+        ["release", "trigger", "excludes", "branch"],
+        ["workflow", "not", "triggered", "release"],
+        ["release", "workflow", "not", "run"]
+      ],
+      "acceptable_evidence": [".github/workflows/release.yml"]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {"category": "ci", "match_any_of": [["workflow", "permissions"]], "note": "A narrowly stated workflow-permissions observation is an acceptable secondary finding."}
+  ],
+  "forbidden_findings": [
+    {"match_any_of": [["tests", "passing"]], "note": "A passing-test claim is unsupported by this workflow-trigger fixture and is a known trap."}
+  ],
+  "notes": "Held-out case. The release trigger must be evaluated from the workflow configuration, not inferred from unrelated CI success."
+}

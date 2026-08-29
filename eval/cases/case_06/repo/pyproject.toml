@@ -1,0 +1,12 @@
+[project]
+name = "metrics-exporter"
+version = "0.5.1"
+description = "Exports application metrics in Prometheus format."
+requires-python = ">=3.10"
+
+[project.scripts]
+build-release = "scripts.build_release:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

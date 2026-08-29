@@ -1,0 +1,50 @@
+{
+  "case_id": "case_07",
+  "name": "Version mismatch",
+  "held_out": false,
+  "requested_ref": "v2.1.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "version_metadata_mismatch",
+      "severity": "critical",
+      "category": "release_metadata",
+      "description": "Release version in pyproject.toml (2.0.3) does not match requested ref v2.1.0 and CHANGELOG (2.1.0).",
+      "match_any_of": [
+        ["version", "mismatch"],
+        ["version", "conflict"],
+        ["manifest", "version", "mismatch"],
+        ["pyproject", "version", "mismatch"],
+        ["version", "inconsistency"],
+        ["release", "version", "inconsistency"],
+        ["version", "does", "not", "match"],
+        ["manifest", "version", "not", "match"],
+        ["manifest", "version", "tag"],
+        ["version", "disagrees", "tag"]
+      ],
+      "acceptable_evidence": [
+        "pyproject.toml",
+        "CHANGELOG.md"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "docs",
+      "match_any_of": [
+        ["changelog", "version"]
+      ],
+      "note": "Observation about changelog version format."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["version", "consistent"],
+        ["version", "aligned"]
+      ],
+      "note": "Claim that versions are aligned is contradicted by pyproject.toml."
+    }
+  ],
+  "notes": "Development case. Tripartite mismatch between requested ref v2.1.0, CHANGELOG 2.1.0, and manifest 2.0.3."
+}

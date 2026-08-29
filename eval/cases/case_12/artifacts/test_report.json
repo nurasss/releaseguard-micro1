@@ -1,0 +1,23 @@
+{
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "tests/test_unit.py::test_config_parser",
+      "outcome": "passed"
+    },
+    {
+      "name": "tests/test_unit.py::test_payload_formatter",
+      "outcome": "passed"
+    },
+    {
+      "name": "tests/test_unit.py::test_validation_rule",
+      "outcome": "passed"
+    },
+    {
+      "name": "tests/test_unit.py::test_batch_slicing",
+      "outcome": "passed"
+    }
+  ]
+}

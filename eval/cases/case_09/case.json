@@ -1,0 +1,8 @@
+{
+  "case_id": "case_09",
+  "name": "Misconfigured workflow",
+  "held_out": true,
+  "requested_ref": "release/v2.4.0",
+  "description": "The release workflow .github/workflows/release.yml is restricted to branch main and does not trigger for release/v2.4.0 or tags.",
+  "notes_for_humans": "Held-out case. The release trigger must be evaluated from the workflow configuration, not inferred from unrelated CI success."
+}

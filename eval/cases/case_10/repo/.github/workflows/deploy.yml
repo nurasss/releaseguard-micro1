@@ -1,0 +1,19 @@
+name: Deploy
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build container image
+        run: docker build -t payment-service:${{ github.ref_name }} .
+      - name: Push container image
+        run: echo "Pushing image to registry"
+      - name: Deploy service
+        run: echo "Triggering container update on cluster"

@@ -1,0 +1,11 @@
+[
+  {
+    "workflow_name": "CI",
+    "path": ".github/workflows/ci.yml",
+    "head_branch": "release/v2.4.0",
+    "event": "push",
+    "conclusion": "success",
+    "created_at": "2026-08-28T12:00:00Z",
+    "html_url": "https://github.com/example/data-pipeline/actions/runs/301"
+  }
+]

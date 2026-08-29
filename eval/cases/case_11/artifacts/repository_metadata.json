@@ -1,0 +1,15 @@
+{
+  "default_branch": "main",
+  "branches": ["main"],
+  "description": "Notification and event streaming service",
+  "tags": ["v1.1.0", "v1.2.0"],
+  "releases": [
+    {
+      "tag_name": "v1.2.0",
+      "name": "Release 1.2.0",
+      "draft": false,
+      "prerelease": false
+    }
+  ],
+  "topics": ["notifications", "events", "messaging"]
+}

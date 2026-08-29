@@ -1,0 +1,8 @@
+{
+  "case_id": "case_04",
+  "name": "No tests",
+  "held_out": false,
+  "requested_ref": "v1.0.0",
+  "description": "There is no tests/ directory, no test configuration of any kind, and the CI workflow only runs a linter, never a test step. The recorded CI run for this ref succeeded, because linting succeeded. There is no evidence the code is actually broken, only that it is unverified.",
+  "notes_for_humans": "Calibration case: absence of tests is a serious risk but not a proven breakage, so severity must be high, not critical, and expected_decision is REVIEW rather than NO-GO."
+}

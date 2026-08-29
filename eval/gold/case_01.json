@@ -1,0 +1,44 @@
+{
+  "case_id": "case_01",
+  "name": "Clean release",
+  "held_out": false,
+  "requested_ref": "v1.4.0",
+  "expected_decision": "GO",
+  "blockers": [],
+  "acceptable_extra_findings": [
+    {
+      "category": "docs",
+      "match_any_of": [
+        ["lock", "file"]
+      ],
+      "note": "A neutral observation that a lock file is present is acceptable but not required."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["tests", "missing"],
+        ["no", "tests"],
+        ["tests", "absent"]
+      ],
+      "note": "Three real tests exist under tests/ and pass; a claim that tests are missing or absent is false."
+    },
+    {
+      "match_any_of": [
+        ["ci", "not", "configured"],
+        ["ci", "missing"],
+        ["workflow", "missing"]
+      ],
+      "note": "ci.yml exists and triggers on both push and tags; a claim that CI is missing or not configured is false."
+    },
+    {
+      "match_any_of": [
+        ["environment", "undocumented"],
+        ["env", "undocumented"],
+        ["variables", "undocumented"]
+      ],
+      "note": "README.md documents every environment variable used by load_config(), and .env.example lists all three; a claim of undocumented configuration is false."
+    }
+  ],
+  "notes": "Development case. All signals are consistent and release-ready; expects zero blockers and exercises the forbidden_findings traps against fabricated issues."
+}

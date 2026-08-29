@@ -1,0 +1,12 @@
+{
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "failures": [
+    {
+      "test": "test_calculate_total_applies_tax_rate",
+      "error_type": "AssertionError",
+      "message": "AssertionError: assert 100.2 == 120.0"
+    }
+  ]
+}

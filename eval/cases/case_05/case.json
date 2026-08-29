@@ -1,0 +1,8 @@
+{
+  "case_id": "case_05",
+  "name": "Missing required env",
+  "held_out": false,
+  "requested_ref": "v2.2.0",
+  "description": "config.py reads os.environ[\"SMTP_HOST\"] at import time with no default, so the service will crash on startup if it is unset. SMTP_HOST is documented nowhere: not in README.md, not in .env.example, not in deployment config. SMTP_PORT, LOG_LEVEL, and API_TIMEOUT_SECONDS are all correctly documented in both README.md and .env.example, giving a visible contrast with the undocumented required variable.",
+  "notes_for_humans": "CI happens to set SMTP_HOST itself, which is why the recorded run is green; that must not be read as evidence the variable is safely optional."
+}

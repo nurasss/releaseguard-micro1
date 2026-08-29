@@ -1,0 +1,22 @@
+{
+  "total": 9,
+  "passed": 6,
+  "failed": 3,
+  "failures": [
+    {
+      "test": "test_auth_token_refresh",
+      "error_type": "AssertionError",
+      "message": "AssertionError: Token expired during dispatch"
+    },
+    {
+      "test": "test_payment_webhook",
+      "error_type": "ConnectionError",
+      "message": "ConnectionError: Gateway connection timeout"
+    },
+    {
+      "test": "test_rate_limiter",
+      "error_type": "RuntimeError",
+      "message": "RuntimeError: Redis distributed lock failure"
+    }
+  ]
+}

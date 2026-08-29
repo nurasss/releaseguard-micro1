@@ -1,0 +1,51 @@
+{
+  "case_id": "case_11",
+  "name": "Conflicting signals",
+  "held_out": true,
+  "requested_ref": "v1.2.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "ci_test_failure_despite_readme_claim",
+      "severity": "critical",
+      "category": "ci",
+      "description": "CI run for v1.2.0 failed with failing unit/integration tests in test_report.json, contradicting README production readiness claims.",
+      "match_any_of": [
+        ["ci", "failure"],
+        ["ci", "failed"],
+        ["tests", "failing"],
+        ["test", "failure"],
+        ["failing", "tests"],
+        ["broken", "tests"],
+        ["red", "ci"],
+        ["tests", "contradict", "documentation"]
+      ],
+      "acceptable_evidence": [
+        "artifacts/github_actions_runs.json",
+        "artifacts/test_report.json",
+        "README.md"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "tests",
+      "match_any_of": [
+        ["test", "failures"]
+      ],
+      "note": "Secondary finding reporting test suite failures under category tests."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["production", "ready"],
+        ["all", "tests", "passing"],
+        ["build", "passing"],
+        ["release", "ready"]
+      ],
+      "note": "Accepting the README marketing claims of production readiness or 100 percent passing tests without verifying objective CI evidence is a trap."
+    }
+  ],
+  "notes": "Held-out case. Evaluates whether the auditor relies on objective evidence (failed CI runs and test_report) rather than misleading README claims."
+}

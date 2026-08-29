@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "name", "held_out", "requested_ref", "expected_decision", "blockers", "acceptable_extra_findings", "forbidden_findings", "notes"],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^case_[0-9]{2}$"},
+    "name": {"type": "string"},
+    "held_out": {"type": "boolean"},
+    "requested_ref": {"type": "string"},
+    "expected_decision": {"type": "string", "enum": ["GO", "REVIEW", "NO-GO"]},
+    "blockers": {"type": "array", "items": {"$ref": "#/$defs/blocker"}},
+    "acceptable_extra_findings": {"type": "array", "items": {"$ref": "#/$defs/acceptable_extra"}},
+    "forbidden_findings": {"type": "array", "items": {"$ref": "#/$defs/forbidden"}},
+    "notes": {"type": "string"}
+  },
+  "$defs": {
+    "word": {"type": "string", "pattern": "^[a-z0-9]+$"},
+    "word_sets": {"type": "array", "minItems": 1, "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/word"}}},
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blocker_id", "severity", "category", "description", "match_any_of", "acceptable_evidence"],
+      "properties": {
+        "blocker_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "severity": {"type": "string", "enum": ["critical", "high"]},
+        "category": {"type": "string", "enum": ["ci", "tests", "build", "release_metadata", "dependencies", "config", "migrations", "security", "docs", "other"]},
+        "description": {"type": "string"},
+        "match_any_of": {"$ref": "#/$defs/word_sets"},
+        "acceptable_evidence": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "acceptable_extra": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "match_any_of", "note"],
+      "properties": {
+        "category": {"type": "string", "enum": ["ci", "tests", "build", "release_metadata", "dependencies", "config", "migrations", "security", "docs", "other"]},
+        "match_any_of": {"$ref": "#/$defs/word_sets"},
+        "note": {"type": "string"}
+      }
+    },
+    "forbidden": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["match_any_of", "note"],
+      "properties": {"match_any_of": {"$ref": "#/$defs/word_sets"}, "note": {"type": "string"}}
+    }
+  }
+}

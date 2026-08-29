@@ -1,0 +1,8 @@
+# Normalise everything to LF in the repository and on checkout. Without this,
+# core.autocrlf=true on Windows rewrites line endings at checkout, which changes
+# every byte-level hash and breaks the frozen fixture commit SHAs.
+* text=auto eol=lf
+
+# Evaluation fixtures are hashed byte-for-byte (EVALUATION_SPEC.md section 7).
+# Disable all conversion here so a clone reproduces identical SHAs on any OS.
+eval/cases/** -text

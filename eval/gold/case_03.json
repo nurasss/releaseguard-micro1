@@ -1,0 +1,45 @@
+{
+  "case_id": "case_03",
+  "name": "CI red",
+  "held_out": false,
+  "requested_ref": "v3.0.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "ci_run_failed",
+      "severity": "critical",
+      "category": "ci",
+      "description": "The most recent GitHub Actions run for ref v3.0.0 has conclusion=failure.",
+      "match_any_of": [
+        ["ci", "failed"],
+        ["ci", "failure"],
+        ["workflow", "failed"],
+        ["run", "failed"],
+        ["workflow", "failure"],
+        ["ci", "red"]
+      ],
+      "acceptable_evidence": [
+        "github_actions_runs.json"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["ci", "green"],
+        ["ci", "passing"],
+        ["ci", "success"]
+      ],
+      "note": "The run for the requested ref is conclusion=failure; claiming CI is green or passing is false."
+    },
+    {
+      "match_any_of": [
+        ["test", "failing"],
+        ["broken", "test"]
+      ],
+      "note": "There is no test_report.json in this case and the tests in repo/ are correct; the CI failure signal must not be attributed to a fabricated failing test."
+    }
+  ],
+  "notes": "Development case. Isolated CI-only signal; repo/ and tests are otherwise clean."
+}

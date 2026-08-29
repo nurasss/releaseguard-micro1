@@ -1,0 +1,8 @@
+{
+  "case_id": "case_06",
+  "name": "Broken build script",
+  "held_out": false,
+  "requested_ref": "v0.5.1",
+  "description": "The declared release build command, scripts/build_release.py, imports metrics_exporter.packaging_utils, a module that does not exist anywhere in src/metrics_exporter/. Running the build fails immediately with ModuleNotFoundError. build_report.json records exit_code=1 and a stderr_tail that matches this exact failure. CI (which only runs pytest, not the build script) is green and unrelated.",
+  "notes_for_humans": "Build failure is isolated from CI and from tests: pytest passes, the recorded workflow run is success, only the separate release build command is broken."
+}

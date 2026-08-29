@@ -1,0 +1,14 @@
+{
+  "default_branch": "main",
+  "description": "Sends email notifications for account events.",
+  "tags": ["v2.1.0", "v2.2.0"],
+  "releases": [
+    {
+      "tag_name": "v2.2.0",
+      "name": "Release 2.2.0",
+      "draft": false,
+      "prerelease": false
+    }
+  ],
+  "topics": ["notifications", "python"]
+}

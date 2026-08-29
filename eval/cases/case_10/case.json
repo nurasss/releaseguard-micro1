@@ -1,0 +1,8 @@
+{
+  "case_id": "case_10",
+  "name": "Missing migration step",
+  "held_out": true,
+  "requested_ref": "v3.0.0",
+  "description": "A new database migration migrations/0003_add_payment_methods.sql is added in release v3.0.0, but neither the deploy workflow .github/workflows/deploy.yml nor RELEASE.md contains a migration execution step.",
+  "notes_for_humans": "Held-out case. Requires verifying presence of migration files and absence of corresponding execution step in release deployment procedures."
+}

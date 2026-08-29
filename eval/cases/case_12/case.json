@@ -1,0 +1,8 @@
+{
+  "case_id": "case_12",
+  "name": "Challenging",
+  "held_out": true,
+  "requested_ref": "v4.0.0",
+  "description": "All CI workflows report success with 0 test failures, but .github/workflows/ci.yml runs pytest with -m 'not integration', skipping the critical end-to-end integration suite tests/test_payment_gateway_integration.py which is absent from test_report.json.",
+  "notes_for_humans": "Flagship case requiring tripartite correlation across workflow flags, pytest test markers, and actual test_report execution items."
+}

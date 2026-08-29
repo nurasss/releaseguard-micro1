@@ -1,0 +1,19 @@
+# Local secrets — never committed
+.env
+
+# Python build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# ReleaseGuard runtime output. Leading slash matters: without it these patterns
+# would also swallow eval/cases/*/artifacts/, which is frozen benchmark data.
+/runs/
+/trajectories/
+/artifacts/
+
+# Local databases
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

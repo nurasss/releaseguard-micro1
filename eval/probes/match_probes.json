@@ -1,0 +1,106 @@
+{
+  "_about": "Independently authored phrasings of a CORRECT finding for each gold blocker. Written by a party other than the gold authors, before any system run, to detect brittle match_any_of keyword sets. Every probe MUST match its blocker. Probes are never shown to any agent and are not part of an audit.",
+  "probes": {
+    "case_02": [
+      ["Unit test failure in invoice calculation", "The recorded test report shows one failing test, test_calculate_total_applies_tax_rate."],
+      ["Failing test blocks the release", "A unit test fails because calculate_total returns 100.2 instead of 120.0."],
+      ["Test suite is red", "One test does not pass in the stored report for this commit."]
+    ],
+    "case_03": [
+      ["CI run failed for the release tag", "The most recent GitHub Actions run for v3.0.0 concluded with failure."],
+      ["Continuous integration is failing", "The applicable workflow run has conclusion failure."],
+      ["Release blocked by red CI", "The pipeline did not succeed on the requested ref."]
+    ],
+    "case_04": [
+      ["No test suite present", "The repository contains no tests directory and no test configuration."],
+      ["Missing automated tests", "There is no test suite and CI only runs linting."],
+      ["Test coverage is absent", "No tests are defined anywhere in the project."]
+    ],
+    "case_05": [
+      ["Required environment variable is undocumented", "SMTP_HOST is read at startup but is not documented in README or .env.example."],
+      ["Undocumented required configuration", "A required environment variable has no default and is missing from the documentation."],
+      ["Missing required env var declaration", "The service needs SMTP_HOST which is declared nowhere."]
+    ],
+    "case_06": [
+      ["Release build fails", "The build script exits with code 1 because of a missing module."],
+      ["Build command is broken", "The release build script raises an import error during packaging."],
+      ["Build failure blocks the release", "The recorded build report shows a non-zero exit code."]
+    ],
+    "case_07": [
+      ["Version mismatch between manifest and tag", "pyproject.toml declares 2.0.3 while the requested ref is v2.1.0."],
+      ["Release version inconsistency", "The manifest version does not match the release tag or the changelog entry."],
+      ["Manifest version does not match the release tag", "The declared package version disagrees with the tag being released."]
+    ],
+    "case_08": [
+      ["Generated OpenAPI spec is out of date", "docs/openapi.json does not include the DELETE users route defined in routes.py."],
+      ["Committed generated file does not match its source", "The OpenAPI document was generated from an older revision of routes.py."],
+      ["Stale generated artifact", "docs/openapi.json is stale relative to src/api/routes.py."]
+    ],
+    "case_09": [
+      ["Release workflow does not run for the release branch", "release.yml triggers only on main, so the release ref is never built."],
+      ["Misconfigured release trigger", "The release workflow trigger excludes the requested release branch."],
+      ["Release CI will not execute for this ref", "No workflow is triggered for the release branch and no alternative exists."]
+    ],
+    "case_10": [
+      ["Release procedure omits the database migration", "0003_add_payment_methods.sql is not applied by the deploy workflow or RELEASE.md."],
+      ["Missing migration step in deployment", "The deploy workflow does not run any database migration command."],
+      ["Unapplied database migration", "A new migration exists but no release step executes it."]
+    ],
+    "case_11": [
+      ["CI is failing despite README claims", "The latest run concluded failure and three tests failed."],
+      ["Failing tests contradict the documentation", "The stored report records three test failures for this ref."],
+      ["Red CI on the release ref", "GitHub Actions reports failure for v1.2.0."]
+    ],
+    "case_12": [
+      ["Integration tests are excluded from CI", "ci.yml runs pytest with a marker filter, so the payment gateway test never executes."],
+      ["Critical integration path is not verified", "The integration test exists but is filtered out of the CI run."],
+      ["Integration tests never run in CI", "The stored report contains only unit tests and omits the integration suite."]
+    ]
+  },
+  "negative_probes": {
+    "case_02": [
+      ["Slow unit test execution", "Several billing unit tests take over two seconds to complete due to inefficient fixture setup."],
+      ["Test assertions lack descriptive messages", "The invoice test suite contains assertions without custom error messages for debugging."]
+    ],
+    "case_03": [
+      ["Workflow missing execution timeout", "The continuous integration pipeline does not define a job timeout limit."],
+      ["Excessive workflow permissions", "The GitHub Actions CI configuration grants write permissions to all default tokens."]
+    ],
+    "case_04": [
+      ["Test code coverage is not tracked", "The project has no coverage reporter configured in pytest settings."],
+      ["Tests do not run in parallel", "Test execution does not utilize pytest-xdist to distribute test cases across multiple CPU cores."]
+    ],
+    "case_05": [
+      ["Environment variable defaults are hardcoded", "The configuration file hardcodes fallback values for API timeouts instead of reading from config maps."],
+      ["Missing environment validation schema", "The settings parser does not validate port ranges or URL formats on application startup."]
+    ],
+    "case_06": [
+      ["Build script produces uncompressed artifacts", "The release packaging tool creates raw tarballs without gzip compression flags."],
+      ["Build artifacts lack provenance signatures", "The build pipeline does not generate cryptographic signatures or checksum files for distribution binaries."]
+    ],
+    "case_07": [
+      ["Release changelog lacks migration notes", "The release notes entry in CHANGELOG.md does not describe breaking changes for upgrading users."],
+      ["Release git tag is unsigned", "The release tag v2.1.0 is a lightweight tag and was not cryptographically signed with GPG."]
+    ],
+    "case_08": [
+      ["OpenAPI schema lacks response examples", "The OpenAPI specification does not define mock response bodies for error status codes."],
+      ["Generator script lacks formatting step", "The schema generation script scripts/generate_openapi.py does not run an auto-formatter on the resulting json."]
+    ],
+    "case_09": [
+      ["Release workflow missing concurrency group", "The release pipeline does not define a concurrency group to prevent overlapping deployments."],
+      ["Release job uses outdated runner image", "The release workflow specifies ubuntu-20.04 which is nearing end of life."]
+    ],
+    "case_10": [
+      ["Database migration lacks rollback script", "The new SQL migration file does not provide a corresponding down migration or rollback procedure."],
+      ["Migration naming convention inconsistent", "The migration files use sequential numbering instead of timestamp prefixes for ordering."]
+    ],
+    "case_11": [
+      ["README links point to staging environment", "Documentation badge URLs reference internal staging domains rather than production endpoints."],
+      ["Test report missing duration metrics", "The generated test report does not include execution time timestamps for individual test cases."]
+    ],
+    "case_12": [
+      ["Integration tests lack database isolation", "The payment integration test suite shares database state across tests without running cleanup fixtures."],
+      ["Slow integration test execution", "The payment gateway tests take several minutes because they perform real HTTP retries against external endpoints."]
+    ]
+  }
+}

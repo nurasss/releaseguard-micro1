@@ -1,0 +1,15 @@
+{
+  "default_branch": "main",
+  "branches": ["main"],
+  "description": "High throughput financial settlement engine",
+  "tags": ["v3.9.0", "v4.0.0"],
+  "releases": [
+    {
+      "tag_name": "v4.0.0",
+      "name": "Release 4.0.0",
+      "draft": false,
+      "prerelease": false
+    }
+  ],
+  "topics": ["finance", "settlement", "transactions"]
+}

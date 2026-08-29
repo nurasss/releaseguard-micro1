@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phoenix-service"
+version = "1.2.0"
+description = "Notification and event streaming service"
+dependencies = ["pydantic>=2.0"]

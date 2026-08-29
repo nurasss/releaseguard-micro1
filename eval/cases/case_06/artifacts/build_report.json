@@ -1,0 +1,5 @@
+{
+  "command": "python scripts/build_release.py",
+  "exit_code": 1,
+  "stderr_tail": "Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'"
+}

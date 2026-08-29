@@ -1,0 +1,54 @@
+{
+  "case_id": "case_06",
+  "name": "Broken build script",
+  "held_out": false,
+  "requested_ref": "v0.5.1",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "release_build_script_fails",
+      "severity": "critical",
+      "category": "build",
+      "description": "scripts/build_release.py fails with exit_code=1: it imports metrics_exporter.packaging_utils, a module that does not exist in the repository.",
+      "match_any_of": [
+        ["build", "fails"],
+        ["build", "failed"],
+        ["build", "script", "broken"],
+        ["packaging", "utils", "missing"],
+        ["build", "failure"],
+        ["release", "build", "failed"]
+      ],
+      "acceptable_evidence": [
+        "build_report.json",
+        "repo/scripts/build_release.py"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "docs",
+      "match_any_of": [
+        ["readme", "build", "command"]
+      ],
+      "note": "Observation that README documents a build command that is itself broken is acceptable supporting context."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["ci", "failed"],
+        ["ci", "red"],
+        ["tests", "failing"]
+      ],
+      "note": "CI only runs pytest and is green; tests pass. The failure is isolated to the separate release build script, not CI or tests."
+    },
+    {
+      "match_any_of": [
+        ["build", "succeeded"],
+        ["build", "passing"]
+      ],
+      "note": "build_report.json shows exit_code=1 with a ModuleNotFoundError; claiming the build succeeded is false."
+    }
+  ],
+  "notes": "Development case. Artifact (build_report.json) and source (scripts/build_release.py, missing packaging_utils module) agree on the same root cause."
+}

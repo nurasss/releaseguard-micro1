@@ -1,0 +1,51 @@
+{
+  "case_id": "case_10",
+  "name": "Missing migration step",
+  "held_out": true,
+  "requested_ref": "v3.0.0",
+  "expected_decision": "NO-GO",
+  "blockers": [
+    {
+      "blocker_id": "database_migration_step_missing",
+      "severity": "critical",
+      "category": "migrations",
+      "description": "New database migration 0003_add_payment_methods.sql exists in migrations/ but deploy workflow and RELEASE.md do not execute migration step.",
+      "match_any_of": [
+        ["migration", "step", "missing"],
+        ["migration", "not", "executed"],
+        ["database", "migration", "omitted"],
+        ["deploy", "missing", "migration"],
+        ["unapplied", "database", "migration"],
+        ["omits", "database", "migration"],
+        ["omits", "the", "database", "migration"],
+        ["procedure", "omits", "database", "migration"],
+        ["missing", "migration", "step", "deployment"],
+        ["migration", "not", "applied"]
+      ],
+      "acceptable_evidence": [
+        "migrations/0003_add_payment_methods.sql",
+        ".github/workflows/deploy.yml",
+        "RELEASE.md"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "config",
+      "match_any_of": [
+        ["deploy", "workflow", "steps"]
+      ],
+      "note": "Observation regarding missing steps in deploy workflow."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["migrations", "applied", "automatically"],
+        ["no", "pending", "migrations"]
+      ],
+      "note": "Claiming migrations are automatically applied without execution steps is false."
+    }
+  ],
+  "notes": "Held-out case. Schema migration file exists but deploy pipeline and release instructions lack migration execution."
+}

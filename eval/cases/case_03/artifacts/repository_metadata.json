@@ -1,0 +1,14 @@
+{
+  "default_branch": "main",
+  "description": "Synchronizes records between two data stores.",
+  "tags": ["v2.9.0", "v3.0.0"],
+  "releases": [
+    {
+      "tag_name": "v3.0.0",
+      "name": "Release 3.0.0",
+      "draft": false,
+      "prerelease": false
+    }
+  ],
+  "topics": ["sync", "python"]
+}

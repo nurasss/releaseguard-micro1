@@ -1,0 +1,54 @@
+{
+  "case_id": "case_04",
+  "name": "No tests",
+  "held_out": false,
+  "requested_ref": "v1.0.0",
+  "expected_decision": "REVIEW",
+  "blockers": [
+    {
+      "blocker_id": "tests_absent",
+      "severity": "high",
+      "category": "tests",
+      "description": "No tests/ directory, no test configuration, and no test step in CI exist anywhere in the repository.",
+      "match_any_of": [
+        ["tests", "missing"],
+        ["no", "tests"],
+        ["tests", "absent"],
+        ["lack", "tests"]
+      ],
+      "acceptable_evidence": [
+        "repo/",
+        ".github/workflows/ci.yml"
+      ]
+    }
+  ],
+  "acceptable_extra_findings": [
+    {
+      "category": "ci",
+      "match_any_of": [
+        ["ci", "lint", "only"],
+        ["ci", "no", "test", "step"]
+      ],
+      "note": "Observation that CI only lints and never runs tests is acceptable as supporting context for the same underlying gap."
+    }
+  ],
+  "forbidden_findings": [
+    {
+      "match_any_of": [
+        ["test", "failing"],
+        ["tests", "failing"],
+        ["broken", "test"],
+        ["test", "broken"]
+      ],
+      "note": "No tests exist at all, so none can be failing or broken; that claim would fabricate a proven breakage that was never observed. This is a severity-calibration trap: escalating to critical/failing is unsupported."
+    },
+    {
+      "match_any_of": [
+        ["ci", "failed"],
+        ["ci", "red"]
+      ],
+      "note": "The recorded CI run for this ref succeeded (lint-only); claiming CI failed is false."
+    }
+  ],
+  "notes": "Development case testing severity calibration: absence of verification is high, not critical, because no breakage is proven."
+}

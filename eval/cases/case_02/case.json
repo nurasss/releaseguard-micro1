@@ -1,0 +1,8 @@
+{
+  "case_id": "case_02",
+  "name": "Broken unit test",
+  "held_out": false,
+  "requested_ref": "v0.9.2",
+  "description": "calculate_total() in billing.py adds the tax rate to the subtotal instead of multiplying by it. test_calculate_total_applies_tax_rate correctly catches the bug. No GitHub Actions run is recorded for this ref, so the only signal is the test report.",
+  "notes_for_humans": "test_report.json is internally consistent with the actual code defect: 4 total, 3 passed, 1 failed, failing test name matches."
+}
