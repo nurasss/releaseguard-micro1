@@ -477,6 +477,75 @@ def test_429_with_retry_after_retries_and_succeeds() -> None:
     assert res.text == "recovered"
 
 
+def test_429_with_body_retry_delay() -> None:
+    attempts = 0
+    sleeps: list[float] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            error_body = {
+                "error": {
+                    "code": 429,
+                    "message": "Resource has been exhausted (e.g. check quota).",
+                    "status": "RESOURCE_EXHAUSTED",
+                    "details": [
+                        {"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "23s"}
+                    ],
+                }
+            }
+            return httpx.Response(429, json=error_body)
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [{"content": {"parts": [{"text": "recovered"}]}}],
+                "usageMetadata": {"promptTokenCount": 1, "candidatesTokenCount": 1, "totalTokenCount": 2},
+            },
+        )
+
+    def sleep_track(s: float) -> None:
+        sleeps.append(s)
+
+    client = create_mock_client(handler, max_retries=2, sleep_fn=sleep_track)
+    res = client.generate(system="", messages=[Message(role="user", content="retry test")])
+
+    assert attempts == 2
+    assert res.retries == 1
+    assert len(sleeps) == 1
+    assert sleeps[0] == pytest.approx(23.0)
+
+
+def test_429_exponential_backoff_sequence_without_retry_info() -> None:
+    attempts = 0
+    sleeps: list[float] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        if attempts <= 2:
+            return httpx.Response(429, text="Quota exceeded without retry delay")
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [{"content": {"parts": [{"text": "recovered"}]}}],
+                "usageMetadata": {"promptTokenCount": 1, "candidatesTokenCount": 1, "totalTokenCount": 2},
+            },
+        )
+
+    def sleep_track(s: float) -> None:
+        sleeps.append(s)
+
+    client = create_mock_client(handler, max_retries=3, sleep_fn=sleep_track)
+    res = client.generate(system="", messages=[Message(role="user", content="test")])
+
+    assert attempts == 3
+    assert res.retries == 2
+    assert len(sleeps) == 2
+    assert 15.0 <= sleeps[0] <= 15.5
+    assert 30.0 <= sleeps[1] <= 30.5
+
+
 def test_429_exceeding_max_retries_raises_rate_limited() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(429, headers={"Retry-After": "2.0"}, text="Quota exceeded")

@@ -59,6 +59,28 @@ def test_dispatcher_executes_all_registered_tools() -> None:
         assert result.duration_ms >= 0
 
 
+def test_dispatcher_returns_evidence_ids_in_result_dictionary() -> None:
+    source = LocalFixtureSource(CASES_DIR / "case_01")
+    store = EvidenceStore(audit_run_id="run-ev-test", commit_sha="d" * 40)
+    dispatcher = ToolDispatcher(source=source, evidence=store)
+
+    specs = build_tool_specs()
+    for spec in specs:
+        args: dict[str, Any] = {}
+        if spec.name == "read_file":
+            args = {"path": "pyproject.toml"}
+        elif spec.name == "search_files":
+            args = {"pattern": "releaseguard"}
+
+        call = ToolCall(name=spec.name, args=args, call_id=f"test:{spec.name}")
+        result = dispatcher.execute(call)
+
+        assert result.ok is True
+        assert "evidence_ids" in result.result
+        assert result.result["evidence_ids"] == result.evidence_ids
+        assert len(result.result["evidence_ids"]) == 1
+
+
 def test_dispatcher_handles_unknown_tool_gracefully() -> None:
     source = LocalFixtureSource(CASES_DIR / "case_01")
     store = EvidenceStore(audit_run_id="run-test", commit_sha="d" * 40)

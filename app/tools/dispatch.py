@@ -44,13 +44,14 @@ class ToolDispatcher:
 
         try:
             if tool_name == "get_repository_metadata":
-                metadata = self.source.get_repository_metadata()
+                metadata = dict(self.source.get_repository_metadata())
                 ev = self.evidence.add(
                     source_type=SourceType.repository_metadata,
                     source_path="repository_metadata.json",
                     summary="Repository metadata",
                     payload=metadata,
                 )
+                metadata["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -70,6 +71,7 @@ class ToolDispatcher:
                     summary="Repository file tree",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -121,6 +123,7 @@ class ToolDispatcher:
                     line_end=slice_res.end_line,
                     content=slice_res.content,
                 )
+                slice_dict["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -160,6 +163,7 @@ class ToolDispatcher:
                     summary=f"Search pattern {pattern!r} in repository",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -178,6 +182,7 @@ class ToolDispatcher:
                     summary="GitHub Actions workflow configurations",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -196,6 +201,7 @@ class ToolDispatcher:
                     summary="GitHub Actions workflow runs",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -214,6 +220,7 @@ class ToolDispatcher:
                     summary="Test execution report",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -232,6 +239,7 @@ class ToolDispatcher:
                     summary="Build and packaging report",
                     payload=payload,
                 )
+                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,

@@ -19,6 +19,33 @@ from app.llm.errors import (
 from app.llm.types import LLMClient, LLMResponse, Message, ToolCall, ToolSpec, Usage
 
 
+def _parse_retry_delay_from_body(response_text: str) -> float | None:
+    """Extract retryDelay (e.g. '23s' or 23) from Gemini error details JSON."""
+    if not response_text:
+        return None
+    try:
+        data = json.loads(response_text)
+        if isinstance(data, dict):
+            error_obj = data.get("error", {})
+            if isinstance(error_obj, dict):
+                details = error_obj.get("details", [])
+                if isinstance(details, list):
+                    for item in details:
+                        if isinstance(item, dict) and "retryDelay" in item:
+                            val_str = str(item["retryDelay"]).strip()
+                            if val_str.endswith("s"):
+                                val_str = val_str[:-1]
+                            return float(val_str)
+                if "retryDelay" in error_obj:
+                    val_str = str(error_obj["retryDelay"]).strip()
+                    if val_str.endswith("s"):
+                        val_str = val_str[:-1]
+                    return float(val_str)
+    except Exception:
+        pass
+    return None
+
+
 class GeminiClient(LLMClient):
     """Client for Google Gemini REST API via Google AI Studio."""
 
@@ -29,8 +56,8 @@ class GeminiClient(LLMClient):
         api_key: str,
         model_id: str,
         timeout_s: int = 120,
-        max_retries: int = 2,
-        min_request_interval_ms: int = 0,
+        max_retries: int = 4,
+        min_request_interval_ms: int = 6500,
         transport: httpx.BaseTransport | None = None,
         time_fn: Callable[[], float] = time.time,
         sleep_fn: Callable[[float], None] = time.sleep,
@@ -270,9 +297,17 @@ class GeminiClient(LLMClient):
                     except ValueError:
                         pass
 
+                # Check body for retryDelay (e.g. error.details -> retryDelay: "23s")
+                if retry_after_s is None:
+                    retry_after_s = _parse_retry_delay_from_body(response.text)
+
                 if retries_done < self.max_retries:
                     retries_done += 1
-                    backoff = retry_after_s if retry_after_s is not None else ((2 ** (retries_done - 1)) + random.uniform(0.0, 0.25))
+                    if retry_after_s is not None:
+                        backoff = retry_after_s
+                    else:
+                        # 429 quota backoff: 15s, 30s, 60s, 120s
+                        backoff = (15.0 * (2 ** (retries_done - 1))) + random.uniform(0.0, 0.25)
                     self._sleep_fn(backoff)
                     continue
 
@@ -281,7 +316,7 @@ class GeminiClient(LLMClient):
                     retry_after_s=retry_after_s,
                 )
 
-            # Handle 5xx Server Errors
+            # Handle 5xx Server Errors (short exponential backoff: 1s, 2s, 4s...)
             if status in (500, 502, 503, 504):
                 if retries_done < self.max_retries:
                     retries_done += 1

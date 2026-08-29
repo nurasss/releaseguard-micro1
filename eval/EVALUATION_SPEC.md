@@ -1,6 +1,16 @@
 # ReleaseGuard frozen evaluation protocol
 
-`FROZEN_AT: <YYYY-MM-DD>`
+`FROZEN_AT: 2026-08-29`
+
+`MODEL_ID: gemini-2.5-flash`  ·  `PROMPT_VERSION: p1`  ·  `TOOLSET: 8 read-only tools`
+
+The model is fixed here because it must be identical for B1 and for the final
+system; changing it invalidates every comparison made under this protocol. It was
+selected on a measured runtime constraint, not on scores: on a trivial request
+`gemini-2.5-flash` answered in 1.3 s while `gemini-3.7-flash` took 23.3 s, and at
+roughly ten model calls per audit the slower model cannot meet the five-minute
+per-fixture target in NFR-08. Results on a stronger model may differ, and that
+limitation is reported alongside the numbers rather than hidden.
 
 This protocol evaluates a read-only ReleaseGuard audit against an official B1 baseline on 12 synthetic cases. Gold data is never available to either system during an audit.
 
