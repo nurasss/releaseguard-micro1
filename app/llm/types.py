@@ -20,6 +20,7 @@ class ToolCall(BaseModel):
     name: str
     args: dict = Field(default_factory=dict)
     call_id: str
+    thought_signature: str | None = None
 
 
 class Usage(BaseModel):

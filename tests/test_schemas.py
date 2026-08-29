@@ -399,17 +399,22 @@ def test_agent_step_and_audit_run_schemas() -> None:
 
 def test_settings_masks_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("RG_API_KEY", "super-secret-token-12345")
+    monkeypatch.setenv("RG_GITHUB_TOKEN", "super-secret-gh-token-67890")
     monkeypatch.setenv("RG_MODEL_ID", "custom-model")
 
     settings = Settings()
     assert settings.api_key == "super-secret-token-12345"
+    assert settings.github_token == "super-secret-gh-token-67890"
     assert settings.model_id == "custom-model"
 
     repr_str = repr(settings)
     str_val = str(settings)
 
-    # API key must NEVER be revealed in repr or str
+    # API key and GitHub token must NEVER be revealed in repr or str
     assert "super-secret-token-12345" not in repr_str
     assert "super-secret-token-12345" not in str_val
+    assert "super-secret-gh-token-67890" not in repr_str
+    assert "super-secret-gh-token-67890" not in str_val
     assert "***" in repr_str
     assert "***" in str_val
+

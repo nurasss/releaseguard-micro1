@@ -108,21 +108,28 @@ class GeminiClient(LLMClient):
                 if msg.content:
                     parts.append({"text": msg.content})
                 for tc in msg.tool_calls:
-                    parts.append({"functionCall": {"name": tc.name, "args": tc.args}})
+                    fc_dict: dict[str, Any] = {"name": tc.name, "args": tc.args}
+                    part_entry: dict[str, Any] = {"functionCall": fc_dict}
+                    if tc.thought_signature is not None:
+                        part_entry["thoughtSignature"] = tc.thought_signature
+                    parts.append(part_entry)
                 if not parts:
                     raise ValueError("Model message must contain at least one text part or tool_call")
                 contents.append({"role": "model", "parts": parts})
             elif msg.role == "tool":
                 # In Gemini REST API, function responses are submitted with role "user"
+                fn_resp: dict[str, Any] = {
+                    "name": msg.tool_name or "",
+                    "response": msg.tool_response or {},
+                }
+                if msg.tool_call_id is not None:
+                    fn_resp["id"] = msg.tool_call_id
                 contents.append(
                     {
                         "role": "user",
                         "parts": [
                             {
-                                "functionResponse": {
-                                    "name": msg.tool_name or "",
-                                    "response": msg.tool_response or {},
-                                }
+                                "functionResponse": fn_resp,
                             }
                         ],
                     }
@@ -211,11 +218,15 @@ class GeminiClient(LLMClient):
                         fc = part["functionCall"]
                         fc_name = fc.get("name", "")
                         fc_args = fc.get("args", {})
+                        fc_id = fc.get("id")
+                        call_id = str(fc_id) if fc_id is not None else f"{idx}:{fc_name}"
+                        thought_sig = part.get("thoughtSignature")
                         tool_calls.append(
                             ToolCall(
                                 name=fc_name,
                                 args=fc_args,
-                                call_id=f"{idx}:{fc_name}",
+                                call_id=call_id,
+                                thought_signature=thought_sig,
                             )
                         )
 

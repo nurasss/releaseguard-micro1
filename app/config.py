@@ -24,6 +24,10 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("GEMINI_API_KEY", "RG_API_KEY"),
     )
+    github_token: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("GITHUB_TOKEN", "RG_GITHUB_TOKEN"),
+    )
     min_request_interval_ms: int = 0
     data_dir: Path = Path("./runs")
     db_path: Path = Path("./runs/releaseguard.sqlite3")
@@ -36,10 +40,12 @@ class Settings(BaseSettings):
 
     def __repr__(self) -> str:
         masked_api_key = "***" if self.api_key is not None else None
+        masked_github_token = "***" if self.github_token is not None else None
         return (
             f"Settings(llm_provider={self.llm_provider!r}, "
             f"model_id={self.model_id!r}, "
             f"api_key={masked_api_key!r}, "
+            f"github_token={masked_github_token!r}, "
             f"min_request_interval_ms={self.min_request_interval_ms!r}, "
             f"data_dir={self.data_dir!r}, "
             f"db_path={self.db_path!r}, "

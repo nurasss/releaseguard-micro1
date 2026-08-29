@@ -138,6 +138,180 @@ def test_response_with_function_call_parsed_to_tool_call() -> None:
     assert call.name == "check_file_syntax"
     assert call.args == {"path": "src/main.py"}
     assert call.call_id == "0:check_file_syntax"
+    assert call.thought_signature is None
+
+
+def test_response_with_model_id_and_thought_signature() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        response_data = {
+            "candidates": [
+                {
+                    "content": {
+                        "parts": [
+                            {
+                                "functionCall": {
+                                    "name": "f",
+                                    "args": {},
+                                    "id": "call_1",
+                                },
+                                "thoughtSignature": "SIG",
+                            }
+                        ],
+                        "role": "model",
+                    },
+                    "finishReason": "STOP",
+                }
+            ],
+            "usageMetadata": {"promptTokenCount": 10, "candidatesTokenCount": 5, "totalTokenCount": 15},
+        }
+        return httpx.Response(200, json=response_data)
+
+    client = create_mock_client(handler)
+    res = client.generate(
+        system="",
+        messages=[Message(role="user", content="run f")],
+        tools=[ToolSpec(name="f", description="test tool", parameters={"type": "object"})],
+    )
+
+    assert len(res.tool_calls) == 1
+    tc = res.tool_calls[0]
+    assert tc.name == "f"
+    assert tc.call_id == "call_1"
+    assert tc.thought_signature == "SIG"
+
+
+def test_model_and_tool_serialization_with_thought_signatures_and_ids() -> None:
+    captured_payload = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal captured_payload
+        captured_payload = json.loads(request.read())
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "content": {"parts": [{"text": "Done."}]},
+                        "finishReason": "STOP",
+                    }
+                ],
+                "usageMetadata": {"promptTokenCount": 20, "candidatesTokenCount": 2, "totalTokenCount": 22},
+            },
+        )
+
+    client = create_mock_client(handler)
+
+    tc_with_sig = ToolCall(name="f1", args={"x": 1}, call_id="call_101", thought_signature="SIG_A")
+    tc_without_sig = ToolCall(name="f2", args={"y": 2}, call_id="call_102", thought_signature=None)
+
+    history = [
+        Message(role="user", content="Run parallel tools"),
+        Message(role="model", tool_calls=[tc_with_sig, tc_without_sig]),
+        Message(role="tool", tool_name="f1", tool_call_id="call_101", tool_response={"out": 1}),
+        Message(role="tool", tool_name="f2", tool_call_id="call_102", tool_response={"out": 2}),
+    ]
+
+    res = client.generate(system="Auditor", messages=history)
+    assert res.text == "Done."
+
+    contents = captured_payload["contents"]
+    assert len(contents) == 4
+
+    # Turn 1: user
+    assert contents[0]["role"] == "user"
+
+    # Turn 2: model with 2 parallel calls
+    model_turn = contents[1]
+    assert model_turn["role"] == "model"
+    parts = model_turn["parts"]
+    assert len(parts) == 2
+
+    # Part 1: has thoughtSignature at part level beside functionCall
+    assert parts[0]["functionCall"] == {"name": "f1", "args": {"x": 1}}
+    assert parts[0]["thoughtSignature"] == "SIG_A"
+    assert "thoughtSignature" not in parts[0]["functionCall"]
+
+    # Part 2: has no thoughtSignature key at all
+    assert parts[1]["functionCall"] == {"name": "f2", "args": {"y": 2}}
+    assert "thoughtSignature" not in parts[1]
+
+    # Turn 3: tool 1 response includes "id": "call_101"
+    tool1_turn = contents[2]
+    assert tool1_turn["role"] == "user"
+    assert tool1_turn["parts"][0]["functionResponse"] == {
+        "id": "call_101",
+        "name": "f1",
+        "response": {"out": 1},
+    }
+
+    # Turn 4: tool 2 response includes "id": "call_102"
+    tool2_turn = contents[3]
+    assert tool2_turn["role"] == "user"
+    assert tool2_turn["parts"][0]["functionResponse"] == {
+        "id": "call_102",
+        "name": "f2",
+        "response": {"out": 2},
+    }
+
+
+def test_three_turn_cycle_with_parallel_tools_and_signatures() -> None:
+    # Full roundtrip: user -> model (2 tool calls with sigs) -> 2 tool responses -> model final text
+    captured_payloads: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.read())
+        captured_payloads.append(body)
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "content": {"parts": [{"text": "All tools completed."}]},
+                        "finishReason": "STOP",
+                    }
+                ],
+                "usageMetadata": {"promptTokenCount": 50, "candidatesTokenCount": 5, "totalTokenCount": 55},
+            },
+        )
+
+    client = create_mock_client(handler)
+
+    history = [
+        Message(role="user", content="Inspect repo"),
+        Message(
+            role="model",
+            tool_calls=[
+                ToolCall(name="get_tree", args={}, call_id="call_t1", thought_signature="SIG_TREE"),
+                ToolCall(name="get_repository_metadata", args={}, call_id="call_m1", thought_signature="SIG_META"),
+            ],
+        ),
+        Message(
+            role="tool",
+            tool_name="get_tree",
+            tool_call_id="call_t1",
+            tool_response={"files": ["a.py"]},
+        ),
+        Message(
+            role="tool",
+            tool_name="get_repository_metadata",
+            tool_call_id="call_m1",
+            tool_response={"default_branch": "main"},
+        ),
+    ]
+
+    res = client.generate(system="Auditor", messages=history)
+    assert res.text == "All tools completed."
+
+    sent_contents = captured_payloads[0]["contents"]
+    assert len(sent_contents) == 4
+
+    # Check model turn
+    assert sent_contents[1]["parts"][0]["thoughtSignature"] == "SIG_TREE"
+    assert sent_contents[1]["parts"][1]["thoughtSignature"] == "SIG_META"
+
+    # Check tool response turns
+    assert sent_contents[2]["parts"][0]["functionResponse"]["id"] == "call_t1"
+    assert sent_contents[3]["parts"][0]["functionResponse"]["id"] == "call_m1"
 
 
 def test_tool_calling_cycle_serialization_roles_and_parts() -> None:
@@ -192,7 +366,7 @@ def test_tool_calling_cycle_serialization_roles_and_parts() -> None:
     # Turn 3: tool result sent with role "user"
     assert contents[2]["role"] == "user"
     assert contents[2]["parts"] == [
-        {"functionResponse": {"name": "glob_files", "response": {"files": ["app/main.py", "app/config.py"]}}}
+        {"functionResponse": {"id": "0:glob_files", "name": "glob_files", "response": {"files": ["app/main.py", "app/config.py"]}}}
     ]
 
     # Verify no disallowed roles and no empty parts exist in any turn
@@ -389,7 +563,7 @@ def test_401_raises_auth_error_without_retry() -> None:
         return httpx.Response(401, text="API key invalid")
 
     client = create_mock_client(handler, max_retries=3)
-    with pytest.raises(LLMAuthError):
+    with pytest.raises(LLAuthError if False else LLMAuthError):
         client.generate(system="", messages=[Message(role="user", content="auth test")])
 
     assert attempts == 1
