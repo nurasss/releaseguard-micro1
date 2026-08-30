@@ -28,14 +28,14 @@ Analyzer -> Verifier separation. The checked-in 12-case run is an
 `OfflineFixtureLLM` simulation of that control, not an official LLM result. It
 scored CBR `0.4444` and decision accuracy `0.4167`; the simulated final path
 scored CBR `1.0000` and decision accuracy `1.0000`. These numbers demonstrate
-the reproducible harness path only and are not presented as a Gemini claim.
+the reproducible harness path only and are not presented as a live-provider claim.
 
-**What failed.** The available Gemini attempt hit provider quota/rate-limit
-responses before producing a successful 12-case baseline/final pair. Therefore
-this bundle does not claim an official LLM improvement or official quality-gate
-pass. The exact failed attempt is retained under
-`submission/results/live_provider_attempt/`, and the live commands are
-documented separately.
+**What failed.** The original Gemini attempt hit provider quota/rate-limit
+responses. A later xAI `grok-4.6` pair completed all 12 baseline and final cases,
+but the official improvement gate failed: CBR moved from `0.7778` to `0.8889`
+(`+11.11` percentage points, below the required `+20`). The bundle preserves
+both the successful live pair and the failed gate without substituting fixture
+metrics.
 
 **Main failure mode.** The dangerous errors are unsupported or missed blockers:
 an agent can turn a plausible signal into a critical claim, or overlook a
@@ -70,8 +70,8 @@ The repository contains a frozen, self-contained 12-case fixture benchmark.
 The default Make targets use `RG_OFFLINE_MODE=1` and the deterministic local
 model `releaseguard-offline-v1`, so they run without a provider key and are
 reproducible in CI. These scores measure the complete pipeline on the frozen
-fixtures; they must not be described as a live Gemini score. A live Gemini run
-can be requested with `RG_OFFLINE_MODE=0` and a valid key/quota.
+fixtures; they must not be described as a live LLM score. The current live-run
+profile uses xAI `grok-4.6`; Google Gemini remains supported as an alternative.
 
 ```bash
 make setup
@@ -95,12 +95,15 @@ locations are in [docs/REPRODUCE.md](docs/REPRODUCE.md).
 vs OFF, evidence-enforcement and deterministic-check ablations, and the
 executed It5 specialized-subagents experiment.
 
-The default results have `execution_mode: offline_fixture`,
+The reproducible fixture results have `execution_mode: offline_fixture`,
 `model_id: releaseguard-offline-v1`, and `total_cost: $0.0000`. Their quality
 gate output is explicitly scoped as `offline_fixture_simulation`; it is not an
-official LLM baseline/final comparison. To produce an official measurement,
-provision a valid Gemini key/quota and run `make baseline-live` followed by
-`make evaluate-live`. The quality checker can enforce that provenance with
+official LLM baseline/final comparison. The included live xAI measurement is
+official-provider eligible but fails the improvement gate. To rerun it,
+provision a fresh xAI key as `XAI_API_KEY` and run `make baseline-live` followed
+by `make evaluate-live`. Both targets default to xAI `grok-4.6`; override them
+with `LIVE_PROVIDER=google LIVE_MODEL=gemini-2.5-flash` if needed. The quality
+checker enforces matching execution mode, provider, and model with
 `--require-live`.
 
 The target gates are CBR ≥ 0.85, absolute improvement ≥ 20 percentage points,

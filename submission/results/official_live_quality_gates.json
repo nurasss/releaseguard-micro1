@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "passed": false,
+  "measurement_scope": "official_live_provider",
+  "official_llm_eligible": true,
+  "official_gate_status": "eligible",
+  "baseline": {
+    "run_label": "baseline_xai_20260831_020453",
+    "generated_at_utc": "2026-08-30T21:04:54.245730Z",
+    "mode": "baseline",
+    "ablation": "none",
+    "model_id": "grok-4.6",
+    "execution_mode": "live_provider",
+    "provider": "xai",
+    "reasoning_effort": "low",
+    "prompt_version": "b1-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "final": {
+    "run_label": "final_xai_20260831_023235",
+    "generated_at_utc": "2026-08-30T21:32:36.942988Z",
+    "mode": "final",
+    "ablation": "none",
+    "model_id": "grok-4.6",
+    "execution_mode": "live_provider",
+    "provider": "xai",
+    "reasoning_effort": "low",
+    "prompt_version": "final-v2",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "checks": {
+    "cbr_minimum": {
+      "actual": 0.8889,
+      "threshold": 0.85,
+      "operator": ">=",
+      "passed": true
+    },
+    "cbr_improvement_over_baseline": {
+      "actual": 0.11109999999999998,
+      "threshold": 0.2,
+      "operator": ">=",
+      "passed": false
+    },
+    "critical_evidence_coverage": {
+      "actual": 1.0,
+      "threshold": 1.0,
+      "operator": "=",
+      "passed": true
+    },
+    "unsupported_critical_findings": {
+      "actual": 0,
+      "threshold": 0,
+      "operator": "=",
+      "passed": true
+    },
+    "successful_run_rate": {
+      "actual": 1.0,
+      "threshold": 0.95,
+      "operator": ">=",
+      "passed": true
+    },
+    "comparison_execution_mode": {
+      "actual": "live_provider vs live_provider",
+      "threshold": "same mode",
+      "operator": "=",
+      "passed": true
+    },
+    "comparison_provider": {
+      "actual": "xai vs xai",
+      "threshold": "same provider",
+      "operator": "=",
+      "passed": true
+    },
+    "comparison_model": {
+      "actual": "grok-4.6 vs grok-4.6",
+      "threshold": "same model",
+      "operator": "=",
+      "passed": true
+    }
+  },
+  "baseline_file": "results/live_provider/baseline/results.json",
+  "final_file": "results/live_provider/final/results.json"
+}

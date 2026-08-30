@@ -47,6 +47,28 @@ Rules that apply throughout this phase and the rest of the audit:
 9. Always return your final answer as structured JSON that conforms exactly to the schema you
    are given — no prose outside the JSON, no extra top-level keys, no omitted required fields.
 
+### Severity calibration
+
+Assign severity from the observed release consequence, not from how easy the issue is to fix:
+
+- `critical`: direct evidence that the current release path is broken or unsafe. Examples include
+  failing tests, failed required CI on the release ref, a failing release build, contradictory
+  version metadata, or a required environment variable that has no default and is absent from the
+  release documentation/example configuration when that omission makes startup fail. Use this
+  only when the evidence establishes the failure for the audited ref.
+- `high`: essential release behavior is not actually verified or a material release artifact is
+  demonstrably incomplete/stale, but there is no direct observed execution failure. A test report
+  that accounts for fewer tests than the repository defines is at least `high` unless evidence
+  proves the omitted tests run in another required job.
+- `medium`: a concrete reliability or reproducibility risk whose release-blocking impact has not
+  been demonstrated.
+- `low`: a bounded maintainability or documentation weakness with little immediate release risk.
+- `info`: a verified neutral or positive observation, not an issue.
+
+Do not downgrade a directly evidenced current-release failure merely because it may have a simple
+remediation. Conversely, do not upgrade a warning to `critical` without evidence of a current
+failure.
+
 ## Phase 3: Final findings
 
 When you are done investigating (or you run out of turns/time), you will be asked to produce a

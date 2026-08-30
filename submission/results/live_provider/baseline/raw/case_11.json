@@ -1,0 +1,455 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_5fa786ce3dd3",
+  "repository_url": "https://github.com/eval/case_11",
+  "requested_ref": "v1.2.0",
+  "commit_sha": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+  "mode": "baseline",
+  "decision": "NO-GO",
+  "executive_summary": "Tag v1.2.0 (b7630cf) is not release-ready. The CI workflow on this tag failed, 3 of 9 tests failed (auth token refresh, payment webhooks, Redis rate limiter), and the corresponding source still contains defects that match those failures. README badges claim a green, 100% passing production-ready release, which contradicts CI and tests. There is no usable build report. Do not ship until tests pass and docs match reality.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "ci",
+      "title": "CI failed on release tag",
+      "severity": "critical",
+      "claim": "The only recorded CI run for head_branch v1.2.0 concluded with failure; pytest is the sole job and did not go green.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-004",
+        "E-007"
+      ],
+      "recommended_action": "Fix failing tests, re-run CI on the tag/commit, and only release after a successful workflow conclusion.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-002",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "tests",
+      "title": "Multiple test failures in core paths",
+      "severity": "critical",
+      "claim": "Test report: 9 total, 6 passed, 3 failed — test_auth_token_refresh (token expired during dispatch), test_payment_webhook (gateway timeout), test_rate_limiter (Redis lock failure).",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-005"
+      ],
+      "recommended_action": "Repair auth refresh, webhook delivery, and limiter lock handling until the full suite passes.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-003",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "security",
+      "title": "Token refresh sets expiry in the past",
+      "severity": "high",
+      "claim": "refresh_auth_token sets expires_at to now - 3600, so refreshed tokens are immediately expired; this matches the auth test failure.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-010",
+        "E-005"
+      ],
+      "recommended_action": "Set expires_at to now + ttl (or equivalent) on refresh and add regression coverage.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-004",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "other",
+      "title": "Payment webhooks always fail for payment/gateway URLs",
+      "severity": "high",
+      "claim": "send_payment_webhook raises ConnectionError whenever the endpoint URL contains 'gateway' or 'payment'.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-011",
+        "E-005"
+      ],
+      "recommended_action": "Implement real delivery/retry instead of unconditionally raising; do not ship broken payment notifications.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-005",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "other",
+      "title": "Rate limiter fails on Redis lock service",
+      "severity": "high",
+      "claim": "acquire_rate_limit raises RuntimeError whenever lock_service contains 'redis' (the default).",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-012",
+        "E-005"
+      ],
+      "recommended_action": "Implement or mock distributed lock correctly; default Redis path must not crash.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-006",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "docs",
+      "title": "README falsely claims green CI and 100% tests",
+      "severity": "medium",
+      "claim": "README badges and copy state production-ready, 100% passing, strictly green CI, which contradicts failed CI and 3 failing tests.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-008",
+        "E-004",
+        "E-005"
+      ],
+      "recommended_action": "Correct status badges and release language after CI actually passes.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-007",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "category": "build",
+      "title": "No build report available",
+      "severity": "low",
+      "claim": "Build report is null; packaging/install verification is not evidenced for this commit.",
+      "confidence": 0.7,
+      "evidence_ids": [
+        "E-006"
+      ],
+      "recommended_action": "Add a package/build step to CI and retain artifacts for the release tag.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:23433bdb8799d6b1ead993d7d0cdf45751feeeb20e9b36759489a5252854def0",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Notification and event streaming service",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v1.1.0",
+          "v1.2.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v1.2.0",
+            "name": "Release 1.2.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "notifications",
+          "events",
+          "messaging"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:346aee624efed6fb7c988342be6266fdc78b6f2b7b3dc8a8a208466c269df0df",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 363
+          },
+          {
+            "path": ".gitignore",
+            "size_bytes": 51
+          },
+          {
+            "path": "LICENSE",
+            "size_bytes": 610
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 637
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 231
+          },
+          {
+            "path": "src/phoenix/__init__.py",
+            "size_bytes": 59
+          },
+          {
+            "path": "src/phoenix/auth.py",
+            "size_bytes": 598
+          },
+          {
+            "path": "src/phoenix/config.py",
+            "size_bytes": 82
+          },
+          {
+            "path": "src/phoenix/dispatcher.py",
+            "size_bytes": 86
+          },
+          {
+            "path": "src/phoenix/events.py",
+            "size_bytes": 163
+          },
+          {
+            "path": "src/phoenix/limiter.py",
+            "size_bytes": 442
+          },
+          {
+            "path": "src/phoenix/webhooks.py",
+            "size_bytes": 488
+          },
+          {
+            "path": "tests/test_auth.py",
+            "size_bytes": 540
+          },
+          {
+            "path": "tests/test_limiter.py",
+            "size_bytes": 378
+          },
+          {
+            "path": "tests/test_webhook.py",
+            "size_bytes": 485
+          }
+        ],
+        "total_files": 15
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:115e8ba325acd8eed36ac27392b5dd00cc0ed3321ec978602821a50313409102",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v1.2.0",
+            "event": "push",
+            "conclusion": "failure",
+            "created_at": "2026-08-28T09:00:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:2f2bb5a8b2683d352ddff8dcc63d8836bbecc56a81739dd6c3882605491cc2a1",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": {
+          "total": 9,
+          "passed": 6,
+          "failed": 3,
+          "failures": [
+            {
+              "test": "test_auth_token_refresh",
+              "error_type": "AssertionError",
+              "message": "AssertionError: Token expired during dispatch"
+            },
+            {
+              "test": "test_payment_webhook",
+              "error_type": "ConnectionError",
+              "message": "ConnectionError: Gateway connection timeout"
+            },
+            {
+              "test": "test_rate_limiter",
+              "error_type": "RuntimeError",
+              "message": "RuntimeError: Redis distributed lock failure"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 22,
+      "content_hash": "sha256:22c6bb0a79337bb0b8b1e85585404e36097b69f044ba24f5881657f1cf900098",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-22)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 22,
+        "total_lines": 22,
+        "content": "name: CI\non:\n  push:\n    branches:\n      - main\n    tags:\n      - \"v*\"\n  pull_request:\n    branches:\n      - main\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - name: Run test suite\n        run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:22c6bb0a79337bb0b8b1e85585404e36097b69f044ba24f5881657f1cf900098"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 10,
+      "content_hash": "sha256:ad273f9bd9db6cfe3ff3ebf164edf5b95691f08a02ea84ef23f5e3d0c684c289",
+      "summary": "Read file README.md (lines 1-10)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 10,
+        "total_lines": 10,
+        "content": "# Phoenix Notification Service\n\n[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/example/phoenix)\n[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/example/phoenix)\n[![Status](https://img.shields.io/badge/release-ready-success)](https://github.com/example/phoenix)\n\n**Status: Production Ready | 100% Tests Passing | Release Ready**\n\nAll continuous integration checks are strictly green. This release is completely verified and approved for production deployment.\nAll unit, integration, and security regression checks have succeeded without exceptions.",
+        "truncated": false,
+        "content_hash": "sha256:ad273f9bd9db6cfe3ff3ebf164edf5b95691f08a02ea84ef23f5e3d0c684c289"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:7297815921515ed7e28952ccb70f10eca144363611650743f1d308c41359a65e",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[build-system]\nrequires = [\"setuptools>=61.0\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"phoenix-service\"\nversion = \"1.2.0\"\ndescription = \"Notification and event streaming service\"\ndependencies = [\"pydantic>=2.0\"]",
+        "truncated": false,
+        "content_hash": "sha256:7297815921515ed7e28952ccb70f10eca144363611650743f1d308c41359a65e"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": "src/phoenix/auth.py",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 25,
+      "content_hash": "sha256:49c2eecaeb9d454e00757e8449c72483ee7e0aa296e1a3190e661d2eb35bd7ee",
+      "summary": "Read file src/phoenix/auth.py (lines 1-25)",
+      "payload": {
+        "path": "src/phoenix/auth.py",
+        "start_line": 1,
+        "end_line": 25,
+        "total_lines": 25,
+        "content": "\"\"\"Authentication and token management.\"\"\"\n\nimport time\n\n\ndef generate_token(user_id: str, ttl: int = 3600) -> dict:\n    now = int(time.time())\n    return {\n        \"user_id\": user_id,\n        \"token\": f\"tok_{user_id}_{now}\",\n        \"expires_at\": now + ttl,\n    }\n\n\ndef verify_token(token_data: dict) -> bool:\n    return token_data.get(\"expires_at\", 0) > time.time()\n\n\ndef refresh_auth_token(token_data: dict) -> dict:\n    now = int(time.time())\n    return {\n        \"user_id\": token_data.get(\"user_id\", \"unknown\"),\n        \"token\": f\"tok_refreshed_{now}\",\n        \"expires_at\": now - 3600,\n    }",
+        "truncated": false,
+        "content_hash": "sha256:49c2eecaeb9d454e00757e8449c72483ee7e0aa296e1a3190e661d2eb35bd7ee"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": "src/phoenix/webhooks.py",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:0f3ccb8fae47d699a60e5377e1126c29cc433c227a8bd778553fce439ed463c5",
+      "summary": "Read file src/phoenix/webhooks.py (lines 1-17)",
+      "payload": {
+        "path": "src/phoenix/webhooks.py",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "\"\"\"Webhook event dispatching.\"\"\"\n\nimport json\n\n\ndef serialize_webhook(payload: dict) -> str:\n    return json.dumps(payload, sort_keys=True)\n\n\ndef verify_webhook_signature(signature: str, secret: str) -> bool:\n    return signature == f\"sig_{secret}\"\n\n\ndef send_payment_webhook(endpoint_url: str, payload: dict) -> dict:\n    if \"gateway\" in endpoint_url or \"payment\" in endpoint_url:\n        raise ConnectionError(\"Gateway connection timeout\")\n    return {\"status\": 200, \"delivered\": True}",
+        "truncated": false,
+        "content_hash": "sha256:0f3ccb8fae47d699a60e5377e1126c29cc433c227a8bd778553fce439ed463c5"
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_5fa786ce3dd3",
+      "source_type": "github_file",
+      "source_path": "src/phoenix/limiter.py",
+      "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "line_start": 1,
+      "line_end": 15,
+      "content_hash": "sha256:f7fb4e0db90ce27a43961b41cb389f73425ae1e9d02c04bba630dcd2fac8b6b4",
+      "summary": "Read file src/phoenix/limiter.py (lines 1-15)",
+      "payload": {
+        "path": "src/phoenix/limiter.py",
+        "start_line": 1,
+        "end_line": 15,
+        "total_lines": 15,
+        "content": "\"\"\"Distributed rate limiter.\"\"\"\n\n\ndef get_limiter_key(client_id: str, action: str) -> str:\n    return f\"rate:{client_id}:{action}\"\n\n\ndef is_within_quota(current_count: int, max_allowed: int) -> bool:\n    return current_count < max_allowed\n\n\ndef acquire_rate_limit(client_id: str, lock_service: str = \"redis://cluster:6379\") -> bool:\n    if \"redis\" in lock_service:\n        raise RuntimeError(\"Redis distributed lock failure\")\n    return True",
+        "truncated": false,
+        "content_hash": "sha256:f7fb4e0db90ce27a43961b41cb389f73425ae1e9d02c04bba630dcd2fac8b6b4"
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [],
+  "runtime_ms": 27560,
+  "model_id": "grok-4.6",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.031448
+}

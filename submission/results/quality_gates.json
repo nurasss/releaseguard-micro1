@@ -70,6 +70,18 @@
       "threshold": "same mode",
       "operator": "=",
       "passed": true
+    },
+    "comparison_provider": {
+      "actual": "local-deterministic-fixture vs local-deterministic-fixture",
+      "threshold": "same provider",
+      "operator": "=",
+      "passed": true
+    },
+    "comparison_model": {
+      "actual": "releaseguard-offline-v1 vs releaseguard-offline-v1",
+      "threshold": "same model",
+      "operator": "=",
+      "passed": true
     }
   },
   "baseline_file": "results/baseline/results.json",

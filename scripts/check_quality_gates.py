@@ -33,10 +33,18 @@ def evaluate_gates(baseline: dict[str, Any], final: dict[str, Any]) -> dict[str,
     after = final.get("aggregate", {}).get("all", {})
     baseline_mode = baseline.get("meta", {}).get("execution_mode", "unspecified")
     final_mode = final.get("meta", {}).get("execution_mode", "unspecified")
+    baseline_provider = baseline.get("meta", {}).get("provider", "unspecified")
+    final_provider = final.get("meta", {}).get("provider", "unspecified")
+    baseline_model = baseline.get("meta", {}).get("model_id", "unspecified")
+    final_model = final.get("meta", {}).get("model_id", "unspecified")
     same_execution_mode = (
         baseline_mode == final_mode or "unspecified" in {baseline_mode, final_mode}
     )
-    official_llm_eligible = baseline_mode == final_mode == "live_provider"
+    same_provider = baseline_provider == final_provider and baseline_provider != "unspecified"
+    same_model = baseline_model == final_model and baseline_model != "unspecified"
+    official_llm_eligible = (
+        baseline_mode == final_mode == "live_provider" and same_provider and same_model
+    )
     if baseline_mode == final_mode == "offline_fixture":
         measurement_scope = "offline_fixture_simulation"
     elif official_llm_eligible:
@@ -80,6 +88,18 @@ def evaluate_gates(baseline: dict[str, Any], final: dict[str, Any]) -> dict[str,
             "threshold": "same mode",
             "operator": "=",
             "passed": same_execution_mode,
+        },
+        "comparison_provider": {
+            "actual": f"{baseline_provider} vs {final_provider}",
+            "threshold": "same provider",
+            "operator": "=",
+            "passed": same_provider,
+        },
+        "comparison_model": {
+            "actual": f"{baseline_model} vs {final_model}",
+            "threshold": "same model",
+            "operator": "=",
+            "passed": same_model,
         },
     }
     return {

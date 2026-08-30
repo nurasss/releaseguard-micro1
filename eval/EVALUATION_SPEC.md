@@ -4,6 +4,14 @@
 
 `MODEL_ID: gemini-2.5-flash`  ·  `PROMPT_VERSION: p1`  ·  `TOOLSET: 8 read-only tools`
 
+**Live rerun amendment (frozen before execution on 2026-08-31):** because the
+original Gemini profile produced no successful baseline/final pair due to
+quota, the next complete live pair uses provider `xai` and model `grok-4.6`.
+Baseline and final must both use exactly that provider/model; no Gemini result
+may be compared with a Grok result. All cases, prompts, tools, scoring, gates,
+and limits below remain unchanged. The original failed attempt is retained for
+provenance.
+
 The model is fixed here because it must be identical for B1 and for the final
 system; changing it invalidates every comparison made under this protocol. It was
 selected on a measured runtime constraint, not on scores: on a trivial request

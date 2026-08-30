@@ -1,254 +1,26 @@
 {
   "meta": {
-    "run_label": "baseline_official_run",
-    "generated_at_utc": "2026-08-30T08:43:53.645225Z",
+    "run_label": "xai_smoke_baseline_20260831_020231",
+    "generated_at_utc": "2026-08-30T21:02:33.163252Z",
     "mode": "baseline",
     "ablation": "none",
-    "model_id": "gemini-2.5-flash",
+    "model_id": "grok-4.6",
+    "execution_mode": "live_provider",
+    "provider": "xai",
+    "reasoning_effort": "low",
     "prompt_version": "b1-v1",
     "system_version": "releaseguard-v1",
     "spec_version": "1.0",
     "frozen_at": "2026-08-29",
-    "cases_total": 12,
-    "timeout_s": 300,
-    "execution_mode": "live_provider",
-    "provider": "google"
+    "cases_total": 1,
+    "timeout_s": 300
   },
   "per_case": [
-    {
-      "case_id": "case_01",
-      "mode": "baseline",
-      "commit_sha": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
-      "audit_run_id": "aud_f0e530cd3e77",
-      "decision_expected": "GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 0,
-      "runtime_ms": 366121,
-      "estimated_cost": 0.0021785999999999997,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_02",
-      "mode": "baseline",
-      "commit_sha": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
-      "audit_run_id": "aud_5e9b02bcfba0",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "failing_unit_test"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 126764,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_03",
-      "mode": "baseline",
-      "commit_sha": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
-      "audit_run_id": "aud_5eb5c4f8a4e0",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "ci_run_failed"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 173155,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_04",
-      "mode": "baseline",
-      "commit_sha": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
-      "audit_run_id": "aud_383f954fd033",
-      "decision_expected": "REVIEW",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "tests_absent"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 0,
-      "runtime_ms": 126599,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_05",
-      "mode": "baseline",
-      "commit_sha": "268ba643673c9c69fac52a077b621bc239bc0c11",
-      "audit_run_id": "aud_566f5044fdfc",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "required_env_var_undocumented"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 293442,
-      "estimated_cost": 0.00027089999999999997,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_06",
-      "mode": "baseline",
-      "commit_sha": "98ff097c80be659a5a7f5f0b52581ef89024f394",
-      "audit_run_id": "aud_988abe2ac569",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "release_build_script_fails"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 126360,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_07",
-      "mode": "baseline",
-      "commit_sha": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
-      "audit_run_id": "aud_233b89e5c293",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "version_metadata_mismatch"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 173618,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_08",
-      "mode": "baseline",
-      "commit_sha": "6dda57ed606d6ce0672f09e588e6b095f529aba8",
-      "audit_run_id": "aud_d68af50599ac",
-      "decision_expected": "REVIEW",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "stale_generated_openapi_spec"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 0,
-      "runtime_ms": 126370,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_09",
-      "mode": "baseline",
-      "commit_sha": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
-      "audit_run_id": "aud_e92e49d0bea1",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "ci_release_trigger_missing"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 173428,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_10",
-      "mode": "baseline",
-      "commit_sha": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
-      "audit_run_id": "aud_17b0ad2882ed",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "database_migration_step_missing"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 126548,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
-    {
-      "case_id": "case_11",
-      "mode": "baseline",
-      "commit_sha": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
-      "audit_run_id": "aud_c3f021de1212",
-      "decision_expected": "NO-GO",
-      "decision_actual": "REVIEW",
-      "matched_blockers": [],
-      "missed_blockers": [
-        "ci_test_failure_despite_readme_claim"
-      ],
-      "false_positives": [],
-      "evidence_coverage": 0.0,
-      "critical_evidence_coverage": 0.0,
-      "unsupported_critical": 0,
-      "trap_hits": 0,
-      "blockers_total": 1,
-      "runtime_ms": 120159,
-      "estimated_cost": 0.0,
-      "status": "failed"
-    },
     {
       "case_id": "case_12",
       "mode": "baseline",
       "commit_sha": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
-      "audit_run_id": "aud_b98864a916bc",
+      "audit_run_id": "aud_545694bbcc48",
       "decision_expected": "NO-GO",
       "decision_actual": "REVIEW",
       "matched_blockers": [],
@@ -261,7 +33,7 @@
       "unsupported_critical": 0,
       "trap_hits": 0,
       "blockers_total": 1,
-      "runtime_ms": 173516,
+      "runtime_ms": 610,
       "estimated_cost": 0.0,
       "status": "failed"
     }
@@ -278,8 +50,8 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 1512429,
-      "total_cost": 0.0024
+      "total_runtime_ms": 0,
+      "total_cost": 0.0
     },
     "held_out": {
       "cbr": 0.0,
@@ -292,7 +64,7 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 593651,
+      "total_runtime_ms": 610,
       "total_cost": 0.0
     },
     "all": {
@@ -306,8 +78,8 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 2106080,
-      "total_cost": 0.0024
+      "total_runtime_ms": 610,
+      "total_cost": 0.0
     }
   }
 }

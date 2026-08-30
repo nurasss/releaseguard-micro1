@@ -31,7 +31,7 @@
     "cases_total": 12,
     "timeout_s": 300
   },
-  "case_12_run_id": "aud_451294228d6b",
+  "case_12_run_id": "aud_13cc5036cae8",
   "required_artifacts": [
     "results/baseline/results.json",
     "results/final/results.json",
@@ -45,7 +45,13 @@
     "trajectories/verifier_case_12.jsonl",
     "case_12/report.json",
     "removed_experiment/README.md",
-    "video/releaseguard_demo.mp4"
+    "video/releaseguard_demo.mp4",
+    "results/official_live_quality_gates.json"
   ],
-  "live_provider_attempt": "results/live_provider_attempt/results.json"
+  "live_provider_attempt": "results/live_provider_attempt/results.json",
+  "official_live_pair": {
+    "baseline": "results/live_provider/baseline/results.json",
+    "final": "results/live_provider/final/results.json",
+    "quality_gates": "results/official_live_quality_gates.json"
+  }
 }

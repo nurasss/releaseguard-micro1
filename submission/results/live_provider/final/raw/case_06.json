@@ -1,0 +1,822 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_1373dffdcb14",
+  "repository_url": "https://github.com/eval/case_06",
+  "requested_ref": "v0.5.1",
+  "commit_sha": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 6 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "build",
+      "title": "Release build fails due to missing packaging_utils module",
+      "severity": "critical",
+      "claim": "The recorded release build command `python scripts/build_release.py` exits with code 1 because it imports `metrics_exporter.packaging_utils.bundle_assets`, and that module is not present in the repository tree (only `src/metrics_exporter/__init__.py` and `exporter.py` exist). README documents this command as the release build path.",
+      "confidence": 0.98,
+      "evidence_ids": [
+        "E-007",
+        "E-014",
+        "E-010",
+        "E-017",
+        "E-018"
+      ],
+      "recommended_action": "Add the missing `metrics_exporter.packaging_utils` implementation (or remove the import) and re-run the documented release build until it succeeds and produces the expected dist artifacts.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-002",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "tests",
+      "title": "No test execution report to confirm suite results",
+      "severity": "high",
+      "claim": "A test file `tests/test_exporter.py` exists and CI is configured to run pytest, and the latest CI run for v0.5.1 concluded success, but no test execution report was available to verify pass/fail coverage of the suite.",
+      "confidence": 0.85,
+      "evidence_ids": [
+        "E-001",
+        "E-013",
+        "E-015",
+        "E-004",
+        "E-012",
+        "E-021"
+      ],
+      "recommended_action": "Publish pytest JUnit/XML (or equivalent) artifacts from the required CI job so release audits can confirm which tests ran and passed.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-003",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "dependencies",
+      "title": "No lockfile for reproducible installs",
+      "severity": "medium",
+      "claim": "A dependency manifest (`pyproject.toml`) is present but no recognized lockfile was found, so reproducible installs are not guaranteed.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-006",
+        "E-016"
+      ],
+      "recommended_action": "Add and commit a lockfile (e.g. uv.lock, poetry.lock, or pip-tools requirements.txt) generated from the release environment.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-004",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "ci",
+      "title": "CI on tag v0.5.1 succeeded but does not run the release build",
+      "severity": "medium",
+      "claim": "Workflow `.github/workflows/ci.yml` triggers on tags `v*` and the latest run for ref v0.5.1 concluded success; observed steps are checkout, setup-python 3.11, `pip install -e .`, and `pytest` only—no release/build step—so the failing `scripts/build_release.py` path is not verified in CI.",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "E-002",
+        "E-003",
+        "E-004",
+        "E-012",
+        "E-015"
+      ],
+      "recommended_action": "Add a required CI job that runs the documented release build on tags so packaging failures fail the release pipeline.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-005",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "release_metadata",
+      "title": "Version metadata matches tag v0.5.1",
+      "severity": "info",
+      "claim": "pyproject.toml version 0.5.1 and `src/metrics_exporter/__init__.py` `__version__` of 0.5.1 match requested ref v0.5.1; a GitHub release named Release 0.5.1 exists for that tag.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-005",
+        "E-016",
+        "E-019",
+        "E-009"
+      ],
+      "recommended_action": "No change required for version alignment.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-006",
+      "audit_run_id": "aud_1373dffdcb14",
+      "category": "security",
+      "title": "No secret patterns detected in scanned files",
+      "severity": "info",
+      "claim": "Deterministic secret scan reported no known secret patterns across the 7 scanned text files.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-008",
+        "E-010"
+      ],
+      "recommended_action": "Keep scanning on new files as the repo grows.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [
+    {
+      "finding_id": "F-001",
+      "status": "confirmed",
+      "confidence": 0.99,
+      "supporting_evidence": [
+        "E-007",
+        "E-014",
+        "E-010",
+        "E-017",
+        "E-018"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "Build report shows python scripts/build_release.py exit_code=1 with ModuleNotFoundError for metrics_exporter.packaging_utils. The repo tree has only src/metrics_exporter/__init__.py and exporter.py; search finds packaging_utils only in build_release.py. README documents that command as the release build path. No contradicting evidence.",
+      "verifier_error": null
+    },
+    {
+      "finding_id": "F-002",
+      "status": "confirmed",
+      "confidence": 0.9,
+      "supporting_evidence": [
+        "E-001",
+        "E-013",
+        "E-015",
+        "E-004",
+        "E-012",
+        "E-021"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "Cited evidence matches the claim: tests/test_exporter.py exists (E-001, E-021), CI runs pytest (E-015), latest v0.5.1 CI conclusion is success (E-004, E-012), and the test execution report is explicitly null (E-013; get_test_report also returned null). Nothing in the cited records or re-check shows a JUnit/XML or equivalent suite report.",
+      "verifier_error": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:52c8e797205fa6c4cf4f810ba6b955812766122e5ee6ab6dede07fbfe8655b27",
+      "summary": "Found 1 test file(s); no execution report available",
+      "payload": {
+        "test_files": [
+          "tests/test_exporter.py"
+        ],
+        "discovered_test_defs": 1
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:71a5f7727002ffc08c62df570461c5a69c2de63fd283047fd84a6083e217fda3",
+      "summary": "Latest CI run for ref 'v0.5.1': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v0.5.1",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-23T16:45:00Z"
+        },
+        "requested_ref": "v0.5.1"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:e301a0c39abf426d5cc18e2e906d73c6116cb2ad4f5b3119cfded3d96dfdda9c",
+      "summary": "Manifest version: '0.5.1'",
+      "payload": {
+        "manifest_version": "0.5.1",
+        "requested_ref": "v0.5.1"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "build_result",
+      "source_path": "build_report",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d1cb134ae58b88ddd90dbad6877658d9406bf88d4d856baf279a2286ded06e3b",
+      "summary": "Build report exit_code=1",
+      "payload": {
+        "command": "python scripts/build_release.py",
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:124d4634e844313b626f5f45091a277076c99b94f167d9f2ed27dee426c19314",
+      "summary": "No secret patterns detected across 7 scanned file(s)",
+      "payload": {
+        "files_scanned": 7
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:0304d08268a8c2848a4490e4f3851228cd45f5c614cacbb4fa7f504d25d8e8ab",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Exports application metrics in Prometheus format.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v0.5.0",
+          "v0.5.1"
+        ],
+        "releases": [
+          {
+            "tag_name": "v0.5.1",
+            "name": "Release 0.5.1",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "metrics",
+          "prometheus",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:6a09a718c6ab3f6fa85d4cd7dab9768cfb3c8f5af9b602ff610569af228cdafc",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 242
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 297
+          },
+          {
+            "path": "scripts/build_release.py",
+            "size_bytes": 406
+          },
+          {
+            "path": "src/metrics_exporter/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/metrics_exporter/exporter.py",
+            "size_bytes": 161
+          },
+          {
+            "path": "tests/test_exporter.py",
+            "size_bytes": 150
+          }
+        ],
+        "total_files": 7
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:bae52f613a9e97df5fb23bcf4baa0237a6dc733692e7597b0f16ba89fcd2add5",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v0.5.1",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-23T16:45:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:9fa02cf25530b42f8ba47613361131ce653e7c5d66b74f87dc11d27985515946",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": {
+          "command": "python scripts/build_release.py",
+          "exit_code": 1,
+          "stderr_tail": "Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'"
+        }
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 12,
+      "content_hash": "sha256:e301a0c39abf426d5cc18e2e906d73c6116cb2ad4f5b3119cfded3d96dfdda9c",
+      "summary": "Read file pyproject.toml (lines 1-12)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 12,
+        "total_lines": 12,
+        "content": "[project]\nname = \"metrics-exporter\"\nversion = \"0.5.1\"\ndescription = \"Exports application metrics in Prometheus format.\"\nrequires-python = \">=3.10\"\n\n[project.scripts]\nbuild-release = \"scripts.build_release:main\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:e301a0c39abf426d5cc18e2e906d73c6116cb2ad4f5b3119cfded3d96dfdda9c"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "scripts/build_release.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 18,
+      "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403",
+      "summary": "Read file scripts/build_release.py (lines 1-18)",
+      "payload": {
+        "path": "scripts/build_release.py",
+        "start_line": 1,
+        "end_line": 18,
+        "total_lines": 18,
+        "content": "\"\"\"Release build entry point.\n\nBundles static assets before packaging. This imports packaging_utils,\nwhich does not exist anywhere in the repository, so the build fails\nimmediately with ModuleNotFoundError.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom metrics_exporter.packaging_utils import bundle_assets\n\n\ndef main() -> None:\n    bundle_assets(output_dir=\"dist\")\n\n\nif __name__ == \"__main__\":\n    main()",
+        "truncated": false,
+        "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923",
+      "summary": "Read file README.md (lines 1-17)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "# metrics-exporter\n\nExports application metrics in Prometheus format.\n\n## Testing\n\n```bash\npytest\n```\n\n## Release build\n\n```bash\npython scripts/build_release.py\n```\n\nThis bundles static assets and writes the distributable archive to `dist/`.",
+        "truncated": false,
+        "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "src/metrics_exporter/__init__.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:3d0bbd059e1466b23efba45cfacd118453cf116553a9d76b82c5a4c1897cedd2",
+      "summary": "Read file src/metrics_exporter/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/metrics_exporter/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"0.5.1\"",
+        "truncated": false,
+        "content_hash": "sha256:3d0bbd059e1466b23efba45cfacd118453cf116553a9d76b82c5a4c1897cedd2"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "src/metrics_exporter/exporter.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:d53d83580dfb7568c594f4d2993d2c0876853ea2ea18f6a534d448c72edd3b76",
+      "summary": "Read file src/metrics_exporter/exporter.py (lines 1-7)",
+      "payload": {
+        "path": "src/metrics_exporter/exporter.py",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "\"\"\"Prometheus-format metric formatting.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef format_metric(name: str, value: float) -> str:\n    return f\"{name} {value}\"",
+        "truncated": false,
+        "content_hash": "sha256:d53d83580dfb7568c594f4d2993d2c0876853ea2ea18f6a534d448c72edd3b76"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "tests/test_exporter.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:378752851e6bb9fe103dea0040da01f062e0642eb38d5769c62cbdab97a2e47c",
+      "summary": "Read file tests/test_exporter.py (lines 1-5)",
+      "payload": {
+        "path": "tests/test_exporter.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "from metrics_exporter.exporter import format_metric\n\n\ndef test_format_metric():\n    assert format_metric(\"requests_total\", 42) == \"requests_total 42\"",
+        "truncated": false,
+        "content_hash": "sha256:378752851e6bb9fe103dea0040da01f062e0642eb38d5769c62cbdab97a2e47c"
+      }
+    },
+    {
+      "id": "E-022",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:6a09a718c6ab3f6fa85d4cd7dab9768cfb3c8f5af9b602ff610569af228cdafc",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 242
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 297
+          },
+          {
+            "path": "scripts/build_release.py",
+            "size_bytes": 406
+          },
+          {
+            "path": "src/metrics_exporter/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/metrics_exporter/exporter.py",
+            "size_bytes": 161
+          },
+          {
+            "path": "tests/test_exporter.py",
+            "size_bytes": 150
+          }
+        ],
+        "total_files": 7
+      }
+    },
+    {
+      "id": "E-023",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "scripts/build_release.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 18,
+      "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403",
+      "summary": "Read file scripts/build_release.py (lines 1-18)",
+      "payload": {
+        "path": "scripts/build_release.py",
+        "start_line": 1,
+        "end_line": 18,
+        "total_lines": 18,
+        "content": "\"\"\"Release build entry point.\n\nBundles static assets before packaging. This imports packaging_utils,\nwhich does not exist anywhere in the repository, so the build fails\nimmediately with ModuleNotFoundError.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom metrics_exporter.packaging_utils import bundle_assets\n\n\ndef main() -> None:\n    bundle_assets(output_dir=\"dist\")\n\n\nif __name__ == \"__main__\":\n    main()",
+        "truncated": false,
+        "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403"
+      }
+    },
+    {
+      "id": "E-024",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923",
+      "summary": "Read file README.md (lines 1-17)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "# metrics-exporter\n\nExports application metrics in Prometheus format.\n\n## Testing\n\n```bash\npytest\n```\n\n## Release build\n\n```bash\npython scripts/build_release.py\n```\n\nThis bundles static assets and writes the distributable archive to `dist/`.",
+        "truncated": false,
+        "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923"
+      }
+    },
+    {
+      "id": "E-025",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:9fa02cf25530b42f8ba47613361131ce653e7c5d66b74f87dc11d27985515946",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": {
+          "command": "python scripts/build_release.py",
+          "exit_code": 1,
+          "stderr_tail": "Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'"
+        }
+      }
+    },
+    {
+      "id": "E-026",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "github_file",
+      "source_path": ".",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:53f37de6da6f4dd3eaca11e6959c49fd6f8d9f9685e675c3a9be02f6b090396e",
+      "summary": "Search pattern 'packaging_utils' in repository",
+      "payload": {
+        "pattern": "packaging_utils",
+        "glob": null,
+        "hits": [
+          {
+            "path": "scripts/build_release.py",
+            "line_number": 3,
+            "line": "Bundles static assets before packaging. This imports packaging_utils,"
+          },
+          {
+            "path": "scripts/build_release.py",
+            "line_number": 10,
+            "line": "from metrics_exporter.packaging_utils import bundle_assets"
+          }
+        ],
+        "total_hits": 2
+      }
+    },
+    {
+      "id": "E-027",
+      "audit_run_id": "aud_1373dffdcb14",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "pass",
+      "details": "Found 1 test file(s) (e.g. tests/test_exporter.py) and/or recognized test configuration. No test execution report was available to verify pass/fail status.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v0.5.1'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v0.5.1' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '0.5.1' matches requested ref 'v0.5.1'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "fail",
+      "details": "Recorded build run 'python scripts/build_release.py' exited with code 1: Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'",
+      "evidence_ids": [
+        "E-007"
+      ]
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 7 scanned text file(s).",
+      "evidence_ids": [
+        "E-008"
+      ]
+    }
+  ],
+  "limitations": [],
+  "runtime_ms": 63205,
+  "model_id": "grok-4.6",
+  "prompt_version": "final-v2",
+  "estimated_cost_usd": 0.105684
+}

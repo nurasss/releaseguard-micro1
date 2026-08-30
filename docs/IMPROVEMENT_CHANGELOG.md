@@ -169,10 +169,57 @@ does not justify a quality claim about context normalization.
 - **Learning:** provenance is part of the result. A mathematically attractive
   offline score cannot stand in for the requested LLM experiment.
 
+## Stage It8 - xAI/Grok live-provider pair
+
+- **Observed failure:** Gemini quota prevented an official paired measurement.
+- **Hypothesis:** an OpenAI-compatible xAI client can execute the unchanged B1
+  and final contracts with tool calling and strict structured output.
+- **Change:** add provider `xai`, model `grok-4.6`, reasoning effort `low`,
+  provider-specific authentication/rate limiting, billable reasoning-token
+  accounting, and same-provider/model comparison enforcement.
+- **Evaluation runs:** `baseline_xai_20260831_020453` and
+  `final_xai_20260831_021046`.
+- **Metric before:** no successful official live pair.
+- **Metric after:** baseline CBR `0.7778`; initial final CBR `0.8889`; absolute
+  improvement `+0.1111`; successful run rate `1.0000`; critical evidence
+  coverage `1.0000`; unsupported critical `0`. Official improvement gate FAIL.
+- **Decision:** **REVISE** severity calibration using development cases only.
+- **Learning:** the stronger baseline narrows the architecture lift, and the
+  model can find a blocker while assigning severity too low for the frozen
+  matcher or decision policy.
+
+## Stage It9 - Explicit severity contract (`final-v2`)
+
+- **Observed failure:** on development cases 02, 03, 05, and 07, Grok found the
+  correct blocker but often labeled a direct current-release failure `high`
+  instead of `critical`.
+- **Hypothesis:** an operational severity rubric will distinguish observed
+  release failure from incomplete verification without changing the
+  deterministic policy or evaluation matcher.
+- **Change:** document consequence-based `critical/high/medium/low/info`
+  calibration in `prompts/analyzer.md`; freeze prompt version `final-v2` before
+  the full run. Cases 09--12 were not encoded into the prompt, and no changes
+  were made after the held-out results.
+- **Development check:** cases 02, 03, 04, 05, 07, and 08 reached CBR `1.0000`
+  and decision accuracy `0.8333`; cases 04 and 08 correctly remained REVIEW.
+- **Evaluation run:** `final_xai_20260831_023235` against the unchanged
+  `baseline_xai_20260831_020453`.
+- **Metric before:** initial final CBR `0.8889`, precision `0.5625`, decision
+  accuracy `0.4167`, cost `$1.0097`.
+- **Metric after:** CBR `0.8889`, precision `0.4762`, decision accuracy `0.7500`,
+  critical evidence coverage `1.0000`, unsupported critical `0`, successful run
+  rate `1.0000`, cost `$1.1836`. Improvement remains `+0.1111`; official gate
+  FAIL.
+- **Decision:** **KEEP** the clearer severity contract for decision quality, but
+  do not claim the required CBR improvement.
+- **Learning:** explicit calibration fixed development decisions and improved
+  overall decision accuracy, but did not close the held-out CBR miss. The
+  frozen FAIL is retained rather than tuning on held-out case 12.
+
 ## Summary decision
 
 The final implementation keeps deterministic evidence, structured Analyzer /
 Verifier contracts, redaction, and read-only public-repository guards. It
-removes It5 from the default route. The checked-in numeric gates pass only for
-the reproducible offline fixture scope; official live LLM gates remain
-unavailable and are explicitly marked as such.
+removes It5 from the default route. The reproducible offline fixture gates pass.
+The completed xAI live pair is official-provider eligible, but its improvement
+gate fails and is explicitly reported as such.

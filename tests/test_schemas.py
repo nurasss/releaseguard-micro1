@@ -418,3 +418,15 @@ def test_settings_masks_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "***" in repr_str
     assert "***" in str_val
 
+
+def test_settings_accepts_and_masks_xai_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("RG_LLM_PROVIDER", "xai")
+    monkeypatch.setenv("RG_MODEL_ID", "grok-4.6")
+    monkeypatch.setenv("XAI_API_KEY", "xai-super-secret-token")
+
+    settings = Settings()
+    assert settings.llm_provider == "xai"
+    assert settings.model_id == "grok-4.6"
+    assert settings.xai_api_key == "xai-super-secret-token"
+    assert "xai-super-secret-token" not in repr(settings)
+    assert "xai_super_secret_token" not in str(settings)

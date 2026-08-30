@@ -17,9 +17,11 @@ from app.llm.types import (
     ToolSpec,
     Usage,
 )
+from app.llm.xai import XAIClient
 
 __all__ = [
     "GeminiClient",
+    "XAIClient",
     "LLMClient",
     "LLMResponse",
     "Message",

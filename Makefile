@@ -1,9 +1,14 @@
-.PHONY: setup baseline baseline-live audit evaluate evaluate-live ablations demo api test quality-gate prepare-submission package verify-package
+.PHONY: setup baseline baseline-live audit evaluate evaluate-live ablations demo api test quality-gate official-quality-gate prepare-submission package verify-package
 
 VENV := .venv
 PYTHON := $(VENV)/bin/python
 PIP := $(PYTHON) -m pip
 FIXTURE_ENV := RG_OFFLINE_MODE=1
+LIVE_PROVIDER ?= xai
+LIVE_MODEL ?= grok-4.6
+LIVE_PROMPT_VERSION ?= final-v2
+LIVE_BASE_ENV := RG_OFFLINE_MODE=0 RG_LLM_PROVIDER=$(LIVE_PROVIDER) RG_MODEL_ID=$(LIVE_MODEL) RG_PROMPT_VERSION=b1-v1
+LIVE_FINAL_ENV := RG_OFFLINE_MODE=0 RG_LLM_PROVIDER=$(LIVE_PROVIDER) RG_MODEL_ID=$(LIVE_MODEL) RG_PROMPT_VERSION=$(LIVE_PROMPT_VERSION)
 
 # The system interpreter is used only for the one-time bootstrap that creates
 # the virtualenv. Every project command below runs through $(PYTHON).
@@ -26,7 +31,7 @@ baseline:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode baseline --label baseline_$(shell date +%Y%m%d_%H%M%S)
 
 baseline-live:
-	RG_OFFLINE_MODE=0 $(PYTHON) -m eval.run --mode baseline --label baseline_live_$(shell date +%Y%m%d_%H%M%S)
+	$(LIVE_BASE_ENV) $(PYTHON) -m eval.run --mode baseline --label baseline_$(LIVE_PROVIDER)_$(shell date +%Y%m%d_%H%M%S)
 
 audit:
 	$(PYTHON) -m app.cli audit --case eval/cases/$(CASE) --mode $(or $(MODE),final)
@@ -35,7 +40,7 @@ evaluate:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --label final_$(shell date +%Y%m%d_%H%M%S)
 
 evaluate-live:
-	RG_OFFLINE_MODE=0 $(PYTHON) -m eval.run --mode final --label final_live_$(shell date +%Y%m%d_%H%M%S)
+	$(LIVE_FINAL_ENV) $(PYTHON) -m eval.run --mode final --label final_$(LIVE_PROVIDER)_$(shell date +%Y%m%d_%H%M%S)
 
 ablations:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation no_verifier --label ablation_no_verifier_$(shell date +%Y%m%d_%H%M%S)
@@ -54,7 +59,10 @@ test:
 	$(PYTHON) -m pytest -q
 
 quality-gate:
-	$(PYTHON) scripts/check_quality_gates.py
+	$(PYTHON) scripts/check_quality_gates.py --baseline submission/results/baseline/results.json --final submission/results/final/results.json
+
+official-quality-gate:
+	$(PYTHON) scripts/check_quality_gates.py --baseline submission/results/live_provider/baseline/results.json --final submission/results/live_provider/final/results.json --out submission/results/official_live_quality_gates.json --require-live
 
 prepare-submission:
 	$(PYTHON) scripts/prepare_submission.py

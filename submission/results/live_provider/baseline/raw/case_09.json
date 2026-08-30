@@ -1,0 +1,456 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_6f8458c9621f",
+  "repository_url": "https://github.com/eval/case_09",
+  "requested_ref": "release/v2.4.0",
+  "commit_sha": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+  "mode": "baseline",
+  "decision": "REVIEW",
+  "executive_summary": "Version 2.4.0 is consistent in pyproject.toml and package __init__, a v2.4.0 tag exists, LICENSE is present, and no secrets were found. Release is not fully ready: CI on release/v2.4.0 reports success but only echoes instead of running tests; there is no GitHub Release; the Release workflow is main-only and does not actually publish artifacts. Treat as REVIEW until real tests run and release automation/metadata are verified.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_6f8458c9621f",
+      "category": "ci",
+      "title": "CI does not execute the test suite",
+      "severity": "high",
+      "claim": "The CI workflow on release/v2.4.0 concluded success, but the test job only runs echo \"Running test suite\" and never invokes pytest or the tests in tests/test_transforms.py.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-004",
+        "E-009",
+        "E-005",
+        "E-014"
+      ],
+      "recommended_action": "Replace the echo step with a real install-and-pytest job and require a green run on the release ref before shipping.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-002",
+      "audit_run_id": "aud_6f8458c9621f",
+      "category": "release_metadata",
+      "title": "Tag without GitHub Release; publish workflow not tied to this branch",
+      "severity": "medium",
+      "claim": "Tags include v2.4.0 but releases is empty. release.yml triggers only on push to main and ends with an echo rather than twine/gh upload, so this release branch is not covered by a real publish path.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-001",
+        "E-010"
+      ],
+      "recommended_action": "Create a GitHub Release for v2.4.0 and wire publish to tags/releases with actual artifact upload.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-003",
+      "audit_run_id": "aud_6f8458c9621f",
+      "category": "docs",
+      "title": "Minimal README for a production engine",
+      "severity": "low",
+      "claim": "README.md is three lines with no install, usage, or changelog for 2.4.0.",
+      "confidence": 0.85,
+      "evidence_ids": [
+        "E-007"
+      ],
+      "recommended_action": "Document install, API, and v2.4.0 changes before public release.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-004",
+      "audit_run_id": "aud_6f8458c9621f",
+      "category": "tests",
+      "title": "Tests exist but are not evidenced in CI reports",
+      "severity": "medium",
+      "claim": "A unit test for normalize_records exists, but get_test_report and get_build_report returned null, so there is no independent proof tests passed at this SHA.",
+      "confidence": 0.8,
+      "evidence_ids": [
+        "E-005",
+        "E-006",
+        "E-014"
+      ],
+      "recommended_action": "Run and archive pytest (and build) results as CI artifacts.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    },
+    {
+      "id": "F-005",
+      "audit_run_id": "aud_6f8458c9621f",
+      "category": "security",
+      "title": "No hardcoded secrets detected",
+      "severity": "info",
+      "claim": "Secret-pattern search found no matches; config is non-sensitive constants.",
+      "confidence": 0.75,
+      "evidence_ids": [
+        "E-016",
+        "E-011"
+      ],
+      "recommended_action": "No action required for secrets in-tree.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ad98c32dea198301ed6b52ac63b258d9d8fd75f018f1e8d7e5cbb802c796b216",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Data pipeline processing engine",
+        "branches": [
+          "main",
+          "release/v2.4.0"
+        ],
+        "tags": [
+          "v2.3.0",
+          "v2.4.0"
+        ],
+        "releases": [],
+        "topics": [
+          "data",
+          "pipeline"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4f3fc7858e8c5977eb75215b49d518f4353a4f1f8ed18c7c1058585e0c3297f1",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 262
+          },
+          {
+            "path": ".github/workflows/release.yml",
+            "size_bytes": 578
+          },
+          {
+            "path": ".gitignore",
+            "size_bytes": 51
+          },
+          {
+            "path": "LICENSE",
+            "size_bytes": 333
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 50
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 226
+          },
+          {
+            "path": "src/pipeline/__init__.py",
+            "size_bytes": 52
+          },
+          {
+            "path": "src/pipeline/config.py",
+            "size_bytes": 65
+          },
+          {
+            "path": "src/pipeline/transforms.py",
+            "size_bytes": 172
+          },
+          {
+            "path": "tests/test_transforms.py",
+            "size_bytes": 178
+          }
+        ],
+        "total_files": 10
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:6bb8239bc0d954ff4cefc9320a5ffa70691b9755eaa5790de610e06e0af421de",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml"
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:11bfbd893e4ed4025397105bd6c27cd473fb2887fe861082670959385f9c34c6",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "release/v2.4.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-28T12:00:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:393b36c6d6932b0c2e93c41b5c608d52611c75dc665734db2df056e90d8d0128",
+      "summary": "Read file README.md (lines 1-3)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "# Data Pipeline\n\nProduction data pipeline engine.",
+        "truncated": false,
+        "content_hash": "sha256:393b36c6d6932b0c2e93c41b5c608d52611c75dc665734db2df056e90d8d0128"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 11,
+      "content_hash": "sha256:1a699c378f9246ebf8169dd7d8c3d45416f542493c4b0eeecc1f8f392b8dc4a6",
+      "summary": "Read file pyproject.toml (lines 1-11)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 11,
+        "total_lines": 11,
+        "content": "[build-system]\nrequires = [\"setuptools>=61.0\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"data-pipeline\"\nversion = \"2.4.0\"\ndescription = \"Data pipeline processing engine\"\ndependencies = [\n    \"pydantic>=2.0\"\n]",
+        "truncated": false,
+        "content_hash": "sha256:1a699c378f9246ebf8169dd7d8c3d45416f542493c4b0eeecc1f8f392b8dc4a6"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:b7f725d177a5ecaaad9fe34bb985d79827e8806ac499b1eb672c89a0b69d6ca1",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\non:\n  push:\n    branches:\n      - main\n      - \"release/**\"\n  pull_request:\n    branches:\n      - main\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run tests\n        run: echo \"Running test suite\"",
+        "truncated": false,
+        "content_hash": "sha256:b7f725d177a5ecaaad9fe34bb985d79827e8806ac499b1eb672c89a0b69d6ca1"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/release.yml",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 25,
+      "content_hash": "sha256:a6319783df5bbf3ce330d7e0e338f73b6c2da181ec2f699955f1f65331d40c18",
+      "summary": "Read file .github/workflows/release.yml (lines 1-25)",
+      "payload": {
+        "path": ".github/workflows/release.yml",
+        "start_line": 1,
+        "end_line": 25,
+        "total_lines": 25,
+        "content": "name: Release\non:\n  push:\n    branches:\n      - main\n\njobs:\n  publish:\n    name: Publish Release Artifacts\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n      packages: write\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - name: Build and Publish\n        run: |\n          python -m pip install --upgrade build twine\n          python -m build\n          echo \"Publishing release package to repository index\"",
+        "truncated": false,
+        "content_hash": "sha256:a6319783df5bbf3ce330d7e0e338f73b6c2da181ec2f699955f1f65331d40c18"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "src/pipeline/config.py",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 4,
+      "content_hash": "sha256:dde6f100640acbbdefa0113573d7bcb5fc9c28a5173b470eb5930354b45326f3",
+      "summary": "Read file src/pipeline/config.py (lines 1-4)",
+      "payload": {
+        "path": "src/pipeline/config.py",
+        "start_line": 1,
+        "end_line": 4,
+        "total_lines": 4,
+        "content": "\"\"\"Pipeline configuration.\"\"\"\n\nBATCH_SIZE = 1000\nMAX_RETRIES = 3",
+        "truncated": false,
+        "content_hash": "sha256:dde6f100640acbbdefa0113573d7bcb5fc9c28a5173b470eb5930354b45326f3"
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "src/pipeline/transforms.py",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:114d6f319b20897601d22c66d167c45d9dc07b874b1f07554248570354133997",
+      "summary": "Read file src/pipeline/transforms.py (lines 1-5)",
+      "payload": {
+        "path": "src/pipeline/transforms.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "\"\"\"Data transform functions.\"\"\"\n\n\ndef normalize_records(records: list[dict]) -> list[dict]:\n    return [{k.strip(): str(v).strip() for k, v in r.items()} for r in records]",
+        "truncated": false,
+        "content_hash": "sha256:114d6f319b20897601d22c66d167c45d9dc07b874b1f07554248570354133997"
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "src/pipeline/__init__.py",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:1606bd4bc7e8531df0a2d62bcc274eb8460cccbfcff11662eb2547e9e2a7d2ba",
+      "summary": "Read file src/pipeline/__init__.py (lines 1-3)",
+      "payload": {
+        "path": "src/pipeline/__init__.py",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "\"\"\"Data pipeline package.\"\"\"\n\n__version__ = \"2.4.0\"",
+        "truncated": false,
+        "content_hash": "sha256:1606bd4bc7e8531df0a2d62bcc274eb8460cccbfcff11662eb2547e9e2a7d2ba"
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "tests/test_transforms.py",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 6,
+      "content_hash": "sha256:438bc7fb599c202fe976a7d66ff0ff4632477f7f523a053760fb8da920709f0f",
+      "summary": "Read file tests/test_transforms.py (lines 1-6)",
+      "payload": {
+        "path": "tests/test_transforms.py",
+        "start_line": 1,
+        "end_line": 6,
+        "total_lines": 6,
+        "content": "from src.pipeline.transforms import normalize_records\n\n\ndef test_normalize_records():\n    res = normalize_records([{\" name \": \"  alice \"}])\n    assert res == [{\"name\": \"alice\"}]",
+        "truncated": false,
+        "content_hash": "sha256:438bc7fb599c202fe976a7d66ff0ff4632477f7f523a053760fb8da920709f0f"
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": "LICENSE",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": 1,
+      "line_end": 11,
+      "content_hash": "sha256:2eeb2b4f16d1f6e8ef9116481f1adae221c8feb99b4b3fd2556237c8344b8f4b",
+      "summary": "Read file LICENSE (lines 1-11)",
+      "payload": {
+        "path": "LICENSE",
+        "start_line": 1,
+        "end_line": 11,
+        "total_lines": 11,
+        "content": "Apache License\nVersion 2.0, January 2004\nhttp://www.apache.org/licenses/\n\nCopyright (c) 2026 Data Pipeline Authors\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0",
+        "truncated": false,
+        "content_hash": "sha256:2eeb2b4f16d1f6e8ef9116481f1adae221c8feb99b4b3fd2556237c8344b8f4b"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_6f8458c9621f",
+      "source_type": "github_file",
+      "source_path": ".",
+      "source_ref": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:c427c4fa8a8672081739c33669f91d88c85b69b7f825118c7ee352e48f3b375e",
+      "summary": "Search pattern '(api[_-]?key|secret|password|token|AKIA)' in repository",
+      "payload": {
+        "pattern": "(api[_-]?key|secret|password|token|AKIA)",
+        "glob": null,
+        "hits": [],
+        "total_hits": 0
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [],
+  "runtime_ms": 30726,
+  "model_id": "grok-4.6",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.031902
+}

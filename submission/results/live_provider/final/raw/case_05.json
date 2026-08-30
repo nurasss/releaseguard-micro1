@@ -1,0 +1,984 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_27cd0e5fbb41",
+  "repository_url": "https://github.com/eval/case_05",
+  "requested_ref": "v2.2.0",
+  "commit_sha": "268ba643673c9c69fac52a077b621bc239bc0c11",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 9 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "config",
+      "title": "Required SMTP_HOST is undocumented and has no default",
+      "severity": "critical",
+      "claim": "SMTP_HOST is read from the environment with no default in src/notifier/config.py, and it is absent from README.md and .env.example, so a production start following documented configuration will fail with KeyError. CI injects SMTP_HOST only in the workflow env, which does not document or supply it for operators.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-007",
+        "E-017",
+        "E-018",
+        "E-019",
+        "E-015"
+      ],
+      "recommended_action": "Document SMTP_HOST as required in README.md and .env.example (no secret value), and fail startup with a clear error if it is missing.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-002",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "dependencies",
+      "title": "No lockfile for reproducible installs",
+      "severity": "medium",
+      "claim": "A dependency manifest exists in pyproject.toml but no recognized lockfile is present, so installs of this release are not guaranteed to be reproducible.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-006",
+        "E-016",
+        "E-010"
+      ],
+      "recommended_action": "Add and commit a lockfile (or equivalent pinned constraints) generated from this ref and use it in CI and release installs.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-003",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "tests",
+      "title": "No test execution report; tests do not cover config/startup",
+      "severity": "high",
+      "claim": "One unit test file exists (tests/test_message.py) covering only format_subject. No test execution report was available. CI runs pytest and the latest run for v2.2.0 succeeded, but tests do not exercise SMTP_HOST/config loading.",
+      "confidence": 0.85,
+      "evidence_ids": [
+        "E-001",
+        "E-013",
+        "E-021",
+        "E-004",
+        "E-012",
+        "E-015"
+      ],
+      "recommended_action": "Publish a CI test report artifact and add tests that import config/startup with required env vars so missing SMTP_HOST cannot ship unnoticed.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-004",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "ci",
+      "title": "CI present and successful for v2.2.0",
+      "severity": "info",
+      "claim": "Workflow .github/workflows/ci.yml triggers on tags v* including v2.2.0; the latest recorded run for that ref concluded success.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-002",
+        "E-003",
+        "E-004",
+        "E-011",
+        "E-012",
+        "E-015"
+      ],
+      "recommended_action": "Keep tag-triggered CI; consider recording pytest JUnit/XML as an artifact.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-005",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "release_metadata",
+      "title": "Version metadata matches v2.2.0",
+      "severity": "info",
+      "claim": "pyproject.toml version 2.2.0, package __version__, git tag v2.2.0, and GitHub release name are consistent.",
+      "confidence": 0.95,
+      "evidence_ids": [
+        "E-005",
+        "E-009",
+        "E-016",
+        "E-022"
+      ],
+      "recommended_action": "No change required for version alignment.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-006",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "build",
+      "title": "No declared build/release command or build report",
+      "severity": "low",
+      "claim": "No package scripts, Makefile build target, or build report was found; this is a small Python package with setuptools metadata only.",
+      "confidence": 0.8,
+      "evidence_ids": [
+        "E-014"
+      ],
+      "recommended_action": "If artifacts are published, document the exact build/publish command in README or pyproject.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-007",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "migrations",
+      "title": "No database migrations in repository",
+      "severity": "info",
+      "claim": "No migration directory or files were found; not applicable for this service as inspected.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-010"
+      ],
+      "recommended_action": "None unless a datastore is introduced.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-008",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "security",
+      "title": "No secret patterns detected in scanned files",
+      "severity": "info",
+      "claim": "Secret scan of 8 text files found no known secret patterns. SMTP_HOST in CI is a non-secret hostname.",
+      "confidence": 0.85,
+      "evidence_ids": [
+        "E-008",
+        "E-015"
+      ],
+      "recommended_action": "Continue avoiding committing credentials; keep SMTP_HOST as configuration only.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-009",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "category": "docs",
+      "title": "README omits required SMTP_HOST and upgrade/rollback",
+      "severity": "medium",
+      "claim": "README documents optional SMTP_PORT, LOG_LEVEL, and API_TIMEOUT_SECONDS and pytest, but not SMTP_HOST, install/upgrade, or rollback for production.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-017",
+        "E-018",
+        "E-007"
+      ],
+      "recommended_action": "Add required env documentation, install steps, and upgrade/rollback notes for the 2.2.0 cut.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [
+    {
+      "finding_id": "F-001",
+      "status": "confirmed",
+      "confidence": 0.95,
+      "supporting_evidence": [
+        "E-007",
+        "E-017",
+        "E-018",
+        "E-019",
+        "E-015"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "config.py assigns SMTP_HOST via os.environ[\"SMTP_HOST\"] with no default (KeyError if unset). README.md and .env.example list only SMTP_PORT, LOG_LEVEL, and API_TIMEOUT_SECONDS. SMTP_HOST appears only in CI workflow env. Repo-wide search found no other documentation of SMTP_HOST.",
+      "verifier_error": null
+    },
+    {
+      "finding_id": "F-003",
+      "status": "confirmed",
+      "confidence": 0.9,
+      "supporting_evidence": [
+        "E-001",
+        "E-013",
+        "E-021",
+        "E-004",
+        "E-012",
+        "E-015",
+        "E-027",
+        "E-028",
+        "E-029",
+        "E-030",
+        "E-031",
+        "E-032"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "Repo has a single 5-line test file that only asserts format_subject; no other test files or SMTP_HOST/config imports under tests/. test_report is null. CI workflow runs pytest with SMTP_HOST set and the v2.2.0 run succeeded, which matches the claim that tests do not exercise config/startup loading.",
+      "verifier_error": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:068ee2e57f8089d6d3b6b73150076b9573d1126f1b83747aae932a61579e5c7a",
+      "summary": "Found 1 test file(s); no execution report available",
+      "payload": {
+        "test_files": [
+          "tests/test_message.py"
+        ],
+        "discovered_test_defs": 1
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:da95461d12fb8aaa1da39a555befebf6b43b60d3fb4632c333986f1d51174c44",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:71a69bd4495105cea5c30fb62f54ba50d1de1e6cfe95b8192c495448b45dd100",
+      "summary": "Latest CI run for ref 'v2.2.0': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v2.2.0",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-24T10:20:00Z"
+        },
+        "requested_ref": "v2.2.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4198cd150080d15e196c62ffbee82728e7dcd7f22a7451581b3c8ab37b1d686b",
+      "summary": "Manifest version: '2.2.0'",
+      "payload": {
+        "manifest_version": "2.2.0",
+        "requested_ref": "v2.2.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "deterministic_check",
+      "source_path": "src/notifier/config.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:85c496ee751338a066f4972294dcb303890a38bebc25e965ec3574b83b8eada7",
+      "summary": "Required environment variable SMTP_HOST referenced without a default",
+      "payload": {
+        "variable": "SMTP_HOST",
+        "locations": [
+          "src/notifier/config.py:10"
+        ],
+        "documented": false
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:96ef560cbc59a476163446c84acb8606865b9dd21537c7e4120a0796548fa318",
+      "summary": "No secret patterns detected across 8 scanned file(s)",
+      "payload": {
+        "files_scanned": 8
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:1f08e2bdaaecbc77a240c5da568ccac2bae908575f7ab3d136d46e2778f04949",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Sends email notifications for account events.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v2.1.0",
+          "v2.2.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v2.2.0",
+            "name": "Release 2.2.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "notifications",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d178d1a8c09143bb8fdee49648d401445010f7f5596577f055f648480b593337",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".env.example",
+            "size_bytes": 52
+          },
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 337
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 468
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 229
+          },
+          {
+            "path": "src/notifier/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/notifier/config.py",
+            "size_bytes": 490
+          },
+          {
+            "path": "src/notifier/message.py",
+            "size_bytes": 201
+          },
+          {
+            "path": "tests/test_message.py",
+            "size_bytes": 158
+          }
+        ],
+        "total_files": 8
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:a504aa95b2086dd2f3687fabd7db86436c9ad83f8efbf5b9f0b2b6fb115e0415",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v2.2.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-24T10:20:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 19,
+      "content_hash": "sha256:da95461d12fb8aaa1da39a555befebf6b43b60d3fb4632c333986f1d51174c44",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-19)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 19,
+        "total_lines": 19,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    env:\n      SMTP_HOST: smtp.ci-internal.example.com\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:da95461d12fb8aaa1da39a555befebf6b43b60d3fb4632c333986f1d51174c44"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:4198cd150080d15e196c62ffbee82728e7dcd7f22a7451581b3c8ab37b1d686b",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"notifier-service\"\nversion = \"2.2.0\"\ndescription = \"Sends email notifications for account events.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:4198cd150080d15e196c62ffbee82728e7dcd7f22a7451581b3c8ab37b1d686b"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 19,
+      "content_hash": "sha256:a4ec058815dc3286e2a54282afd569e571ac341905d80737f09d9829a3e7a683",
+      "summary": "Read file README.md (lines 1-19)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 19,
+        "total_lines": 19,
+        "content": "# notifier-service\n\nSends email notifications for account events.\n\n## Configuration\n\nCopy `.env.example` to `.env` and adjust as needed.\n\n| Variable | Required | Default | Description |\n| --- | --- | --- | --- |\n| `SMTP_PORT` | no | `587` | Port used to connect to the SMTP relay. |\n| `LOG_LEVEL` | no | `INFO` | Python logging level for the service. |\n| `API_TIMEOUT_SECONDS` | no | `30` | Timeout in seconds for outbound API calls. |\n\n## Testing\n\n```bash\npytest\n```",
+        "truncated": false,
+        "content_hash": "sha256:a4ec058815dc3286e2a54282afd569e571ac341905d80737f09d9829a3e7a683"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".env.example",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:0979dd18d59c1483d24347bdd4cd9d1d3c5acdb7511d2e8f6268bc6d0688aabf",
+      "summary": "Read file .env.example (lines 1-3)",
+      "payload": {
+        "path": ".env.example",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "SMTP_PORT=587\nLOG_LEVEL=INFO\nAPI_TIMEOUT_SECONDS=30",
+        "truncated": false,
+        "content_hash": "sha256:0979dd18d59c1483d24347bdd4cd9d1d3c5acdb7511d2e8f6268bc6d0688aabf"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "src/notifier/config.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 14,
+      "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f",
+      "summary": "Read file src/notifier/config.py (lines 1-14)",
+      "payload": {
+        "path": "src/notifier/config.py",
+        "start_line": 1,
+        "end_line": 14,
+        "total_lines": 14,
+        "content": "\"\"\"Startup configuration for the notifier service.\"\"\"\n\nfrom __future__ import annotations\n\nimport os\n\n# Required: the SMTP relay host. There is no default because sending mail\n# without a configured relay is not a safe fallback. It is not documented\n# in README.md or .env.example.\nSMTP_HOST = os.environ[\"SMTP_HOST\"]\n\nSMTP_PORT = int(os.environ.get(\"SMTP_PORT\", \"587\"))\nLOG_LEVEL = os.environ.get(\"LOG_LEVEL\", \"INFO\")\nAPI_TIMEOUT_SECONDS = int(os.environ.get(\"API_TIMEOUT_SECONDS\", \"30\"))",
+        "truncated": false,
+        "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "src/notifier/message.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:5e10e974dd0ef069568d86850b650fe14186c3b8c66d17bbe0b06994c4f0bf98",
+      "summary": "Read file src/notifier/message.py (lines 1-7)",
+      "payload": {
+        "path": "src/notifier/message.py",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "\"\"\"Pure helpers that do not touch environment variables.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef format_subject(event_name: str, account_id: str) -> str:\n    return f\"[{account_id}] {event_name}\"",
+        "truncated": false,
+        "content_hash": "sha256:5e10e974dd0ef069568d86850b650fe14186c3b8c66d17bbe0b06994c4f0bf98"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "tests/test_message.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:e36f398168f3ddd826493d3b5d099e7272000cfabe7c356e463f1987bc3d0dbf",
+      "summary": "Read file tests/test_message.py (lines 1-5)",
+      "payload": {
+        "path": "tests/test_message.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "from notifier.message import format_subject\n\n\ndef test_format_subject():\n    assert format_subject(\"password_reset\", \"acct_42\") == \"[acct_42] password_reset\"",
+        "truncated": false,
+        "content_hash": "sha256:e36f398168f3ddd826493d3b5d099e7272000cfabe7c356e463f1987bc3d0dbf"
+      }
+    },
+    {
+      "id": "E-022",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "src/notifier/__init__.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:8fc0c33699e23cd866c2bcb9cd441ccf3afd1a3e9b194dec5147977c697f90a1",
+      "summary": "Read file src/notifier/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/notifier/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"2.2.0\"",
+        "truncated": false,
+        "content_hash": "sha256:8fc0c33699e23cd866c2bcb9cd441ccf3afd1a3e9b194dec5147977c697f90a1"
+      }
+    },
+    {
+      "id": "E-023",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "src/notifier/config.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 14,
+      "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f",
+      "summary": "Read file src/notifier/config.py (lines 1-14)",
+      "payload": {
+        "path": "src/notifier/config.py",
+        "start_line": 1,
+        "end_line": 14,
+        "total_lines": 14,
+        "content": "\"\"\"Startup configuration for the notifier service.\"\"\"\n\nfrom __future__ import annotations\n\nimport os\n\n# Required: the SMTP relay host. There is no default because sending mail\n# without a configured relay is not a safe fallback. It is not documented\n# in README.md or .env.example.\nSMTP_HOST = os.environ[\"SMTP_HOST\"]\n\nSMTP_PORT = int(os.environ.get(\"SMTP_PORT\", \"587\"))\nLOG_LEVEL = os.environ.get(\"LOG_LEVEL\", \"INFO\")\nAPI_TIMEOUT_SECONDS = int(os.environ.get(\"API_TIMEOUT_SECONDS\", \"30\"))",
+        "truncated": false,
+        "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f"
+      }
+    },
+    {
+      "id": "E-024",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:91f0a9fff8b87e23b665ceefe5e0c1fdeae23b0b34d160e92e5be8aef43e4f35",
+      "summary": "Search pattern 'SMTP_HOST' in repository",
+      "payload": {
+        "pattern": "SMTP_HOST",
+        "glob": null,
+        "hits": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "line_number": 12,
+            "line": "      SMTP_HOST: smtp.ci-internal.example.com"
+          },
+          {
+            "path": "src/notifier/config.py",
+            "line_number": 10,
+            "line": "SMTP_HOST = os.environ[\"SMTP_HOST\"]"
+          }
+        ],
+        "total_hits": 2
+      }
+    },
+    {
+      "id": "E-025",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 19,
+      "content_hash": "sha256:a4ec058815dc3286e2a54282afd569e571ac341905d80737f09d9829a3e7a683",
+      "summary": "Read file README.md (lines 1-19)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 19,
+        "total_lines": 19,
+        "content": "# notifier-service\n\nSends email notifications for account events.\n\n## Configuration\n\nCopy `.env.example` to `.env` and adjust as needed.\n\n| Variable | Required | Default | Description |\n| --- | --- | --- | --- |\n| `SMTP_PORT` | no | `587` | Port used to connect to the SMTP relay. |\n| `LOG_LEVEL` | no | `INFO` | Python logging level for the service. |\n| `API_TIMEOUT_SECONDS` | no | `30` | Timeout in seconds for outbound API calls. |\n\n## Testing\n\n```bash\npytest\n```",
+        "truncated": false,
+        "content_hash": "sha256:a4ec058815dc3286e2a54282afd569e571ac341905d80737f09d9829a3e7a683"
+      }
+    },
+    {
+      "id": "E-026",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".env.example",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:0979dd18d59c1483d24347bdd4cd9d1d3c5acdb7511d2e8f6268bc6d0688aabf",
+      "summary": "Read file .env.example (lines 1-3)",
+      "payload": {
+        "path": ".env.example",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "SMTP_PORT=587\nLOG_LEVEL=INFO\nAPI_TIMEOUT_SECONDS=30",
+        "truncated": false,
+        "content_hash": "sha256:0979dd18d59c1483d24347bdd4cd9d1d3c5acdb7511d2e8f6268bc6d0688aabf"
+      }
+    },
+    {
+      "id": "E-027",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d178d1a8c09143bb8fdee49648d401445010f7f5596577f055f648480b593337",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".env.example",
+            "size_bytes": 52
+          },
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 337
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 468
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 229
+          },
+          {
+            "path": "src/notifier/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/notifier/config.py",
+            "size_bytes": 490
+          },
+          {
+            "path": "src/notifier/message.py",
+            "size_bytes": 201
+          },
+          {
+            "path": "tests/test_message.py",
+            "size_bytes": 158
+          }
+        ],
+        "total_files": 8
+      }
+    },
+    {
+      "id": "E-028",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ee89b6f547c33112a3f9fd808f4648e033656d5cd54f97d94b7d1e2e1310d2d8",
+      "summary": "Search pattern 'test_' in repository",
+      "payload": {
+        "pattern": "test_",
+        "glob": "**/*",
+        "hits": [
+          {
+            "path": "tests/test_message.py",
+            "line_number": 4,
+            "line": "def test_format_subject():"
+          }
+        ],
+        "total_hits": 1
+      }
+    },
+    {
+      "id": "E-029",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-030",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "tests/test_message.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:e36f398168f3ddd826493d3b5d099e7272000cfabe7c356e463f1987bc3d0dbf",
+      "summary": "Read file tests/test_message.py (lines 1-5)",
+      "payload": {
+        "path": "tests/test_message.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "from notifier.message import format_subject\n\n\ndef test_format_subject():\n    assert format_subject(\"password_reset\", \"acct_42\") == \"[acct_42] password_reset\"",
+        "truncated": false,
+        "content_hash": "sha256:e36f398168f3ddd826493d3b5d099e7272000cfabe7c356e463f1987bc3d0dbf"
+      }
+    },
+    {
+      "id": "E-031",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": ".",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:8345de592c7e49134190dd44ab86490245a1296631dc6818a739a2c332acd7e3",
+      "summary": "Search pattern 'SMTP_HOST|config' in repository",
+      "payload": {
+        "pattern": "SMTP_HOST|config",
+        "glob": "tests/**",
+        "hits": [],
+        "total_hits": 0
+      }
+    },
+    {
+      "id": "E-032",
+      "audit_run_id": "aud_27cd0e5fbb41",
+      "source_type": "github_file",
+      "source_path": "src/notifier/config.py",
+      "source_ref": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "line_start": 1,
+      "line_end": 14,
+      "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f",
+      "summary": "Read file src/notifier/config.py (lines 1-14)",
+      "payload": {
+        "path": "src/notifier/config.py",
+        "start_line": 1,
+        "end_line": 14,
+        "total_lines": 14,
+        "content": "\"\"\"Startup configuration for the notifier service.\"\"\"\n\nfrom __future__ import annotations\n\nimport os\n\n# Required: the SMTP relay host. There is no default because sending mail\n# without a configured relay is not a safe fallback. It is not documented\n# in README.md or .env.example.\nSMTP_HOST = os.environ[\"SMTP_HOST\"]\n\nSMTP_PORT = int(os.environ.get(\"SMTP_PORT\", \"587\"))\nLOG_LEVEL = os.environ.get(\"LOG_LEVEL\", \"INFO\")\nAPI_TIMEOUT_SECONDS = int(os.environ.get(\"API_TIMEOUT_SECONDS\", \"30\"))",
+        "truncated": false,
+        "content_hash": "sha256:7abffc9a0a7cfe268e0ee83d23250592ab2a1ee69c8e45596c9e7b91f704a17f"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "pass",
+      "details": "Found 1 test file(s) (e.g. tests/test_message.py) and/or recognized test configuration. No test execution report was available to verify pass/fail status.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v2.2.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v2.2.0' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '2.2.0' matches requested ref 'v2.2.0'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "fail",
+      "details": "Required environment variable(s) ['SMTP_HOST'] are read without a default and are not documented in .env.example, .env.sample, README.md.",
+      "evidence_ids": [
+        "E-007"
+      ]
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 8 scanned text file(s).",
+      "evidence_ids": [
+        "E-008"
+      ]
+    }
+  ],
+  "limitations": [],
+  "runtime_ms": 71202,
+  "model_id": "grok-4.6",
+  "prompt_version": "final-v2",
+  "estimated_cost_usd": 0.10908
+}

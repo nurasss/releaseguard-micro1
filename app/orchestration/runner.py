@@ -21,6 +21,7 @@ from app.llm.gemini import GeminiClient
 from app.llm.offline import OfflineFixtureLLM
 from app.llm.pricing import estimate_cost_usd
 from app.llm.types import LLMClient, Usage
+from app.llm.xai import XAIClient
 from app.policy.decision import decide
 from app.reports.markdown import render_report_md
 from app.security.redaction import redact
@@ -106,6 +107,15 @@ class AuditRunner:
                 dispatcher=dispatcher,
                 evidence_store=evidence_store,
                 mode=mode,
+            )
+        if self.settings.llm_provider == "xai":
+            return XAIClient(
+                api_key=self.settings.xai_api_key or "",
+                model_id=self.settings.model_id,
+                timeout_s=self.settings.request_timeout_s,
+                max_retries=self.settings.max_retries,
+                min_request_interval_ms=self.settings.xai_min_request_interval_ms,
+                reasoning_effort=self.settings.xai_reasoning_effort,
             )
         return GeminiClient(
             api_key=self.settings.api_key or "",

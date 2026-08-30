@@ -10,6 +10,7 @@ from app.cli import main
 from app.config import Settings
 from app.llm.errors import LLMServerError
 from app.llm.types import LLMResponse, ToolCall, Usage
+from app.llm.xai import XAIClient
 from app.orchestration.runner import AuditRunner
 from app.schemas.enums import Decision, RunStatus, VerificationStatus, VerifierStatus
 from app.sources.fixture import LocalFixtureSource
@@ -21,6 +22,22 @@ from tests.test_baseline_agent import FakeLLMClient
 
 CASES_DIR = Path(__file__).resolve().parents[1] / "eval" / "cases"
 FIXTURE_SHAS = json.loads((CASES_DIR / "FIXTURE_SHAS.json").read_text(encoding="utf-8"))
+
+
+def test_runner_selects_xai_client() -> None:
+    settings = Settings(
+        llm_provider="xai",
+        model_id="grok-4.6",
+        xai_api_key="test-xai-key",
+        xai_min_request_interval_ms=25,
+        xai_reasoning_effort="medium",
+    )
+    client = AuditRunner(settings=settings)._get_llm()
+    assert isinstance(client, XAIClient)
+    assert client.model_id == "grok-4.6"
+    assert client.min_request_interval_ms == 25
+    assert client.reasoning_effort == "medium"
+    client.close()
 
 
 def test_runner_full_successful_case_run(tmp_path: Path) -> None:

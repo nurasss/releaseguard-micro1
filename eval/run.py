@@ -20,7 +20,12 @@ from eval.validate_gold import load_gold
 DEFAULT_CASES = [f"case_{i:02d}" for i in range(1, 13)]
 
 
-def _latest_results_file(results_root: Path, mode: str, exclude: Path | None = None) -> Path | None:
+def _latest_results_file(
+    results_root: Path,
+    mode: str,
+    exclude: Path | None = None,
+    reference_meta: dict[str, Any] | None = None,
+) -> Path | None:
     """Find the newest completed results file for a reference mode."""
     candidates: list[tuple[float, Path]] = []
     for path in results_root.glob("*/results.json"):
@@ -31,8 +36,13 @@ def _latest_results_file(results_root: Path, mode: str, exclude: Path | None = N
                 payload = json.load(handle)
         except (OSError, json.JSONDecodeError):
             continue
-        if payload.get("meta", {}).get("mode") != mode:
+        meta = payload.get("meta", {})
+        if meta.get("mode") != mode:
             continue
+        if reference_meta is not None:
+            matching_fields = ("execution_mode", "provider", "model_id")
+            if any(meta.get(field) != reference_meta.get(field) for field in matching_fields):
+                continue
         candidates.append((path.stat().st_mtime, path))
     if not candidates:
         return None
@@ -71,9 +81,15 @@ def _make_comparison(current: dict[str, Any], baseline: dict[str, Any], baseline
         baseline_execution_mode == final_execution_mode
         or "unspecified" in {baseline_execution_mode, final_execution_mode}
     )
+    same_provider = baseline_meta.get("provider") == current_meta.get("provider")
+    same_model = baseline_meta.get("model_id") == current_meta.get("model_id")
     if baseline_execution_mode == final_execution_mode == "offline_fixture":
         measurement_scope = "offline_fixture_simulation"
-    elif baseline_execution_mode == final_execution_mode == "live_provider":
+    elif (
+        baseline_execution_mode == final_execution_mode == "live_provider"
+        and same_provider
+        and same_model
+    ):
         measurement_scope = "official_live_provider"
     else:
         measurement_scope = "mixed_or_unspecified"
@@ -82,17 +98,23 @@ def _make_comparison(current: dict[str, Any], baseline: dict[str, Any], baseline
         "schema_version": "1.0",
         "measurement_scope": measurement_scope,
         "same_execution_mode": same_execution_mode,
+        "same_provider": same_provider,
+        "same_model": same_model,
         "official_llm_comparison": measurement_scope == "official_live_provider",
         "baseline": {
             "run_label": baseline_meta.get("run_label", ""),
             "mode": baseline_meta.get("mode", "baseline"),
             "execution_mode": baseline_execution_mode,
+            "provider": baseline_meta.get("provider", ""),
+            "model_id": baseline_meta.get("model_id", ""),
             "results_file": str(baseline_path),
         },
         "final": {
             "run_label": current_meta.get("run_label", ""),
             "mode": current_meta.get("mode", "final"),
             "execution_mode": final_execution_mode,
+            "provider": current_meta.get("provider", ""),
+            "model_id": current_meta.get("model_id", ""),
         },
         "deltas": deltas,
     }
@@ -104,7 +126,12 @@ def _write_final_comparison(
     current: dict[str, Any],
 ) -> Path | None:
     """Attach comparison.json and comparison.md to a normal final run."""
-    baseline_path = _latest_results_file(results_root, "baseline", exclude=out_run_dir / "results.json")
+    baseline_path = _latest_results_file(
+        results_root,
+        "baseline",
+        exclude=out_run_dir / "results.json",
+        reference_meta=current.get("meta", {}),
+    )
     if baseline_path is None:
         return None
     try:
@@ -310,10 +337,15 @@ def run_evaluation(
             "model_id": reported_model_id,
             "execution_mode": "offline_fixture" if settings.offline_mode else "live_provider",
             "provider": "local-deterministic-fixture" if settings.offline_mode else settings.llm_provider,
+            "reasoning_effort": (
+                settings.xai_reasoning_effort
+                if not settings.offline_mode and settings.llm_provider == "xai"
+                else None
+            ),
             "prompt_version": (
                 "offline-b1-v1" if settings.offline_mode and mode == "baseline" else
                 "offline-final-v1" if settings.offline_mode else
-                "b1-v1" if mode == "baseline" else "final-v1"
+                "b1-v1" if mode == "baseline" else settings.prompt_version
             ),
             "system_version": "releaseguard-v1",
             "spec_version": "1.0",

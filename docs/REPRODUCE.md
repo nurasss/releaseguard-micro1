@@ -14,8 +14,9 @@ The fixture evaluation does not require Gemini or GitHub credentials.
   used the repository `.venv` interpreter.
 - Dependency versions: every runtime and development pin is recorded with
   `==` in `requirements.lock`; `make setup` installs that file first.
-- Live model ID: `gemini-2.5-flash`; fixture model ID:
-  `releaseguard-offline-v1`.
+- Current live rerun profile: xAI `grok-4.6`; fixture model ID:
+  `releaseguard-offline-v1`. The earlier Gemini attempt remains preserved as a
+  failed provider attempt, not as benchmark data.
 - Evaluation protocol: `eval/EVALUATION_SPEC.md`, frozen at `2026-08-29`.
 
 The default commands are deliberately fixture-mode commands. Their outputs
@@ -51,9 +52,9 @@ The full local path takes approximately 2-5 minutes from a warm checkout
 (mostly setup/install time; the evaluation commands themselves are under a
 minute on the reference host). A cold dependency download can take roughly
 5-10 minutes depending on the package mirror. Fixture execution costs
-`$0.0000`: it makes no provider calls. A live Gemini reproduction has no fixed
-cost in this repository; cost depends on token usage and the configured Gemini
-rate, and the run records `estimated_cost` per case.
+`$0.0000`: it makes no provider calls. A live reproduction has no fixed cost;
+cost depends on token usage and current provider pricing, and the run records
+`estimated_cost` per case.
 
 ## Outputs
 
@@ -100,17 +101,29 @@ the baseline/final pair was not produced by a live provider.
 
 ## Live provider run
 
-Only run this when a valid Gemini key and quota are intentionally provisioned:
+Revoke any key that has appeared in chat or logs. Put a fresh xAI key only in
+the ignored local `.env` file:
+
+```dotenv
+XAI_API_KEY=your-new-key
+```
+
+Then run the matched baseline/final pair:
 
 ```bash
 make baseline-live
 make evaluate-live
 ```
 
-The live targets use `.venv/bin/python` and require `GEMINI_API_KEY` in `.env`.
+The live targets use `.venv/bin/python` and default to
+`LIVE_PROVIDER=xai LIVE_MODEL=grok-4.6 LIVE_PROMPT_VERSION=final-v2`. Google remains available with
+`make baseline-live evaluate-live LIVE_PROVIDER=google LIVE_MODEL=gemini-2.5-flash`
+and `GEMINI_API_KEY`.
 Do not combine live-provider and offline-fixture outputs in one comparison;
 `.venv/bin/python scripts/check_quality_gates.py --require-live` rejects the
-latter. Record the provider/model, prompt version, immutable commit SHA,
+latter and also rejects mismatched providers or models. Record the
+provider/model, prompt version, immutable commit SHA,
 per-case status, and any quota failures alongside the live results. The
-checked-in bundle records the failed live attempt and deliberately leaves
-official LLM status unavailable.
+checked-in bundle records both the earlier failed attempt and the completed xAI
+pair. The pair is official-provider eligible, but its improvement gate is FAIL
+(`+11.11` percentage points versus the required `+20`).

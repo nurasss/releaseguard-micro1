@@ -2,17 +2,23 @@
   "schema_version": "1.0",
   "measurement_scope": "offline_fixture_simulation",
   "same_execution_mode": true,
+  "same_provider": true,
+  "same_model": true,
   "official_llm_comparison": false,
   "baseline": {
     "run_label": "baseline_20260830_220320",
     "mode": "baseline",
     "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "model_id": "releaseguard-offline-v1",
     "results_file": "results/baseline/results.json"
   },
   "final": {
     "run_label": "final_20260830_220325",
     "mode": "final",
-    "execution_mode": "offline_fixture"
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "model_id": "releaseguard-offline-v1"
   },
   "deltas": {
     "development": {

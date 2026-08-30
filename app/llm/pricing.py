@@ -15,6 +15,8 @@ from app.llm.types import Usage
 # pricing page is the source of truth and may have changed since.
 PRICES: dict[str, tuple[float, float]] = {
     "gemini-2.5-flash": (0.30, 2.50),
+    # xAI public text-token pricing documented for Grok 4.6 as of 2026-08-31.
+    "grok-4.6": (2.00, 6.00),
 }
 
 

@@ -23,14 +23,23 @@ def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _latest_result(results_dir: Path, mode: str, ablation: str = "none") -> Path:
+def _latest_result(
+    results_dir: Path,
+    mode: str,
+    ablation: str = "none",
+    execution_mode: str | None = None,
+) -> Path:
     candidates: list[tuple[float, Path]] = []
     for path in results_dir.glob("*/results.json"):
         try:
             meta = _load(path).get("meta", {})
         except (OSError, json.JSONDecodeError):
             continue
-        if meta.get("mode") == mode and meta.get("ablation", "none") == ablation:
+        if (
+            meta.get("mode") == mode
+            and meta.get("ablation", "none") == ablation
+            and (execution_mode is None or meta.get("execution_mode") == execution_mode)
+        ):
             candidates.append((path.stat().st_mtime, path))
     if not candidates:
         raise FileNotFoundError(f"No {mode}/{ablation} results found in {results_dir}")
@@ -49,6 +58,56 @@ def _latest_live_result(results_dir: Path) -> Path | None:
             and meta.get("model_id") == "gemini-2.5-flash"
             and meta.get("ablation", "none") == "none"
         ):
+            candidates.append((path.stat().st_mtime, path))
+    return max(candidates, key=lambda item: item[0])[1] if candidates else None
+
+
+def _latest_successful_live_pair(results_dir: Path) -> tuple[Path, Path] | None:
+    runs: list[tuple[float, Path, dict[str, Any], dict[str, Any]]] = []
+    for path in results_dir.glob("*/results.json"):
+        try:
+            payload = _load(path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        meta = payload.get("meta", {})
+        aggregate = payload.get("aggregate", {}).get("all", {})
+        if (
+            meta.get("execution_mode") == "live_provider"
+            and meta.get("ablation", "none") == "none"
+            and meta.get("cases_total") == 12
+            and aggregate.get("successful_run_rate", 0.0) >= 0.95
+        ):
+            runs.append((path.stat().st_mtime, path, meta, payload))
+
+    finals = sorted(
+        (item for item in runs if item[2].get("mode") == "final"),
+        key=lambda item: item[0],
+        reverse=True,
+    )
+    baselines = [item for item in runs if item[2].get("mode") == "baseline"]
+    for _, final_path, final_meta, _ in finals:
+        matching = [
+            item
+            for item in baselines
+            if item[2].get("provider") == final_meta.get("provider")
+            and item[2].get("model_id") == final_meta.get("model_id")
+        ]
+        if matching:
+            baseline_path = max(matching, key=lambda item: item[0])[1]
+            return baseline_path, final_path
+    return None
+
+
+def _latest_failed_live_result(results_dir: Path) -> Path | None:
+    candidates: list[tuple[float, Path]] = []
+    for path in results_dir.glob("*/results.json"):
+        try:
+            payload = _load(path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        meta = payload.get("meta", {})
+        success_rate = payload.get("aggregate", {}).get("all", {}).get("successful_run_rate", 0.0)
+        if meta.get("execution_mode") == "live_provider" and success_rate < 0.95:
             candidates.append((path.stat().st_mtime, path))
     return max(candidates, key=lambda item: item[0])[1] if candidates else None
 
@@ -129,32 +188,52 @@ def prepare_submission(
     output_dir = output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    baseline_file = _latest_result(results_dir, "baseline")
-    final_file = _latest_result(results_dir, "final")
+    baseline_file = _latest_result(results_dir, "baseline", execution_mode="offline_fixture")
+    final_file = _latest_result(results_dir, "final", execution_mode="offline_fixture")
     baseline = _load(baseline_file)
     final = _load(final_file)
 
     _copy_result_tree(baseline_file, output_dir / "results" / "baseline")
     _copy_result_tree(final_file, output_dir / "results" / "final")
 
-    live_result = _latest_live_result(results_dir)
-    if live_result is not None:
+    live_pair = _latest_successful_live_pair(results_dir)
+    failed_live_result = _latest_failed_live_result(results_dir)
+    if failed_live_result is not None:
         live_out = output_dir / "results" / "live_provider_attempt"
         live_out.mkdir(parents=True, exist_ok=True)
         # Keep the machine-readable failed attempt, but do not copy its large
         # raw per-case reports into the curated submission.
-        live_payload = _load(live_result)
+        live_payload = _load(failed_live_result)
         live_payload.setdefault("meta", {}).setdefault("execution_mode", "live_provider")
-        live_payload.setdefault("meta", {}).setdefault("provider", "google")
+        live_payload.setdefault("meta", {}).setdefault("provider", "unknown")
+        attempt_provider = live_payload["meta"].get("provider", "unknown")
+        attempt_model = live_payload["meta"].get("model_id", "unknown")
         (live_out / "results.json").write_text(
             json.dumps(live_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         (live_out / "README.md").write_text(
             "# Live provider attempt\n\n"
-            "This excluded-from-gates attempt used the configured Gemini provider and "
-            "did not produce a successful 12-case baseline/final pair because the "
-            "provider returned quota/rate-limit errors. It is retained as an honest "
+            f"This excluded-from-gates attempt used provider `{attempt_provider}` with "
+            f"model `{attempt_model}` and "
+            "did not produce a successful 12-case baseline/final pair. It is retained as an honest "
             "record and is not compared with the deterministic offline run.\n",
+            encoding="utf-8",
+        )
+
+    live_baseline: dict[str, Any] | None = None
+    live_final: dict[str, Any] | None = None
+    live_gate_report: dict[str, Any] | None = None
+    if live_pair is not None:
+        live_baseline_file, live_final_file = live_pair
+        live_baseline = _load(live_baseline_file)
+        live_final = _load(live_final_file)
+        _copy_result_tree(live_baseline_file, output_dir / "results" / "live_provider" / "baseline")
+        _copy_result_tree(live_final_file, output_dir / "results" / "live_provider" / "final")
+        live_gate_report = evaluate_gates(live_baseline, live_final)
+        live_gate_report["baseline_file"] = "results/live_provider/baseline/results.json"
+        live_gate_report["final_file"] = "results/live_provider/final/results.json"
+        (output_dir / "results" / "official_live_quality_gates.json").write_text(
+            json.dumps(live_gate_report, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
 
@@ -238,22 +317,26 @@ def prepare_submission(
     (output_dir / "results" / "quality_gates.json").write_text(
         json.dumps(gate_report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    live_meta = _load(live_result).get("meta", {}) if live_result is not None else {}
-    live_aggregate = _load(live_result).get("aggregate", {}) if live_result is not None else {}
+    live_result = live_pair[1] if live_pair is not None else failed_live_result
+    live_payload = _load(live_result) if live_result is not None else {}
+    live_meta = live_payload.get("meta", {})
+    live_aggregate = live_payload.get("aggregate", {})
     live_execution_mode = live_meta.get("execution_mode")
-    if live_execution_mode is None and live_meta.get("model_id", "").startswith("gemini-"):
+    if live_execution_mode is None and live_meta.get("model_id", "").startswith(("gemini-", "grok-")):
         live_execution_mode = "live_provider"
     official_status = {
         "schema_version": "1.0",
-        "status": "unavailable",
+        "status": "available" if live_pair is not None else "unavailable",
         "measurement": "official_llm_baseline_final",
-        "provider": live_meta.get("provider", "google") if live_meta else "google",
-        "model_id": live_meta.get("model_id", "gemini-2.5-flash") if live_meta else "gemini-2.5-flash",
-        "successful_live_pair": False,
+        "provider": live_meta.get("provider") if live_meta else None,
+        "model_id": live_meta.get("model_id") if live_meta else None,
+        "successful_live_pair": live_pair is not None,
+        "quality_gates_passed": live_gate_report.get("passed") if live_gate_report else None,
         "reason": (
-            "No successful live-provider baseline/final pair is available in this bundle. "
-            "The retained provider attempt ended in quota/rate-limit errors before a "
-            "successful 12-case run."
+            "A successful 12-case live-provider baseline/final pair is included. "
+            "Its official quality gate result is preserved without substitution."
+            if live_pair is not None
+            else "No successful live-provider baseline/final pair is available in this bundle."
         ),
         "offline_fixture_results_are_not_official_substitute": True,
         "observed_live_attempt": {
@@ -261,7 +344,11 @@ def prepare_submission(
             "mode": live_meta.get("mode") if live_meta else None,
             "execution_mode": live_execution_mode,
             "successful_run_rate": live_aggregate.get("all", {}).get("successful_run_rate") if live_aggregate else None,
-            "results_file": "results/live_provider_attempt/results.json" if live_result is not None else None,
+            "results_file": (
+                "results/live_provider/final/results.json"
+                if live_pair is not None
+                else "results/live_provider_attempt/results.json" if failed_live_result is not None else None
+            ),
         },
         "rerun": "make baseline-live && make evaluate-live",
     }
@@ -273,9 +360,9 @@ def prepare_submission(
         "The baseline, final, and ablation directories in this bundle are the "
         "reproducible `releaseguard-offline-v1` fixture simulation. Their numeric "
         "quality gates are not official LLM benchmark results. The official live "
-        "measurement status is recorded in `official_llm_status.json`; the failed "
-        "provider attempt is retained under `live_provider_attempt/`.\n\n"
-        "To create an official comparison with a valid Gemini key and quota, run "
+        "measurement status is recorded in `official_llm_status.json`; a successful "
+        "pair is stored under `live_provider/`, while failed attempts remain separate.\n\n"
+        "To create an official comparison with a fresh provider key and quota, run "
         "`make baseline-live`, `make evaluate-live`, and then use "
         "`scripts/check_quality_gates.py --require-live`.\n",
         encoding="utf-8",
@@ -362,7 +449,8 @@ def prepare_submission(
         "ablations, representative Analyzer and Verifier trajectories, the case 12\n"
         "report, the executed removed experiment, quality-gate output, official LLM\n"
         "status, and a walkthrough video. The offline numbers are explicitly not\n"
-        "official Gemini measurements; the failed live attempt is retained separately.\n"
+        "official live-provider measurements. The completed xAI pair and its FAIL\n"
+        "gate are stored separately from both fixture results and failed attempts.\n"
         "Local runtime directories and secrets are excluded by the ZIP packager.\n",
         encoding="utf-8",
     )
@@ -389,8 +477,15 @@ def prepare_submission(
             "video/releaseguard_demo.mp4",
         ],
     }
-    if live_result is not None:
+    if failed_live_result is not None:
         manifest["live_provider_attempt"] = "results/live_provider_attempt/results.json"
+    if live_pair is not None:
+        manifest["required_artifacts"].append("results/official_live_quality_gates.json")
+        manifest["official_live_pair"] = {
+            "baseline": "results/live_provider/baseline/results.json",
+            "final": "results/live_provider/final/results.json",
+            "quality_gates": "results/official_live_quality_gates.json",
+        }
     (output_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )

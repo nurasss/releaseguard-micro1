@@ -17,7 +17,7 @@ class Settings(BaseSettings):
         protected_namespaces=(),
     )
 
-    llm_provider: Literal["google"] = "google"
+    llm_provider: Literal["google", "xai"] = "google"
     # Model frozen due to latency requirement: gemini-2.5-flash (1.3s) vs gemini-3.7-flash (23.3s) to satisfy NFR-08 (<=5min per fixture).
     model_id: str = "gemini-2.5-flash"
     offline_mode: bool = False
@@ -26,16 +26,22 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("GEMINI_API_KEY", "RG_API_KEY"),
     )
+    xai_api_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("XAI_API_KEY", "RG_XAI_API_KEY"),
+    )
     github_token: str | None = Field(
         default=None,
         validation_alias=AliasChoices("GITHUB_TOKEN", "RG_GITHUB_TOKEN"),
     )
     min_request_interval_ms: int = 6500
+    xai_min_request_interval_ms: int = 0
+    xai_reasoning_effort: Literal["low", "medium", "high", "xhigh"] = "low"
     data_dir: Path = Path("./runs")
     db_path: Path = Path("./runs/releaseguard.sqlite3")
     trajectories_dir: Path = Path("./trajectories")
     artifacts_dir: Path = Path("./artifacts")
-    prompt_version: str = "p1"
+    prompt_version: str = "final-v2"
     system_version: str = "0.1.0"
     audit_deadline_s: int = 300
     request_timeout_s: int = 120
@@ -43,14 +49,18 @@ class Settings(BaseSettings):
 
     def __repr__(self) -> str:
         masked_api_key = "***" if self.api_key is not None else None
+        masked_xai_api_key = "***" if self.xai_api_key is not None else None
         masked_github_token = "***" if self.github_token is not None else None
         return (
             f"Settings(llm_provider={self.llm_provider!r}, "
             f"model_id={self.model_id!r}, "
             f"offline_mode={self.offline_mode!r}, "
             f"api_key={masked_api_key!r}, "
+            f"xai_api_key={masked_xai_api_key!r}, "
             f"github_token={masked_github_token!r}, "
             f"min_request_interval_ms={self.min_request_interval_ms!r}, "
+            f"xai_min_request_interval_ms={self.xai_min_request_interval_ms!r}, "
+            f"xai_reasoning_effort={self.xai_reasoning_effort!r}, "
             f"data_dir={self.data_dir!r}, "
             f"db_path={self.db_path!r}, "
             f"trajectories_dir={self.trajectories_dir!r}, "
