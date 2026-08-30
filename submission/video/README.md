@@ -1,3 +1,3 @@
 # Submission video
 
-`releaseguard_demo.mp4` is a short, silent 20-second AVFoundation-rendered demo. It covers the security boundary, frozen 12-case result, case 12 trajectory, and packaged artifacts.
+`releaseguard_demo.mp4` is an approximately 100-second AVFoundation-rendered walkthrough. It covers the persona and bottleneck, the baseline and final commands, Analyzer -> Verifier on case 12, redaction/private-repository guards, the changelog and removed It5 experiment, reproduction commands, and the honest offline/live measurement boundary.

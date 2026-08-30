@@ -1,13 +1,18 @@
 {
   "schema_version": "1.0",
+  "measurement_scope": "offline_fixture_simulation",
+  "same_execution_mode": true,
+  "official_llm_comparison": false,
   "baseline": {
-    "run_label": "baseline_20260830_213016",
+    "run_label": "baseline_20260830_220320",
     "mode": "baseline",
+    "execution_mode": "offline_fixture",
     "results_file": "results/baseline/results.json"
   },
   "final": {
-    "run_label": "final_20260830_213022",
-    "mode": "final"
+    "run_label": "final_20260830_220325",
+    "mode": "final",
+    "execution_mode": "offline_fixture"
   },
   "deltas": {
     "development": {
@@ -21,7 +26,7 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 127,
+      "total_runtime_ms": 245,
       "total_cost": 0.0
     },
     "held_out": {
@@ -35,7 +40,7 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 124,
+      "total_runtime_ms": 138,
       "total_cost": 0.0
     },
     "all": {
@@ -49,7 +54,7 @@
       "unsupported_critical_total": 0,
       "trap_hits_total": 0,
       "successful_run_rate": 0.0,
-      "total_runtime_ms": 251,
+      "total_runtime_ms": 383,
       "total_cost": 0.0
     }
   }

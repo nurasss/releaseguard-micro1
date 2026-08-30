@@ -22,42 +22,126 @@ if FileManager.default.fileExists(atPath: outputURL.path) {
 let width = 1280
 let height = 720
 let fps: Int32 = 24
-let secondsPerSlide = 5
+let secondsPerSlide = 10
 let slides = [
     Slide(
         title: "ReleaseGuard",
         lines: [
-            "Submission demo — read-only release readiness auditing",
-            "Public repository snapshot → evidence → decision",
+            "SUBMISSION WALKTHROUGH / 01",
+            "Persona: Tech Lead or Release Engineer",
+            "Bottleneck: release evidence is scattered across CI, tests, builds, and docs",
+            "Value: a redacted, evidence-backed GO / REVIEW / NO-GO in minutes",
+            "Scope: read-only public repository audit, bound to an immutable commit SHA",
         ],
         accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
     ),
     Slide(
-        title: "Security boundary",
+        title: "The fair baseline",
         lines: [
-            "Public repositories only; private targets stop before content access",
-            "Redaction happens before evidence, report, trajectory, and SQLite persistence",
-            "Secret-file bodies are omitted; hashes and structure remain",
+            "SUBMISSION WALKTHROUGH / 02",
+            "$ make baseline",
+            "12 identical frozen cases / same output contract",
+            "B1: one direct general-purpose path, no checklist or Verifier",
+            "CBR 0.4444   decision accuracy 0.4167   runtime 0.449s",
+            "OfflineFixtureLLM simulation, not official Gemini",
         ],
         accent: CGColor(red: 0.98, green: 0.55, blue: 0.30, alpha: 1.0)
     ),
     Slide(
-        title: "Frozen 12-case experiment",
+        title: "What the baseline misses",
         lines: [
-            "Baseline CBR: 0.4444",
-            "Final CBR: 1.0000  |  improvement: +55.56 percentage points",
-            "Critical evidence: 100%  |  unsupported critical: 0  |  run rate: 100%",
+            "SUBMISSION WALKTHROUGH / 03",
+            "case_05  required production environment setting -> missed",
+            "case_07  release ref and manifest version conflict -> missed",
+            "case_09  release workflow excludes the release branch -> missed",
+            "case_12  green CI does not exercise the critical integration path",
+            "Failure mode: no structured coverage across cross-file signals",
+        ],
+        accent: CGColor(red: 0.95, green: 0.35, blue: 0.35, alpha: 1.0)
+    ),
+    Slide(
+        title: "Final workflow",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 04",
+            "$ make evaluate",
+            "resolve SHA -> snapshot -> deterministic checks",
+            "AuditPlan -> Analyzer -> Verifier falsification",
+            "evidence IDs -> policy -> JSON + Markdown + trajectory",
+            "All 12 fixture runs completed successfully",
+        ],
+        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
+    ),
+    Slide(
+        title: "Realistic execution: case 12",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 05",
+            "$ make demo CASE=case_12",
+            "snapshot: immutable fixture SHA / CI conclusion: success",
+            "Analyzer: integration tests are not run for the release path",
+            "Verifier: confirms the cited workflow and test evidence",
+            "Policy: NO-GO | report.json + report.md + snapshot.json saved",
+        ],
+        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
+    ),
+    Slide(
+        title: "Evidence before persistence",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 06",
+            "read_file(.env) -> [REDACTED: secret file contents omitted]",
+            "EvidenceStore -> redacted payload -> SQLite/report/trajectory",
+            "private repository -> reject before ref or content access",
+            "critical/high finding -> evidence IDs -> independent falsification",
+            "No raw secret body is shipped in report.json or SQLite",
+        ],
+        accent: CGColor(red: 0.98, green: 0.55, blue: 0.30, alpha: 1.0)
+    ),
+    Slide(
+        title: "Experiments that earned their place",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 07",
+            "Verifier ON CBR 1.0000 | OFF 1.0000 -> no lift on frozen cases",
+            "Evidence ON/OFF -> same metrics; adversarial cases are still needed",
+            "No deterministic checks -> CBR 0.0000 / decision accuracy 0.1667",
+            "It5 CI + Security + Test subagents -> CBR 0.5556 -> REMOVE",
+            "More agents are not a substitute for an evidence boundary",
+        ],
+        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
+    ),
+    Slide(
+        title: "Measured result and boundary",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 08",
+            "OFFLINE FIXTURE SIMULATION / same frozen 12 cases",
+            "B1 CBR 0.4444 -> Final CBR 1.0000 (+55.56 pp)",
+            "Final: precision 1.0000 / critical evidence 100% / unsupported 0",
+            "Final: successful run rate 100% / fixture cost $0.0000",
+            "Official LLM baseline + final: UNAVAILABLE after provider HTTP 429",
         ],
         accent: CGColor(red: 0.45, green: 0.82, blue: 0.38, alpha: 1.0)
     ),
     Slide(
-        title: "Case 12 and submission",
+        title: "Reproduce and package",
         lines: [
-            "Analyzer identifies the excluded integration-test path",
-            "Verifier confirms the evidence; policy returns NO-GO",
-            "Curated trajectories, baseline/final, ablations, and ZIP are verified",
+            "SUBMISSION WALKTHROUGH / 09",
+            "$ make setup && make test",
+            "$ make baseline && make evaluate && make ablations",
+            "$ make demo CASE=case_12",
+            "$ .venv/bin/python scripts/package_submission.py",
+            "$ .venv/bin/python scripts/verify_submission_zip.py dist/releaseguard_submission.zip",
         ],
-        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
+        accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
+    ),
+    Slide(
+        title: "ReleaseGuard in one line",
+        lines: [
+            "SUBMISSION WALKTHROUGH / 10",
+            "The user gets a release decision they can inspect and challenge",
+            "The system does not deploy, push, merge, or access private repositories",
+            "Analyzer proposes; Verifier tries to falsify; policy stays deterministic",
+            "Offline numbers are labelled simulation until a live LLM pair exists",
+            "Evidence is the boundary. Human approval remains the release gate.",
+        ],
+        accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
     ),
 ]
 
@@ -101,6 +185,17 @@ func drawText(_ context: CGContext, _ text: String, x: CGFloat, y: CGFloat, size
     CTLineDraw(line, context)
 }
 
+func lineColor(_ line: String, accent: CGColor) -> CGColor {
+    if line.hasPrefix("$") { return accent }
+    if line.contains("UNAVAILABLE") || line.contains("missed") || line.contains("REMOVE") {
+        return CGColor(red: 1.0, green: 0.52, blue: 0.40, alpha: 1.0)
+    }
+    if line.contains("100%") || line.contains("successfully") || line.contains("NO-GO") {
+        return CGColor(red: 0.55, green: 0.92, blue: 0.55, alpha: 1.0)
+    }
+    return CGColor(red: 0.86, green: 0.90, blue: 0.95, alpha: 1.0)
+}
+
 func makeBuffer(slide: Slide, progress: CGFloat) -> CVPixelBuffer? {
     var optionalBuffer: CVPixelBuffer?
     let status = CVPixelBufferCreate(
@@ -126,18 +221,39 @@ func makeBuffer(slide: Slide, progress: CGFloat) -> CVPixelBuffer? {
         bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue
     ) else { return nil }
 
-    context.setFillColor(CGColor(red: 0.045, green: 0.06, blue: 0.10, alpha: 1.0))
+    let background = CGColor(red: 0.035, green: 0.048, blue: 0.078, alpha: 1.0)
+    let panel = CGColor(red: 0.055, green: 0.075, blue: 0.115, alpha: 1.0)
+    let muted = CGColor(red: 0.42, green: 0.50, blue: 0.62, alpha: 1.0)
+    context.setFillColor(background)
     context.fill(CGRect(x: 0, y: 0, width: width, height: height))
     context.setFillColor(slide.accent)
     context.fill(CGRect(x: 0, y: 0, width: 14, height: height))
-    drawText(context, slide.title, x: 76, y: 560, size: 52, color: .white, bold: true)
+    drawText(context, "RELEASEGUARD  /  AGENTIC WORKFLOWS HACKATHON", x: 76, y: 674, size: 17, color: muted, bold: true)
+    drawText(context, slide.title, x: 76, y: 604, size: 48, color: .white, bold: true)
 
-    var y: CGFloat = 455
-    for line in slide.lines {
-        context.setFillColor(slide.accent)
-        context.fill(CGRect(x: 78, y: y + 5, width: 12, height: 12))
-        drawText(context, line, x: 112, y: y, size: 26, color: CGColor(red: 0.88, green: 0.91, blue: 0.95, alpha: 1.0))
-        y -= 66
+    let panelRect = CGRect(x: 68, y: 142, width: 1144, height: 390)
+    context.setFillColor(panel)
+    context.fill(panelRect)
+    context.setFillColor(CGColor(red: 0.10, green: 0.13, blue: 0.19, alpha: 1.0))
+    context.fill(CGRect(x: panelRect.minX, y: panelRect.maxY - 32, width: panelRect.width, height: 32))
+    for (index, color) in [
+        CGColor(red: 0.95, green: 0.34, blue: 0.31, alpha: 1.0),
+        CGColor(red: 0.96, green: 0.72, blue: 0.25, alpha: 1.0),
+        CGColor(red: 0.32, green: 0.78, blue: 0.44, alpha: 1.0),
+    ].enumerated() {
+        context.setFillColor(color)
+        context.fillEllipse(in: CGRect(x: panelRect.minX + 18 + CGFloat(index) * 22, y: panelRect.maxY - 22, width: 10, height: 10))
+    }
+    drawText(context, "captured run notes", x: panelRect.minX + 98, y: panelRect.maxY - 24, size: 14, color: muted)
+
+    let reveal = min(max(progress * 1.35, 0.0), 1.0)
+    let visibleCount = min(slide.lines.count, max(0, Int(reveal * CGFloat(slide.lines.count + 1))))
+    var y: CGFloat = panelRect.maxY - 76
+    for (index, line) in slide.lines.enumerated() {
+        if index >= visibleCount { break }
+        drawText(context, ">", x: panelRect.minX + 22, y: y, size: 22, color: slide.accent, bold: true)
+        drawText(context, line, x: panelRect.minX + 52, y: y, size: 21, color: lineColor(line, accent: slide.accent), bold: line.hasPrefix("$"))
+        y -= 43
     }
 
     let barWidth = CGFloat(width - 152) * progress
@@ -145,6 +261,8 @@ func makeBuffer(slide: Slide, progress: CGFloat) -> CVPixelBuffer? {
     context.fill(CGRect(x: 76, y: 52, width: CGFloat(width - 152), height: 5))
     context.setFillColor(slide.accent)
     context.fill(CGRect(x: 76, y: 52, width: barWidth, height: 5))
+    drawText(context, String(format: "SCENE %02d / %02d", slides.firstIndex(where: { $0.title == slide.title }).map { $0 + 1 } ?? 0, slides.count), x: 76, y: 28, size: 14, color: muted, bold: true)
+    drawText(context, "simulation scope is labelled; no credentials or secret bodies", x: 694, y: 28, size: 14, color: muted)
     return buffer
 }
 

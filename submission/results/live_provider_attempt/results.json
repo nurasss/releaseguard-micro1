@@ -10,7 +10,9 @@
     "spec_version": "1.0",
     "frozen_at": "2026-08-29",
     "cases_total": 12,
-    "timeout_s": 300
+    "timeout_s": 300,
+    "execution_mode": "live_provider",
+    "provider": "google"
   },
   "per_case": [
     {

@@ -34,9 +34,15 @@ class ToolResult(BaseModel):
 class ToolDispatcher:
     """Dispatches tool calls against repository sources and records evidence."""
 
-    def __init__(self, source: RepositorySource, evidence: EvidenceStore) -> None:
+    def __init__(
+        self,
+        source: RepositorySource,
+        evidence: EvidenceStore,
+        normalize_outputs: bool = True,
+    ) -> None:
         self.source = source
         self.evidence = evidence
+        self.normalize_outputs = normalize_outputs
 
     def _record(
         self,
@@ -59,7 +65,15 @@ class ToolDispatcher:
             line_end=line_end,
             content=content,
         )
-        result = redact_obj(dict(ev.payload))
+        safe_payload = redact_obj(dict(ev.payload))
+        if self.normalize_outputs:
+            result = safe_payload
+        else:
+            # Keep the ablation bounded and persistence-safe while removing the
+            # normalized object shape that the normal path gives to the agent.
+            # This is intentionally a serialized raw tool payload, not an
+            # unbounded repository read and never includes secret-file bodies.
+            result = {"raw_output": str(safe_payload)}
         result["evidence_ids"] = [ev.id]
         return ev, result
 

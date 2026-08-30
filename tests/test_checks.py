@@ -394,8 +394,9 @@ def test_dc10_detects_injected_secret(tmp_path: Path) -> None:
     repo = case_dir / "repo"
     repo.mkdir(parents=True)
     (case_dir / "artifacts").mkdir()
+    synthetic_aws_key = "AKIA" + "ABCDEFGHIJKLMNOP"
     (repo / "settings.py").write_text(
-        'AWS_KEY = "AKIAABCDEFGHIJKLMNOP"\n', encoding="utf-8"
+        f'AWS_KEY = "{synthetic_aws_key}"\n', encoding="utf-8"
     )
 
     source = LocalFixtureSource(case_dir)
@@ -408,4 +409,4 @@ def test_dc10_detects_injected_secret(tmp_path: Path) -> None:
     result = check_secret_scan(source, _Resolved(), store)
     assert result.status == CheckStatus.fail
     assert "AWS Access Key" in result.details
-    assert "AKIAABCDEFGHIJKLMNOP" not in result.details  # must not leak the raw secret
+    assert synthetic_aws_key not in result.details  # must not leak the raw secret

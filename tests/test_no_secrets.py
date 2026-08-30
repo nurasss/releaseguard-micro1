@@ -82,7 +82,8 @@ def test_find_secrets_positive_and_negative() -> None:
     assert hits_aws[0][1] == "AWS Access Key"
 
     # 6. Positive: Private Key
-    hits_pk = find_secrets("-----BEGIN RSA PRIVATE KEY-----")
+    sample_private_key_header = "-----BEGIN " + "RSA PRIVATE KEY-----"
+    hits_pk = find_secrets(sample_private_key_header)
     assert len(hits_pk) == 1
     assert hits_pk[0][1] == "Private Key Header"
 

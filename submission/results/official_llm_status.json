@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "status": "unavailable",
+  "measurement": "official_llm_baseline_final",
+  "provider": "google",
+  "model_id": "gemini-2.5-flash",
+  "successful_live_pair": false,
+  "reason": "No successful live-provider baseline/final pair is available in this bundle. The retained provider attempt ended in quota/rate-limit errors before a successful 12-case run.",
+  "offline_fixture_results_are_not_official_substitute": true,
+  "observed_live_attempt": {
+    "run_label": "baseline_official_run",
+    "mode": "baseline",
+    "execution_mode": "live_provider",
+    "successful_run_rate": 0.0,
+    "results_file": "results/live_provider_attempt/results.json"
+  },
+  "rerun": "make baseline-live && make evaluate-live"
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "audit_run_id": "aud_87ebc17780a2",
+  "audit_run_id": "aud_c417dd68f6ed",
   "repository_url": "https://github.com/eval/case_06",
   "requested_ref": "v0.5.1",
   "commit_sha": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -13,7 +13,7 @@
   "evidence": [
     {
       "id": "E-001",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "repository_metadata",
       "source_path": "repository_metadata.json",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -49,7 +49,7 @@
     },
     {
       "id": "E-002",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "git_metadata",
       "source_path": ".",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -93,7 +93,7 @@
     },
     {
       "id": "E-003",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -110,7 +110,7 @@
     },
     {
       "id": "E-004",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_actions",
       "source_path": "github_actions_runs.json",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -134,7 +134,7 @@
     },
     {
       "id": "E-005",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "test_result",
       "source_path": "test_report.json",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -148,7 +148,7 @@
     },
     {
       "id": "E-006",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "build_result",
       "source_path": "build_report.json",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -166,7 +166,7 @@
     },
     {
       "id": "E-007",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": ".github/workflows/ci.yml",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -186,7 +186,7 @@
     },
     {
       "id": "E-008",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "README.md",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -206,7 +206,7 @@
     },
     {
       "id": "E-009",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "pyproject.toml",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -226,7 +226,7 @@
     },
     {
       "id": "E-010",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "scripts/build_release.py",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -246,7 +246,7 @@
     },
     {
       "id": "E-011",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "src/metrics_exporter/__init__.py",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -266,7 +266,7 @@
     },
     {
       "id": "E-012",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "src/metrics_exporter/exporter.py",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -286,7 +286,7 @@
     },
     {
       "id": "E-013",
-      "audit_run_id": "aud_87ebc17780a2",
+      "audit_run_id": "aud_c417dd68f6ed",
       "source_type": "github_file",
       "source_path": "tests/test_exporter.py",
       "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
@@ -309,7 +309,7 @@
   "limitations": [
     "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (100 total tokens)"
   ],
-  "runtime_ms": 27,
+  "runtime_ms": 38,
   "model_id": "releaseguard-offline-v1",
   "prompt_version": "p1",
   "estimated_cost_usd": 0.0

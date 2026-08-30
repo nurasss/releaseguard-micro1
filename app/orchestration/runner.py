@@ -228,6 +228,7 @@ class AuditRunner:
                 prompt_version=self.settings.prompt_version,
                 system_version=self.settings.system_version,
                 mode=mode,
+                ablation=ablation,
             )
 
             report_fail = AuditReport(
@@ -270,7 +271,11 @@ class AuditRunner:
 
         # 2. Setup EvidenceStore, ToolDispatcher, TrajectoryLogger
         store = EvidenceStore(audit_run_id=audit_run_id, commit_sha=commit_sha)
-        dispatcher = ToolDispatcher(source=source, evidence=store)
+        dispatcher = ToolDispatcher(
+            source=source,
+            evidence=store,
+            normalize_outputs=ablation != "no_tool_output_normalization",
+        )
         logger = TrajectoryLogger(audit_run_id=audit_run_id, trajectories_dir=self.settings.trajectories_dir)
         SnapshotManager().capture(
             source=source,
@@ -429,6 +434,7 @@ class AuditRunner:
             prompt_version=self.settings.prompt_version,
             system_version=self.settings.system_version,
             mode=mode,
+            ablation=ablation,
         )
 
         # 9. Save to SQLite database
@@ -488,9 +494,8 @@ class AuditRunner:
         - "no_evidence_enforcement": findings the Analyzer rejected ONLY for missing
           evidence on a critical claim are let back into the candidate pool.
         - "no_deterministic_checks": skip run_all_checks() entirely.
-        - "no_tool_output_normalization": accepted as a valid value but not yet wired to a
-          behavioral change here; recorded as a limitation so results are never silently
-          mislabeled as an ablation that didn't actually run.
+        - "no_tool_output_normalization": keep redaction and hard bounds, but send each
+          tool result to the agent as a serialized payload instead of the normalized object.
         - "it5_subagents": It5 "removed experiment" (ТЗ Improvement Changelog) — runs three
           specialized subagents (CI / Security / Test) sequentially instead of the single
           Analyzer, and combines their output into one Analyzer-shaped outcome. See
@@ -501,8 +506,8 @@ class AuditRunner:
 
         if ablation == "no_tool_output_normalization":
             limitations.append(
-                f"Ablation {ablation!r} was requested but is not yet wired into _run_final_pipeline; "
-                "this run behaved identically to ablation='none'."
+                "Ablation 'no_tool_output_normalization': tool results were sent as bounded "
+                "redacted serialized payloads rather than normalized objects."
             )
 
         if ablation == "no_deterministic_checks":

@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-# When invoked as ``python scripts/prepare_submission.py``, Python puts the
+# When invoked as ``.venv/bin/python scripts/prepare_submission.py``, Python puts the
 # scripts directory on sys.path rather than the repository root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -77,6 +77,7 @@ def _find_case12_run(runs_dir: Path) -> tuple[dict[str, Any], Path]:
         if (
             report.get("repository_url", "").rstrip("/").endswith("/case_12")
             and report.get("mode") == "final"
+            and run.get("ablation", "none") == "none"
             and run.get("status", "completed") == "completed"
         ):
             candidates.append((run.get("finished_at", ""), report, report_path.parent))
@@ -142,16 +143,28 @@ def prepare_submission(
         live_out.mkdir(parents=True, exist_ok=True)
         # Keep the machine-readable failed attempt, but do not copy its large
         # raw per-case reports into the curated submission.
-        shutil.copy2(live_result, live_out / "results.json")
+        live_payload = _load(live_result)
+        live_payload.setdefault("meta", {}).setdefault("execution_mode", "live_provider")
+        live_payload.setdefault("meta", {}).setdefault("provider", "google")
+        (live_out / "results.json").write_text(
+            json.dumps(live_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
         (live_out / "README.md").write_text(
             "# Live provider attempt\n\n"
             "This excluded-from-gates attempt used the configured Gemini provider and "
-            "was interrupted by provider quota/rate-limit errors. It is retained as "
-            "an honest record and is not compared with the deterministic offline run.\n",
+            "did not produce a successful 12-case baseline/final pair because the "
+            "provider returned quota/rate-limit errors. It is retained as an honest "
+            "record and is not compared with the deterministic offline run.\n",
             encoding="utf-8",
         )
 
-    ablation_names = ("no_verifier", "no_evidence_enforcement", "no_deterministic_checks", "it5_subagents")
+    ablation_names = (
+        "no_verifier",
+        "no_evidence_enforcement",
+        "no_deterministic_checks",
+        "no_tool_output_normalization",
+        "it5_subagents",
+    )
     ablation_summary: dict[str, Any] = {
         "schema_version": "1.0",
         "reference_final": final.get("meta", {}),
@@ -178,8 +191,8 @@ def prepare_submission(
         "",
         "All rows use the same frozen 12 cases and the same offline fixture model.",
         "",
-        "| Run | CBR | Precision | Critical evidence | Unsupported critical | Successful run rate |",
-        "|---|---:|---:|---:|---:|---:|",
+        "| Run | CBR | Precision | Critical evidence | Unsupported critical | Successful run rate | Runtime | Cost |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     reference_metrics = final.get("aggregate", {}).get("all", {})
     rows = [("final (Verifier ON)", reference_metrics)]
@@ -188,14 +201,27 @@ def prepare_submission(
         for name, data in ablation_summary["ablations"].items()
     )
     for name, metrics in rows:
+        cost = metrics.get("total_cost", metrics.get("total_cost_usd", 0.0))
         ablation_lines.append(
             f"| `{name}` | {metrics.get('cbr', 0.0):.4f} | {metrics.get('precision', 0.0):.4f} | "
             f"{metrics.get('critical_evidence_coverage', 0.0):.4f} | "
             f"{metrics.get('unsupported_critical_total', 0)} | "
-            f"{metrics.get('successful_run_rate', 0.0):.4f} |"
+            f"{metrics.get('successful_run_rate', 0.0):.4f} | "
+            f"{metrics.get('total_runtime_ms', 0.0):.0f} ms | "
+            f"${cost:.4f} |"
         )
     (output_dir / "results" / "ablations" / "comparison.md").write_text(
-        "\n".join(ablation_lines) + "\n", encoding="utf-8"
+        "\n".join(ablation_lines)
+        + "\n\n## Interpretation\n\n"
+        + "- Verifier ON and `no_verifier` have the same metrics on these frozen, "
+          "non-adversarial cases; this does not support a metric-lift claim for "
+          "verification.\n"
+        + "- Evidence enforcement ON/OFF also matches because no unsupported "
+          "critical candidate was emitted in this run.\n"
+        + "- `no_deterministic_checks` and It5 show the meaningful negative controls: "
+          "removing deterministic evidence or adding specialized agents reduced "
+          "quality.\n",
+        encoding="utf-8",
     )
 
     comparison = _make_comparison(final, baseline, Path("results/baseline/results.json"))
@@ -211,6 +237,48 @@ def prepare_submission(
     gate_report["final_file"] = "results/final/results.json"
     (output_dir / "results" / "quality_gates.json").write_text(
         json.dumps(gate_report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    live_meta = _load(live_result).get("meta", {}) if live_result is not None else {}
+    live_aggregate = _load(live_result).get("aggregate", {}) if live_result is not None else {}
+    live_execution_mode = live_meta.get("execution_mode")
+    if live_execution_mode is None and live_meta.get("model_id", "").startswith("gemini-"):
+        live_execution_mode = "live_provider"
+    official_status = {
+        "schema_version": "1.0",
+        "status": "unavailable",
+        "measurement": "official_llm_baseline_final",
+        "provider": live_meta.get("provider", "google") if live_meta else "google",
+        "model_id": live_meta.get("model_id", "gemini-2.5-flash") if live_meta else "gemini-2.5-flash",
+        "successful_live_pair": False,
+        "reason": (
+            "No successful live-provider baseline/final pair is available in this bundle. "
+            "The retained provider attempt ended in quota/rate-limit errors before a "
+            "successful 12-case run."
+        ),
+        "offline_fixture_results_are_not_official_substitute": True,
+        "observed_live_attempt": {
+            "run_label": live_meta.get("run_label") if live_meta else None,
+            "mode": live_meta.get("mode") if live_meta else None,
+            "execution_mode": live_execution_mode,
+            "successful_run_rate": live_aggregate.get("all", {}).get("successful_run_rate") if live_aggregate else None,
+            "results_file": "results/live_provider_attempt/results.json" if live_result is not None else None,
+        },
+        "rerun": "make baseline-live && make evaluate-live",
+    }
+    (output_dir / "results" / "official_llm_status.json").write_text(
+        json.dumps(official_status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    (output_dir / "results" / "README.md").write_text(
+        "# Evaluation result provenance\n\n"
+        "The baseline, final, and ablation directories in this bundle are the "
+        "reproducible `releaseguard-offline-v1` fixture simulation. Their numeric "
+        "quality gates are not official LLM benchmark results. The official live "
+        "measurement status is recorded in `official_llm_status.json`; the failed "
+        "provider attempt is retained under `live_provider_attempt/`.\n\n"
+        "To create an official comparison with a valid Gemini key and quota, run "
+        "`make baseline-live`, `make evaluate-live`, and then use "
+        "`scripts/check_quality_gates.py --require-live`.\n",
+        encoding="utf-8",
     )
     # Replace any harness-local comparison files copied from the final run
     # directory with portable curated versions.
@@ -246,6 +314,7 @@ def prepare_submission(
     it5_dir.mkdir(parents=True, exist_ok=True)
     it5_result = output_dir / "results" / "ablations" / "it5_subagents" / "results.json"
     it5_metrics = _load(it5_result).get("aggregate", {}).get("all", {}) if it5_result.exists() else {}
+    it5_cost = it5_metrics.get("total_cost", it5_metrics.get("total_cost_usd"))
     (it5_dir / "README.md").write_text(
         "# Removed experiment: It5 specialized subagents\n\n"
         "This is the executed comparison requested by the changelog. It runs CI,\n"
@@ -254,7 +323,13 @@ def prepare_submission(
         "`results/ablations/it5_subagents/`.\n\n"
         f"All-case CBR: {it5_metrics.get('cbr', 'N/A')}\n"
         f"All-case precision: {it5_metrics.get('precision', 'N/A')}\n"
-        f"All-case successful run rate: {it5_metrics.get('successful_run_rate', 'N/A')}\n",
+        f"All-case decision accuracy: {it5_metrics.get('decision_accuracy', 'N/A')}\n"
+        f"Critical evidence coverage: {it5_metrics.get('critical_evidence_coverage', 'N/A')}\n"
+        f"Unsupported critical findings: {it5_metrics.get('unsupported_critical_total', 'N/A')}\n"
+        f"All-case successful run rate: {it5_metrics.get('successful_run_rate', 'N/A')}\n"
+        f"Runtime: {it5_metrics.get('total_runtime_ms', 'N/A')} ms\n"
+        + (f"Cost: ${it5_cost:.4f}\n" if isinstance(it5_cost, (int, float)) else f"Cost: {it5_cost or 'N/A'}\n")
+        + "Decision: REMOVE — the extra specialists reduced CBR on the frozen cases.\n",
         encoding="utf-8",
     )
 
@@ -273,18 +348,22 @@ def prepare_submission(
         raise FileNotFoundError(f"Required submission video not found: {video_path}")
     (output_dir / "video" / "README.md").write_text(
         "# Submission video\n\n"
-        "`releaseguard_demo.mp4` is a short, silent 20-second AVFoundation-rendered demo. "
-        "It covers the security boundary, frozen 12-case result, case 12 trajectory, "
-        "and packaged artifacts.\n",
+        "`releaseguard_demo.mp4` is an approximately 100-second AVFoundation-rendered "
+        "walkthrough. It covers the persona and bottleneck, the baseline and final "
+        "commands, Analyzer -> Verifier on case 12, redaction/private-repository "
+        "guards, the changelog and removed It5 experiment, reproduction commands, "
+        "and the honest offline/live measurement boundary.\n",
         encoding="utf-8",
     )
     (output_dir / "README.md").write_text(
         "# ReleaseGuard submission bundle\n\n"
         "This directory is a curated, redacted selection for review. It contains\n"
-        "the 12-case baseline/final results and comparison, ablations, representative\n"
-        "Analyzer and Verifier trajectories, the case 12 report, the executed removed\n"
-        "experiment, quality-gate output, and a short demo video. Local runtime\n"
-        "directories and secrets are excluded by the ZIP packager.\n",
+        "the 12-case offline-fixture baseline/final simulation and comparison,\n"
+        "ablations, representative Analyzer and Verifier trajectories, the case 12\n"
+        "report, the executed removed experiment, quality-gate output, official LLM\n"
+        "status, and a walkthrough video. The offline numbers are explicitly not\n"
+        "official Gemini measurements; the failed live attempt is retained separately.\n"
+        "Local runtime directories and secrets are excluded by the ZIP packager.\n",
         encoding="utf-8",
     )
 
@@ -300,6 +379,8 @@ def prepare_submission(
             "results/comparison.json",
             "results/comparison.md",
             "results/quality_gates.json",
+            "results/README.md",
+            "results/official_llm_status.json",
             "results/ablations/comparison.json",
             "trajectories/analyzer_case_12.jsonl",
             "trajectories/verifier_case_12.jsonl",

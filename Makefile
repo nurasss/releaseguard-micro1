@@ -1,4 +1,4 @@
-.PHONY: setup baseline audit evaluate ablations demo api test quality-gate prepare-submission package verify-package
+.PHONY: setup baseline baseline-live audit evaluate evaluate-live ablations demo api test quality-gate prepare-submission package verify-package
 
 VENV := .venv
 PYTHON := $(VENV)/bin/python
@@ -25,16 +25,23 @@ setup:
 baseline:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode baseline --label baseline_$(shell date +%Y%m%d_%H%M%S)
 
+baseline-live:
+	RG_OFFLINE_MODE=0 $(PYTHON) -m eval.run --mode baseline --label baseline_live_$(shell date +%Y%m%d_%H%M%S)
+
 audit:
 	$(PYTHON) -m app.cli audit --case eval/cases/$(CASE) --mode $(or $(MODE),final)
 
 evaluate:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --label final_$(shell date +%Y%m%d_%H%M%S)
 
+evaluate-live:
+	RG_OFFLINE_MODE=0 $(PYTHON) -m eval.run --mode final --label final_live_$(shell date +%Y%m%d_%H%M%S)
+
 ablations:
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation no_verifier --label ablation_no_verifier_$(shell date +%Y%m%d_%H%M%S)
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation no_evidence_enforcement --label ablation_no_evidence_enforcement_$(shell date +%Y%m%d_%H%M%S)
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation no_deterministic_checks --label ablation_no_deterministic_checks_$(shell date +%Y%m%d_%H%M%S)
+	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation no_tool_output_normalization --label ablation_no_tool_output_normalization_$(shell date +%Y%m%d_%H%M%S)
 	$(FIXTURE_ENV) $(PYTHON) -m eval.run --mode final --ablation it5_subagents --label ablation_it5_subagents_$(shell date +%Y%m%d_%H%M%S)
 
 demo:

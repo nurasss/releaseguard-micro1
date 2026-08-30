@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "source": "local redacted artifacts selected by scripts/prepare_submission.py",
   "baseline_result": {
-    "run_label": "baseline_20260830_213016",
-    "generated_at_utc": "2026-08-30T16:30:17.064349Z",
+    "run_label": "baseline_20260830_220320",
+    "generated_at_utc": "2026-08-30T17:03:21.553812Z",
     "mode": "baseline",
     "ablation": "none",
     "model_id": "releaseguard-offline-v1",
@@ -17,8 +17,8 @@
     "timeout_s": 300
   },
   "final_result": {
-    "run_label": "final_20260830_213022",
-    "generated_at_utc": "2026-08-30T16:30:23.607523Z",
+    "run_label": "final_20260830_220325",
+    "generated_at_utc": "2026-08-30T17:03:26.649294Z",
     "mode": "final",
     "ablation": "none",
     "model_id": "releaseguard-offline-v1",
@@ -31,13 +31,15 @@
     "cases_total": 12,
     "timeout_s": 300
   },
-  "case_12_run_id": "aud_9f22bcd6e71e",
+  "case_12_run_id": "aud_451294228d6b",
   "required_artifacts": [
     "results/baseline/results.json",
     "results/final/results.json",
     "results/comparison.json",
     "results/comparison.md",
     "results/quality_gates.json",
+    "results/README.md",
+    "results/official_llm_status.json",
     "results/ablations/comparison.json",
     "trajectories/analyzer_case_12.jsonl",
     "trajectories/verifier_case_12.jsonl",

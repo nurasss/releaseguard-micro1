@@ -14,6 +14,14 @@ limitation is reported alongside the numbers rather than hidden.
 
 This protocol evaluates a read-only ReleaseGuard audit against an official B1 baseline on 12 synthetic cases. Gold data is never available to either system during an audit.
 
+The word **official** applies only to a result whose metadata has
+`execution_mode: live_provider` and whose baseline and final use the same live
+model/provider. The default local Make targets intentionally use
+`execution_mode: offline_fixture` so a clean checkout can exercise the full
+pipeline without credentials. Those fixture results are engineering smoke
+measurements, not official LLM benchmark results, and must not be used to claim
+the hackathon baseline/final improvement gate.
+
 ## 1. Primary metric
 
 The primary metric is Critical Blocker Recall (CBR):
@@ -148,8 +156,10 @@ After the first main experiment run, the primary-metric formula, matching rule, 
     "run_label": "baseline_2026_08_29",
     "generated_at_utc": "2026-08-29T00:00:00Z",
     "mode": "baseline",
-    "model_id": "example-model-2026-08-01",
-    "prompt_version": "b1-v1",
+      "model_id": "example-model-2026-08-01",
+      "execution_mode": "live_provider",
+      "provider": "google",
+      "prompt_version": "b1-v1",
     "system_version": "releaseguard-v1",
     "spec_version": "1.0",
     "frozen_at": "<YYYY-MM-DD>",

@@ -18,6 +18,8 @@ REQUIRED_MEMBERS = {
     "submission/results/comparison.json",
     "submission/results/comparison.md",
     "submission/results/quality_gates.json",
+    "submission/results/README.md",
+    "submission/results/official_llm_status.json",
     "submission/results/ablations/comparison.json",
     "submission/trajectories/analyzer_case_12.jsonl",
     "submission/trajectories/verifier_case_12.jsonl",

@@ -40,6 +40,16 @@ def format_value(key: str, val: Any) -> str:
     return str(val)
 
 
+def measurement_scope(meta: dict[str, Any]) -> str:
+    """Return a judge-facing label for the provenance of a result."""
+    execution_mode = meta.get("execution_mode")
+    if execution_mode == "live_provider":
+        return "official live-provider measurement"
+    if execution_mode == "offline_fixture":
+        return "offline fixture simulation (not an official LLM measurement)"
+    return "unspecified execution mode"
+
+
 def generate_markdown_report(results: dict[str, Any], compare_results: dict[str, Any] | None = None) -> str:
     meta = results.get("meta", {})
     per_case = results.get("per_case", [])
@@ -50,8 +60,15 @@ def generate_markdown_report(results: dict[str, Any], compare_results: dict[str,
     lines.append(f"- **Mode:** `{meta.get('mode', 'unknown')}`")
     lines.append(f"- **Model ID:** `{meta.get('model_id', 'unknown')}`")
     lines.append(f"- **Prompt Version:** `{meta.get('prompt_version', 'unknown')}`")
+    lines.append(f"- **Execution Mode:** `{meta.get('execution_mode', 'unspecified')}`")
+    lines.append(f"- **Measurement Scope:** {measurement_scope(meta)}")
     lines.append(f"- **Generated at:** `{meta.get('generated_at_utc', 'unknown')}`")
     lines.append(f"- **Cases Total:** `{meta.get('cases_total', len(per_case))}`\n")
+    if meta.get("execution_mode") == "offline_fixture":
+        lines.append(
+            "> This result is a deterministic offline-fixture simulation of the full pipeline. "
+            "It is reproducible locally, but it must not be reported as an official LLM baseline or final score.\n"
+        )
 
     # 1. Per-Case Table
     lines.append("## Per-Case Results\n")

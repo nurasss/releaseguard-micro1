@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "audit_run_id": "aud_d6fe4ebad233",
+  "audit_run_id": "aud_6e596afdc706",
   "repository_url": "https://github.com/eval/case_11",
   "requested_ref": "v1.2.0",
   "commit_sha": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -10,7 +10,7 @@
   "findings": [
     {
       "id": "F-001",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "category": "tests",
       "title": "Test failures",
       "severity": "critical",
@@ -25,7 +25,7 @@
     },
     {
       "id": "F-002",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "category": "ci",
       "title": "CI failed",
       "severity": "critical",
@@ -44,7 +44,7 @@
   "evidence": [
     {
       "id": "E-001",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "test_result",
       "source_path": "test_report",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -85,7 +85,7 @@
     },
     {
       "id": "E-002",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -101,7 +101,7 @@
     },
     {
       "id": "E-003",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_actions",
       "source_path": ".github/workflows/ci.yml",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -123,7 +123,7 @@
     },
     {
       "id": "E-004",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_actions",
       "source_path": "github_actions_runs",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -145,7 +145,7 @@
     },
     {
       "id": "E-005",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "manifest",
       "source_path": "pyproject.toml",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -160,7 +160,7 @@
     },
     {
       "id": "E-006",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "deterministic_check",
       "source_path": "<repository tree>",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -174,7 +174,7 @@
     },
     {
       "id": "E-007",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "deterministic_check",
       "source_path": "<repository tree>",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -188,7 +188,7 @@
     },
     {
       "id": "E-008",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "repository_metadata",
       "source_path": "repository_metadata.json",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -224,7 +224,7 @@
     },
     {
       "id": "E-009",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "git_metadata",
       "source_path": ".",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -300,7 +300,7 @@
     },
     {
       "id": "E-010",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -317,7 +317,7 @@
     },
     {
       "id": "E-011",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_actions",
       "source_path": "github_actions_runs.json",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -341,7 +341,7 @@
     },
     {
       "id": "E-012",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "test_result",
       "source_path": "test_report.json",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -376,7 +376,7 @@
     },
     {
       "id": "E-013",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "build_result",
       "source_path": "build_report.json",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -390,7 +390,7 @@
     },
     {
       "id": "E-014",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": ".github/workflows/ci.yml",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -410,7 +410,7 @@
     },
     {
       "id": "E-015",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": ".gitignore",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -430,7 +430,7 @@
     },
     {
       "id": "E-016",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "LICENSE",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -450,7 +450,7 @@
     },
     {
       "id": "E-017",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "README.md",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -470,7 +470,7 @@
     },
     {
       "id": "E-018",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "pyproject.toml",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -490,7 +490,7 @@
     },
     {
       "id": "E-019",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/__init__.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -510,7 +510,7 @@
     },
     {
       "id": "E-020",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/auth.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -530,7 +530,7 @@
     },
     {
       "id": "E-021",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/config.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -550,7 +550,7 @@
     },
     {
       "id": "E-022",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/dispatcher.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -570,7 +570,7 @@
     },
     {
       "id": "E-023",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/events.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -590,7 +590,7 @@
     },
     {
       "id": "E-024",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/limiter.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -610,7 +610,7 @@
     },
     {
       "id": "E-025",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "src/phoenix/webhooks.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -630,7 +630,7 @@
     },
     {
       "id": "E-026",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "tests/test_auth.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -650,7 +650,7 @@
     },
     {
       "id": "E-027",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "tests/test_limiter.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -670,7 +670,7 @@
     },
     {
       "id": "E-028",
-      "audit_run_id": "aud_d6fe4ebad233",
+      "audit_run_id": "aud_6e596afdc706",
       "source_type": "github_file",
       "source_path": "tests/test_webhook.py",
       "source_ref": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
@@ -779,7 +779,7 @@
     "Ablation 'no_verifier': every critical/high finding was trusted as confirmed without running the Verifier.",
     "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (111 total tokens)"
   ],
-  "runtime_ms": 82,
+  "runtime_ms": 78,
   "model_id": "releaseguard-offline-v1",
   "prompt_version": "p1",
   "estimated_cost_usd": 0.0

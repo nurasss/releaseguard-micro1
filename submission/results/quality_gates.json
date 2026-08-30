@@ -1,9 +1,12 @@
 {
   "schema_version": "1.0",
   "passed": true,
+  "measurement_scope": "offline_fixture_simulation",
+  "official_llm_eligible": false,
+  "official_gate_status": "not_eligible",
   "baseline": {
-    "run_label": "baseline_20260830_213016",
-    "generated_at_utc": "2026-08-30T16:30:17.064349Z",
+    "run_label": "baseline_20260830_220320",
+    "generated_at_utc": "2026-08-30T17:03:21.553812Z",
     "mode": "baseline",
     "ablation": "none",
     "model_id": "releaseguard-offline-v1",
@@ -17,8 +20,8 @@
     "timeout_s": 300
   },
   "final": {
-    "run_label": "final_20260830_213022",
-    "generated_at_utc": "2026-08-30T16:30:23.607523Z",
+    "run_label": "final_20260830_220325",
+    "generated_at_utc": "2026-08-30T17:03:26.649294Z",
     "mode": "final",
     "ablation": "none",
     "model_id": "releaseguard-offline-v1",
@@ -60,6 +63,12 @@
       "actual": 1.0,
       "threshold": 0.95,
       "operator": ">=",
+      "passed": true
+    },
+    "comparison_execution_mode": {
+      "actual": "offline_fixture vs offline_fixture",
+      "threshold": "same mode",
+      "operator": "=",
       "passed": true
     }
   },

@@ -50,3 +50,11 @@ class AuditRun(BaseModel):
     prompt_version: str
     system_version: str
     mode: Literal["baseline", "final", "ablation"] = "final"
+    ablation: Literal[
+        "none",
+        "no_verifier",
+        "no_evidence_enforcement",
+        "no_deterministic_checks",
+        "no_tool_output_normalization",
+        "it5_subagents",
+    ] = "none"

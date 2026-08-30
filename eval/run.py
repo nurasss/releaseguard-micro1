@@ -63,16 +63,36 @@ def _make_comparison(current: dict[str, Any], baseline: dict[str, Any], baseline
             metric: after.get(metric, 0) - before.get(metric, 0)
             for metric in metrics
         }
+    baseline_meta = baseline.get("meta", {})
+    current_meta = current.get("meta", {})
+    baseline_execution_mode = baseline_meta.get("execution_mode", "unspecified")
+    final_execution_mode = current_meta.get("execution_mode", "unspecified")
+    same_execution_mode = (
+        baseline_execution_mode == final_execution_mode
+        or "unspecified" in {baseline_execution_mode, final_execution_mode}
+    )
+    if baseline_execution_mode == final_execution_mode == "offline_fixture":
+        measurement_scope = "offline_fixture_simulation"
+    elif baseline_execution_mode == final_execution_mode == "live_provider":
+        measurement_scope = "official_live_provider"
+    else:
+        measurement_scope = "mixed_or_unspecified"
+
     return {
         "schema_version": "1.0",
+        "measurement_scope": measurement_scope,
+        "same_execution_mode": same_execution_mode,
+        "official_llm_comparison": measurement_scope == "official_live_provider",
         "baseline": {
-            "run_label": baseline.get("meta", {}).get("run_label", ""),
-            "mode": baseline.get("meta", {}).get("mode", "baseline"),
+            "run_label": baseline_meta.get("run_label", ""),
+            "mode": baseline_meta.get("mode", "baseline"),
+            "execution_mode": baseline_execution_mode,
             "results_file": str(baseline_path),
         },
         "final": {
-            "run_label": current.get("meta", {}).get("run_label", ""),
-            "mode": current.get("meta", {}).get("mode", "final"),
+            "run_label": current_meta.get("run_label", ""),
+            "mode": current_meta.get("mode", "final"),
+            "execution_mode": final_execution_mode,
         },
         "deltas": deltas,
     }

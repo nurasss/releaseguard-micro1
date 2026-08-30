@@ -66,7 +66,7 @@ None.
 
 ## Run metadata
 
-Runtime: 61 ms
+Runtime: 66 ms
 Model: releaseguard-offline-v1
 Prompt version: p1
 Estimated LLM cost: $0.0000

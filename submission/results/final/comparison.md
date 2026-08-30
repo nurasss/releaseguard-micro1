@@ -1,18 +1,22 @@
-# ReleaseGuard Evaluation Report: `final_20260830_213022`
+# ReleaseGuard Evaluation Report: `final_20260830_220325`
 
 - **Mode:** `final`
 - **Model ID:** `releaseguard-offline-v1`
 - **Prompt Version:** `offline-final-v1`
-- **Generated at:** `2026-08-30T16:30:23.607523Z`
+- **Execution Mode:** `offline_fixture`
+- **Measurement Scope:** offline fixture simulation (not an official LLM measurement)
+- **Generated at:** `2026-08-30T17:03:26.649294Z`
 - **Cases Total:** `12`
+
+> This result is a deterministic offline-fixture simulation of the full pipeline. It is reproducible locally, but it must not be reported as an official LLM baseline or final score.
 
 ## Per-Case Results
 
 | Case | Expected | Actual | Decision Match | Matched / Total Blockers | False Positives | Trap Hits | Evidence Cov | Runtime | Cost | Status |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---:|---:|:---:|
-| `case_01` | `GO` | `GO` | ✅ | 0/0 | 0 | 0 | 0% | 0.0s | $0.0000 | OK |
+| `case_01` | `GO` | `GO` | ✅ | 0/0 | 0 | 0 | 0% | 0.1s | $0.0000 | OK |
 | `case_02` | `NO-GO` | `NO-GO` | ✅ | 1/1 | 0 | 0 | 100% | 0.0s | $0.0000 | OK |
-| `case_03` | `NO-GO` | `NO-GO` | ✅ | 1/1 | 0 | 0 | 100% | 0.0s | $0.0000 | OK |
+| `case_03` | `NO-GO` | `NO-GO` | ✅ | 1/1 | 0 | 0 | 100% | 0.1s | $0.0000 | OK |
 | `case_04` | `REVIEW` | `REVIEW` | ✅ | 1/1 | 0 | 0 | 100% | 0.0s | $0.0000 | OK |
 | `case_05` | `NO-GO` | `NO-GO` | ✅ | 1/1 | 0 | 0 | 100% | 0.1s | $0.0000 | OK |
 | `case_06` | `NO-GO` | `NO-GO` | ✅ | 1/1 | 0 | 0 | 100% | 0.1s | $0.0000 | OK |
@@ -37,12 +41,12 @@
 | **Unsupported Critical Findings** | 0 | 0 | 0 |
 | **Trap Hits Total** | 0 | 0 | 0 |
 | **Successful Run Rate** | 100.0% | 100.0% | 100.0% |
-| **Total Runtime** | 0.4s | 0.3s | 0.7s |
+| **Total Runtime** | 0.5s | 0.3s | 0.8s |
 | **Total Estimated Cost** | $0.0000 | $0.0000 | $0.0000 |
 
-## Comparison with `baseline_20260830_213016`
+## Comparison with `baseline_20260830_220320`
 
-Comparing `final_20260830_213022` (Current) vs `baseline_20260830_213016` (Reference):
+Comparing `final_20260830_220325` (Current) vs `baseline_20260830_220320` (Reference):
 
 | Metric | Reference (All) | Current (All) | Delta (All) | Reference (Held-Out) | Current (Held-Out) | Delta (Held-Out) |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -56,5 +60,5 @@ Comparing `final_20260830_213022` (Current) vs `baseline_20260830_213016` (Refer
 | **Unsupported Critical Findings** | 0 | 0 | **+0** | 0 | 0 | **+0** |
 | **Trap Hits Total** | 0 | 0 | **+0** | 0 | 0 | **+0** |
 | **Successful Run Rate** | 100.0% | 100.0% | **+0.0%** | 100.0% | 100.0% | **+0.0%** |
-| **Total Runtime** | 0.4s | 0.7s | **+0.3s** | 0.1s | 0.3s | **+0.1s** |
+| **Total Runtime** | 0.4s | 0.8s | **+0.4s** | 0.1s | 0.3s | **+0.1s** |
 | **Total Estimated Cost** | $0.0000 | $0.0000 | **+0.0000** | $0.0000 | $0.0000 | **+0.0000** |

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "reference_final": {
-    "run_label": "final_20260830_213022",
-    "generated_at_utc": "2026-08-30T16:30:23.607523Z",
+    "run_label": "final_20260830_220325",
+    "generated_at_utc": "2026-08-30T17:03:26.649294Z",
     "mode": "final",
     "ablation": "none",
     "model_id": "releaseguard-offline-v1",
@@ -18,8 +18,8 @@
   "ablations": {
     "no_verifier": {
       "meta": {
-        "run_label": "ablation_no_verifier_20260830_213029",
-        "generated_at_utc": "2026-08-30T16:30:30.094659Z",
+        "run_label": "ablation_no_verifier_20260830_220331",
+        "generated_at_utc": "2026-08-30T17:03:32.217021Z",
         "mode": "final",
         "ablation": "no_verifier",
         "model_id": "releaseguard-offline-v1",
@@ -43,14 +43,14 @@
         "unsupported_critical_total": 0,
         "trap_hits_total": 0,
         "successful_run_rate": 1.0,
-        "total_runtime_ms": 736,
+        "total_runtime_ms": 729,
         "total_cost": 0.0
       }
     },
     "no_evidence_enforcement": {
       "meta": {
-        "run_label": "ablation_no_evidence_enforcement_20260830_213029",
-        "generated_at_utc": "2026-08-30T16:30:31.883780Z",
+        "run_label": "ablation_no_evidence_enforcement_20260830_220331",
+        "generated_at_utc": "2026-08-30T17:03:34.050895Z",
         "mode": "final",
         "ablation": "no_evidence_enforcement",
         "model_id": "releaseguard-offline-v1",
@@ -74,14 +74,14 @@
         "unsupported_critical_total": 0,
         "trap_hits_total": 0,
         "successful_run_rate": 1.0,
-        "total_runtime_ms": 811,
+        "total_runtime_ms": 1005,
         "total_cost": 0.0
       }
     },
     "no_deterministic_checks": {
       "meta": {
-        "run_label": "ablation_no_deterministic_checks_20260830_213029",
-        "generated_at_utc": "2026-08-30T16:30:33.734544Z",
+        "run_label": "ablation_no_deterministic_checks_20260830_220331",
+        "generated_at_utc": "2026-08-30T17:03:36.200963Z",
         "mode": "final",
         "ablation": "no_deterministic_checks",
         "model_id": "releaseguard-offline-v1",
@@ -105,14 +105,45 @@
         "unsupported_critical_total": 0,
         "trap_hits_total": 0,
         "successful_run_rate": 1.0,
-        "total_runtime_ms": 382,
+        "total_runtime_ms": 412,
+        "total_cost": 0.0
+      }
+    },
+    "no_tool_output_normalization": {
+      "meta": {
+        "run_label": "ablation_no_tool_output_normalization_20260830_220331",
+        "generated_at_utc": "2026-08-30T17:03:37.708755Z",
+        "mode": "final",
+        "ablation": "no_tool_output_normalization",
+        "model_id": "releaseguard-offline-v1",
+        "execution_mode": "offline_fixture",
+        "provider": "local-deterministic-fixture",
+        "prompt_version": "offline-final-v1",
+        "system_version": "releaseguard-v1",
+        "spec_version": "1.0",
+        "frozen_at": "2026-08-29",
+        "cases_total": 12,
+        "timeout_s": 300
+      },
+      "aggregate_all": {
+        "cbr": 1.0,
+        "high_blocker_recall": 1.0,
+        "precision": 1.0,
+        "f1": 1.0,
+        "decision_accuracy": 1.0,
+        "evidence_coverage": 1.0,
+        "critical_evidence_coverage": 1.0,
+        "unsupported_critical_total": 0,
+        "trap_hits_total": 0,
+        "successful_run_rate": 1.0,
+        "total_runtime_ms": 840,
         "total_cost": 0.0
       }
     },
     "it5_subagents": {
       "meta": {
-        "run_label": "ablation_it5_subagents_20260830_213029",
-        "generated_at_utc": "2026-08-30T16:30:35.144787Z",
+        "run_label": "ablation_it5_subagents_20260830_220331",
+        "generated_at_utc": "2026-08-30T17:03:39.732338Z",
         "mode": "final",
         "ablation": "it5_subagents",
         "model_id": "releaseguard-offline-v1",
@@ -136,7 +167,7 @@
         "unsupported_critical_total": 0,
         "trap_hits_total": 0,
         "successful_run_rate": 1.0,
-        "total_runtime_ms": 716,
+        "total_runtime_ms": 782,
         "total_cost": 0.0
       }
     }

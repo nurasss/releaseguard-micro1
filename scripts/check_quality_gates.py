@@ -31,6 +31,18 @@ def _find_latest(results_dir: Path, mode: str) -> Path | None:
 def evaluate_gates(baseline: dict[str, Any], final: dict[str, Any]) -> dict[str, Any]:
     before = baseline.get("aggregate", {}).get("all", {})
     after = final.get("aggregate", {}).get("all", {})
+    baseline_mode = baseline.get("meta", {}).get("execution_mode", "unspecified")
+    final_mode = final.get("meta", {}).get("execution_mode", "unspecified")
+    same_execution_mode = (
+        baseline_mode == final_mode or "unspecified" in {baseline_mode, final_mode}
+    )
+    official_llm_eligible = baseline_mode == final_mode == "live_provider"
+    if baseline_mode == final_mode == "offline_fixture":
+        measurement_scope = "offline_fixture_simulation"
+    elif official_llm_eligible:
+        measurement_scope = "official_live_provider"
+    else:
+        measurement_scope = "mixed_or_unspecified"
 
     checks = {
         "cbr_minimum": {
@@ -63,10 +75,19 @@ def evaluate_gates(baseline: dict[str, Any], final: dict[str, Any]) -> dict[str,
             "operator": ">=",
             "passed": after.get("successful_run_rate", 0.0) >= 0.95,
         },
+        "comparison_execution_mode": {
+            "actual": f"{baseline_mode} vs {final_mode}",
+            "threshold": "same mode",
+            "operator": "=",
+            "passed": same_execution_mode,
+        },
     }
     return {
         "schema_version": "1.0",
         "passed": all(item["passed"] for item in checks.values()),
+        "measurement_scope": measurement_scope,
+        "official_llm_eligible": official_llm_eligible,
+        "official_gate_status": "eligible" if official_llm_eligible else "not_eligible",
         "baseline": baseline.get("meta", {}),
         "final": final.get("meta", {}),
         "checks": checks,
@@ -79,6 +100,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baseline", default=None, help="Explicit baseline results.json")
     parser.add_argument("--final", dest="final_results", default=None, help="Explicit final results.json")
     parser.add_argument("--out", default="submission/results/quality_gates.json")
+    parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help="Fail unless both inputs are successful live-provider measurements",
+    )
     args = parser.parse_args(argv)
 
     results_dir = Path(args.results_dir)
@@ -114,9 +140,15 @@ def main(argv: list[str] | None = None) -> int:
     for name, check in report["checks"].items():
         status = "PASS" if check["passed"] else "FAIL"
         print(f"{status} {name}: {check['actual']} {check['operator']} {check['threshold']}")
-    print(f"Quality gates: {'PASS' if report['passed'] else 'FAIL'}")
+    print(f"Measurement scope: {report['measurement_scope']}")
+    print(f"Official LLM eligible: {'YES' if report['official_llm_eligible'] else 'NO'}")
+    gates_passed = report["passed"]
+    if args.require_live and not report["official_llm_eligible"]:
+        print("Official LLM gate: FAIL (both baseline and final must use live_provider)")
+        gates_passed = False
+    print(f"Quality gates: {'PASS' if gates_passed else 'FAIL'}")
     print(f"Gate report: {output}")
-    return 0 if report["passed"] else 1
+    return 0 if gates_passed else 1
 
 
 if __name__ == "__main__":
