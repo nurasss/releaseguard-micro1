@@ -1,0 +1,517 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_54b37cc40763",
+  "repository_url": "https://github.com/eval/case_03",
+  "requested_ref": "v3.0.0",
+  "commit_sha": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 1 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_54b37cc40763",
+      "category": "ci",
+      "title": "CI failed",
+      "severity": "critical",
+      "claim": "Latest recorded CI run for ref 'v3.0.0' has conclusion=failure.",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "E-004"
+      ],
+      "recommended_action": "Resolve the observed release-readiness gap and rerun the audit.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:b74b355bb549b28e005354dde19e7d3eb83575eb40bc47027753304ae312c55a",
+      "summary": "Found 1 test file(s); no execution report available",
+      "payload": {
+        "test_files": [
+          "tests/test_merge.py"
+        ],
+        "discovered_test_defs": 2
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ea358ee11fed984b3fe6db6effacdba83616ff3473f21b371723cf7c3e2d8f7c",
+      "summary": "Latest CI run for ref 'v3.0.0': conclusion='failure'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v3.0.0",
+          "event": "push",
+          "conclusion": "failure",
+          "created_at": "2026-08-22T11:05:00Z"
+        },
+        "requested_ref": "v3.0.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:6c2f5a601cb8df207b56eb28c4c59c2e49bfe3f4c368088808e1ba366e6e505e",
+      "summary": "Manifest version: '3.0.0'",
+      "payload": {
+        "manifest_version": "3.0.0",
+        "requested_ref": "v3.0.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:1af0706a44e7ba8876c9d2fe997dc307f697cb2d2cb220792ba469a9a1b5f791",
+      "summary": "No secret patterns detected across 6 scanned file(s)",
+      "payload": {
+        "files_scanned": 6
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:28c4a97b73a8c272d3556d6ead345850e6e77fca190eec5a778daecbc53193e8",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Synchronizes records between two data stores.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v2.9.0",
+          "v3.0.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v3.0.0",
+            "name": "Release 3.0.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "sync",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:b38a879ddd74ab43805c36ac9cb4c78fd931232394a2c801a7bd94087027b94d",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 91
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 222
+          },
+          {
+            "path": "src/datasync/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/datasync/merge.py",
+            "size_bytes": 282
+          },
+          {
+            "path": "tests/test_merge.py",
+            "size_bytes": 252
+          }
+        ],
+        "total_files": 6
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:fa2ceb2994d67b7c72dd0829c722e4ff0781d9b4b7b802d9e9ddba6383f61d3c",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v3.0.0",
+            "event": "push",
+            "conclusion": "failure",
+            "created_at": "2026-08-22T11:05:00Z"
+          },
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "main",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-21T08:40:00Z"
+          }
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e"
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:25ab0e7d40aa6f9e7c936605c94cdfceff7e59cfe96cfd0481c2192042bacf95",
+      "summary": "Read file README.md (lines 1-9)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "# data-sync\n\nSynchronizes records between two data stores.\n\n## Testing\n\n```bash\npytest\n```",
+        "truncated": false,
+        "content_hash": "sha256:25ab0e7d40aa6f9e7c936605c94cdfceff7e59cfe96cfd0481c2192042bacf95"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:6c2f5a601cb8df207b56eb28c4c59c2e49bfe3f4c368088808e1ba366e6e505e",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"data-sync\"\nversion = \"3.0.0\"\ndescription = \"Synchronizes records between two data stores.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:6c2f5a601cb8df207b56eb28c4c59c2e49bfe3f4c368088808e1ba366e6e505e"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": "src/datasync/__init__.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:a40ecd363bbdd73718907fd7c75f9cfea8c94f721c919c6a9b913e553670ed46",
+      "summary": "Read file src/datasync/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/datasync/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"3.0.0\"",
+        "truncated": false,
+        "content_hash": "sha256:a40ecd363bbdd73718907fd7c75f9cfea8c94f721c919c6a9b913e553670ed46"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": "src/datasync/merge.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:73f64107ec2bfad16e4d36eb3a47374aa439c82194f56c9b9adf29560c84a672",
+      "summary": "Read file src/datasync/merge.py (lines 1-13)",
+      "payload": {
+        "path": "src/datasync/merge.py",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "\"\"\"Record merge utilities.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef merge_records(source: dict, target: dict) -> dict:\n    merged = dict(target)\n    merged.update(source)\n    return merged\n\n\ndef diff_keys(source: dict, target: dict) -> set:\n    return set(source) - set(target)",
+        "truncated": false,
+        "content_hash": "sha256:73f64107ec2bfad16e4d36eb3a47374aa439c82194f56c9b9adf29560c84a672"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_54b37cc40763",
+      "source_type": "github_file",
+      "source_path": "tests/test_merge.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:57f78e31fcd6f816b5d89fa305f3724b9af053724242dc34bd3afc7914783a41",
+      "summary": "Read file tests/test_merge.py (lines 1-9)",
+      "payload": {
+        "path": "tests/test_merge.py",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "from datasync.merge import diff_keys, merge_records\n\n\ndef test_merge_records_overrides_target():\n    assert merge_records({\"a\": 1}, {\"a\": 0, \"b\": 2}) == {\"a\": 1, \"b\": 2}\n\n\ndef test_diff_keys():\n    assert diff_keys({\"a\": 1, \"c\": 3}, {\"a\": 1}) == {\"c\"}",
+        "truncated": false,
+        "content_hash": "sha256:57f78e31fcd6f816b5d89fa305f3724b9af053724242dc34bd3afc7914783a41"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "pass",
+      "details": "Found 1 test file(s) (e.g. tests/test_merge.py) and/or recognized test configuration. No test execution report was available to verify pass/fail status.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v3.0.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "fail",
+      "details": "Latest recorded CI run for ref 'v3.0.0' has conclusion=failure.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '3.0.0' matches requested ref 'v3.0.0'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 6 scanned text file(s).",
+      "evidence_ids": [
+        "E-007"
+      ]
+    }
+  ],
+  "limitations": [
+    "Ablation 'no_verifier': every critical/high finding was trusted as confirmed without running the Verifier.",
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (102 total tokens)"
+  ],
+  "runtime_ms": 49,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

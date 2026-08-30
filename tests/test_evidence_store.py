@@ -106,3 +106,25 @@ def test_evidence_store_passes_integrity_validation() -> None:
 
     violations = validate_report_integrity(report)
     assert not violations, f"Unexpected integrity violations: {violations}"
+
+
+def test_secret_file_payload_is_structural_only() -> None:
+    store = EvidenceStore(audit_run_id="run-secret", commit_sha="d" * 40)
+    secret_value = "plain-password-that-has-no-provider-prefix"
+    ev = store.add(
+        source_type=SourceType.github_file,
+        source_path=".env",
+        summary="Read .env",
+        payload={
+            "path": ".env",
+            "content": f"PASSWORD={secret_value}",
+            "total_lines": 1,
+            "truncated": False,
+        },
+        content=f"PASSWORD={secret_value}",
+    )
+
+    encoded = ev.model_dump_json()
+    assert secret_value not in encoded
+    assert "PASSWORD=" not in encoded
+    assert ev.payload["content"].startswith("[REDACTED:secret file contents omitted]")

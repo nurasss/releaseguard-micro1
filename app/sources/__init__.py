@@ -17,11 +17,13 @@ from app.sources.errors import (
     GitHubAPIError,
     InvalidPathError,
     PathEscapeError,
+    PrivateRepositoryError,
     SourceError,
     UnknownRefError,
 )
 from app.sources.fixture import LocalFixtureSource
 from app.sources.github import GitHubSource
+from app.sources.snapshot import SnapshotManager, SnapshotManifest, tree_digest
 
 __all__ = [
     "MAX_READ_FILE_CHARS",
@@ -37,10 +39,14 @@ __all__ = [
     "InvalidPathError",
     "LocalFixtureSource",
     "PathEscapeError",
+    "PrivateRepositoryError",
     "RepositorySource",
     "ResolvedRef",
     "SearchHit",
     "SourceError",
     "TreeEntry",
     "UnknownRefError",
+    "SnapshotManager",
+    "SnapshotManifest",
+    "tree_digest",
 ]

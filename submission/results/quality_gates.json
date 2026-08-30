@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "passed": true,
+  "baseline": {
+    "run_label": "baseline_20260830_213016",
+    "generated_at_utc": "2026-08-30T16:30:17.064349Z",
+    "mode": "baseline",
+    "ablation": "none",
+    "model_id": "releaseguard-offline-v1",
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "prompt_version": "offline-b1-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "final": {
+    "run_label": "final_20260830_213022",
+    "generated_at_utc": "2026-08-30T16:30:23.607523Z",
+    "mode": "final",
+    "ablation": "none",
+    "model_id": "releaseguard-offline-v1",
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "prompt_version": "offline-final-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "checks": {
+    "cbr_minimum": {
+      "actual": 1.0,
+      "threshold": 0.85,
+      "operator": ">=",
+      "passed": true
+    },
+    "cbr_improvement_over_baseline": {
+      "actual": 0.5556,
+      "threshold": 0.2,
+      "operator": ">=",
+      "passed": true
+    },
+    "critical_evidence_coverage": {
+      "actual": 1.0,
+      "threshold": 1.0,
+      "operator": "=",
+      "passed": true
+    },
+    "unsupported_critical_findings": {
+      "actual": 0,
+      "threshold": 0,
+      "operator": "=",
+      "passed": true
+    },
+    "successful_run_rate": {
+      "actual": 1.0,
+      "threshold": 0.95,
+      "operator": ">=",
+      "passed": true
+    }
+  },
+  "baseline_file": "results/baseline/results.json",
+  "final_file": "results/final/results.json"
+}

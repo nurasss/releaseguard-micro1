@@ -1,0 +1,556 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_8675a41eb6d2",
+  "repository_url": "https://github.com/eval/case_01",
+  "requested_ref": "v1.4.0",
+  "commit_sha": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+  "mode": "final",
+  "decision": "GO",
+  "executive_summary": "Analyzed 0 candidate finding(s) across 10 deterministic check(s). Decision: GO. 0 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "test_result",
+      "source_path": "test_report",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:22393287b2c107496a87d79212acc5d1cf257b21af157a6e22f21db4da7d4a9f",
+      "summary": "Test report: 3/3 passed, 0 failed",
+      "payload": {
+        "report": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "failures": []
+        },
+        "test_files": [
+          "tests/test_cli.py"
+        ],
+        "discovered_test_defs": 3
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ef5990f27d2149a6cf90d617344633e064e381e1663c36dc7f1f34e4e54c4b5e",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:550bf295f2e1cb5c004b1eac48cca6770373f21e0dc1c76a108d11f498a8f7f5",
+      "summary": "Latest CI run for ref 'v1.4.0': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v1.4.0",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-20T09:15:00Z"
+        },
+        "requested_ref": "v1.4.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:7460472d379dbca59b0dc2f8b8986661cee8d1b4e963cdc1b29a130a117eb2f5",
+      "summary": "Manifest version: '1.4.0'",
+      "payload": {
+        "manifest_version": "1.4.0",
+        "requested_ref": "v1.4.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "lockfile",
+      "source_path": "requirements.lock",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:099e0cd3a817fdb82bfe8d7ae500c583f253eaac36d09f2b20a53f7353155b11",
+      "summary": "Lockfile present: requirements.lock",
+      "payload": {
+        "lockfiles": [
+          "requirements.lock"
+        ]
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:96ef560cbc59a476163446c84acb8606865b9dd21537c7e4120a0796548fa318",
+      "summary": "No secret patterns detected across 8 scanned file(s)",
+      "payload": {
+        "files_scanned": 8
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:7c5fb4f76cb0c9ca83bbf18c17778e20574cacd1d4249de2402206f7365db510",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "A small command-line toolbox for text and number utilities.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v1.2.0",
+          "v1.3.0",
+          "v1.4.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v1.4.0",
+            "name": "Release 1.4.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "cli",
+          "python",
+          "utilities"
+        ]
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:0633f15f4af684ac9fa3ea9647095805d49a6429ec27bd8f03108319dcb6d622",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".env.example",
+            "size_bytes": 93
+          },
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 365
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 747
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 238
+          },
+          {
+            "path": "requirements.lock",
+            "size_bytes": 34
+          },
+          {
+            "path": "src/toolbox/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/toolbox/cli.py",
+            "size_bytes": 624
+          },
+          {
+            "path": "tests/test_cli.py",
+            "size_bytes": 562
+          }
+        ],
+        "total_files": 8
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4b7705ee5b0130368ab894be9c72c19cdf0f17aa991ae169e0dd01e11fd8fbcf",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v1.4.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-20T09:15:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:22c10b9391baa3567816a95b00de679fca034382a78c75299da6aa85ef3e7096",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": ".env.example",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:9fd85ee50b72e4bd64d26b59bb02c7a18605b3ffaa2f513927819c17286c2bf5",
+      "summary": "Read file .env.example (lines 1-3)",
+      "payload": {
+        "path": ".env.example",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "TOOLBOX_API_KEY=example-key-please-replace\nTOOLBOX_LOG_LEVEL=INFO\nTOOLBOX_TIMEOUT_SECONDS=30",
+        "truncated": false,
+        "content_hash": "sha256:9fd85ee50b72e4bd64d26b59bb02c7a18605b3ffaa2f513927819c17286c2bf5"
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 20,
+      "content_hash": "sha256:ef5990f27d2149a6cf90d617344633e064e381e1663c36dc7f1f34e4e54c4b5e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-20)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 20,
+        "total_lines": 20,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n  pull_request:\n    branches: [main]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -r requirements.lock\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:ef5990f27d2149a6cf90d617344633e064e381e1663c36dc7f1f34e4e54c4b5e"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 29,
+      "content_hash": "sha256:31a66c65d3c53c19b4fcca4b2de5fc17739503dc77c5f34ec7b685816d539e07",
+      "summary": "Read file README.md (lines 1-29)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 29,
+        "total_lines": 29,
+        "content": "# toolbox-cli\n\nA small command-line toolbox for text and number utilities.\n\n## Installation\n\n```bash\npip install -r requirements.lock\n```\n\n## Configuration\n\nAll configuration is via environment variables. Copy `.env.example` to `.env` and adjust as needed.\n\n| Variable | Required | Default | Description |\n| --- | --- | --- | --- |\n| `TOOLBOX_API_KEY` | no | `\"\"` | API key used for the optional remote lookup feature. |\n| `TOOLBOX_LOG_LEVEL` | no | `INFO` | Python logging level for the CLI. |\n| `TOOLBOX_TIMEOUT_SECONDS` | no | `30` | Network timeout in seconds for remote lookups. |\n\n## Testing\n\n```bash\npytest\n```\n\n## Release process\n\nTags of the form `vX.Y.Z` trigger the CI workflow, which runs the test suite before a release is published.",
+        "truncated": false,
+        "content_hash": "sha256:31a66c65d3c53c19b4fcca4b2de5fc17739503dc77c5f34ec7b685816d539e07"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:7460472d379dbca59b0dc2f8b8986661cee8d1b4e963cdc1b29a130a117eb2f5",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"toolbox-cli\"\nversion = \"1.4.0\"\ndescription = \"A small command-line toolbox for text and number utilities.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:7460472d379dbca59b0dc2f8b8986661cee8d1b4e963cdc1b29a130a117eb2f5"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "requirements.lock",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 2,
+      "content_hash": "sha256:85a77e54eff652da92e9fbe03c0f4bd5310cd51e522c862dbb53fb211dbb5b2b",
+      "summary": "Read file requirements.lock (lines 1-2)",
+      "payload": {
+        "path": "requirements.lock",
+        "start_line": 1,
+        "end_line": 2,
+        "total_lines": 2,
+        "content": "click==8.1.7\npython-dotenv==1.0.1",
+        "truncated": false,
+        "content_hash": "sha256:85a77e54eff652da92e9fbe03c0f4bd5310cd51e522c862dbb53fb211dbb5b2b"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "src/toolbox/__init__.py",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:977ccc819d8b6544337bdc9a7066e51d94366aeee9225339d351fb05cdc75e3f",
+      "summary": "Read file src/toolbox/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/toolbox/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"1.4.0\"",
+        "truncated": false,
+        "content_hash": "sha256:977ccc819d8b6544337bdc9a7066e51d94366aeee9225339d351fb05cdc75e3f"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "src/toolbox/cli.py",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 24,
+      "content_hash": "sha256:4c02a05cadfd49d60109bb021cbe651af0a68eeb519e393a6b24d9f07c12989b",
+      "summary": "Read file src/toolbox/cli.py (lines 1-24)",
+      "payload": {
+        "path": "src/toolbox/cli.py",
+        "start_line": 1,
+        "end_line": 24,
+        "total_lines": 24,
+        "content": "\"\"\"Core utilities for the toolbox CLI.\"\"\"\n\nfrom __future__ import annotations\n\nimport os\n\n\ndef add_numbers(a: float, b: float) -> float:\n    return a + b\n\n\ndef slugify(text: str) -> str:\n    cleaned = \"\".join(ch.lower() if ch.isalnum() else \"-\" for ch in text.strip())\n    while \"--\" in cleaned:\n        cleaned = cleaned.replace(\"--\", \"-\")\n    return cleaned.strip(\"-\")\n\n\ndef load_config() -> dict:\n    return {\n        \"api_key\": os.environ.get(\"TOOLBOX_API_KEY\", \"\"),\n        \"log_level\": os.environ.get(\"TOOLBOX_LOG_LEVEL\", \"INFO\"),\n        \"timeout_seconds\": int(os.environ.get(\"TOOLBOX_TIMEOUT_SECONDS\", \"30\")),\n    }",
+        "truncated": false,
+        "content_hash": "sha256:4c02a05cadfd49d60109bb021cbe651af0a68eeb519e393a6b24d9f07c12989b"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_8675a41eb6d2",
+      "source_type": "github_file",
+      "source_path": "tests/test_cli.py",
+      "source_ref": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "line_start": 1,
+      "line_end": 19,
+      "content_hash": "sha256:3d0e5d6acc3ce27b6daa024381df41a73eed0b1c13a009024d6170ec8a590080",
+      "summary": "Read file tests/test_cli.py (lines 1-19)",
+      "payload": {
+        "path": "tests/test_cli.py",
+        "start_line": 1,
+        "end_line": 19,
+        "total_lines": 19,
+        "content": "import os\n\nfrom toolbox.cli import add_numbers, load_config, slugify\n\n\ndef test_add_numbers():\n    assert add_numbers(2, 3) == 5\n\n\ndef test_slugify_collapses_punctuation():\n    assert slugify(\"Hello, World!!\") == \"hello-world\"\n\n\ndef test_load_config_defaults(monkeypatch):\n    monkeypatch.delenv(\"TOOLBOX_API_KEY\", raising=False)\n    monkeypatch.delenv(\"TOOLBOX_LOG_LEVEL\", raising=False)\n    monkeypatch.delenv(\"TOOLBOX_TIMEOUT_SECONDS\", raising=False)\n    config = load_config()\n    assert config == {\"api_key\": \"\", \"log_level\": \"INFO\", \"timeout_seconds\": 30}",
+        "truncated": false,
+        "content_hash": "sha256:3d0e5d6acc3ce27b6daa024381df41a73eed0b1c13a009024d6170ec8a590080"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "pass",
+      "details": "Test suite present (1 test file(s)) and latest test report shows 3/3 passing with 0 failures.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v1.4.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v1.4.0' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '1.4.0' matches requested ref 'v1.4.0'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "pass",
+      "details": "Lockfile(s) found: ['requirements.lock'].",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 8 scanned text file(s).",
+      "evidence_ids": [
+        "E-007"
+      ]
+    }
+  ],
+  "limitations": [
+    "Ablation 'no_verifier': every critical/high finding was trusted as confirmed without running the Verifier.",
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (100 total tokens)"
+  ],
+  "runtime_ms": 51,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

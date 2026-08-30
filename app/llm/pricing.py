@@ -5,8 +5,17 @@ from app.llm.types import Usage
 
 
 # Prices per 1,000,000 prompt and output tokens in USD: {model_id: (input_price_per_1m, output_price_per_1m)}
-# Default is deliberately empty: token counts are always tracked, but USD costs are only estimated when pricing is explicitly configured.
-PRICES: dict[str, tuple[float, float]] = {}
+# Unlisted models deliberately have no entry: token counts are always tracked, but USD costs
+# are only estimated when pricing is explicitly configured — a missing entry must never be
+# silently reported as a $0.00 cost.
+#
+# gemini-2.5-flash: publicly documented standard-tier rate ($0.30 / 1M input tokens,
+# $2.50 / 1M output tokens) as of the frozen_at date in eval/EVALUATION_SPEC.md. This is an
+# approximation for reporting purposes, not a vendor-guaranteed billing figure — Google's
+# pricing page is the source of truth and may have changed since.
+PRICES: dict[str, tuple[float, float]] = {
+    "gemini-2.5-flash": (0.30, 2.50),
+}
 
 
 def estimate_cost_usd(model_id: str, usage: Usage) -> float | None:

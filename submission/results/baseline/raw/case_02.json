@@ -1,0 +1,306 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_3b0c7fba1721",
+  "repository_url": "https://github.com/eval/case_02",
+  "requested_ref": "v0.9.2",
+  "commit_sha": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+  "mode": "baseline",
+  "decision": "NO-GO",
+  "executive_summary": "Offline baseline observed only direct test, CI-run, and build signals.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "category": "tests",
+      "title": "Test failures",
+      "severity": "critical",
+      "claim": "Test failures are recorded: the report contains 1 failing test(s).",
+      "confidence": 0.98,
+      "evidence_ids": [
+        "E-005"
+      ],
+      "recommended_action": "Fix the failing tests and rerun the release checks.",
+      "verification_status": "pending",
+      "origin": "baseline"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:59a0f9d45612ae533c48b82b742ede70b2319fd63fc304428f45a00f7ce29f04",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Invoice total calculation library.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v0.9.0",
+          "v0.9.1",
+          "v0.9.2"
+        ],
+        "releases": [
+          {
+            "tag_name": "v0.9.2",
+            "name": "Release 0.9.2",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "billing",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:0be37ca477105415251ef844f7dd11d8be42749c7fb6cb5683fdf6e9e586bb6e",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 83
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 214
+          },
+          {
+            "path": "src/invoicing/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/invoicing/billing.py",
+            "size_bytes": 423
+          },
+          {
+            "path": "tests/test_billing.py",
+            "size_bytes": 405
+          }
+        ],
+        "total_files": 6
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:58400b41fb05b41468823f4e9f0891f7f2b9027d4951f33479535e70bb116681",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [],
+        "count": 0
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:8929e915de897d603d082c5b6661e292b0f06d43a4269a3f044cc0b4782c14c3",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": {
+          "total": 4,
+          "passed": 3,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "test_calculate_total_applies_tax_rate",
+              "error_type": "AssertionError",
+              "message": "AssertionError: assert 100.2 == 120.0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:15f4f51917a613e8fdff5f93d4c3ad905d47987e0efa060d652661a7bf883bf6",
+      "summary": "Read file README.md (lines 1-9)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "# invoice-calc\n\nInvoice total calculation library.\n\n## Testing\n\n```bash\npytest\n```",
+        "truncated": false,
+        "content_hash": "sha256:15f4f51917a613e8fdff5f93d4c3ad905d47987e0efa060d652661a7bf883bf6"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:6b4671db9b8a0c475e11a064cb298db4baa1feccd7ff49e823a525ac7f41cd6a",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"invoice-calc\"\nversion = \"0.9.2\"\ndescription = \"Invoice total calculation library.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:6b4671db9b8a0c475e11a064cb298db4baa1feccd7ff49e823a525ac7f41cd6a"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": "src/invoicing/__init__.py",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:73193ba315e2cc01bf1a3b0d49d93ee85725786cb1265ead9786c9191cc84065",
+      "summary": "Read file src/invoicing/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/invoicing/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"0.9.2\"",
+        "truncated": false,
+        "content_hash": "sha256:73193ba315e2cc01bf1a3b0d49d93ee85725786cb1265ead9786c9191cc84065"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": "src/invoicing/billing.py",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 16,
+      "content_hash": "sha256:ea0280ba0827c100356b10e92682fd2697d5c2b58fa7ec2b16e0ac5462cd3620",
+      "summary": "Read file src/invoicing/billing.py (lines 1-16)",
+      "payload": {
+        "path": "src/invoicing/billing.py",
+        "start_line": 1,
+        "end_line": 16,
+        "total_lines": 16,
+        "content": "\"\"\"Invoice total calculation.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef apply_discount(amount: float, percent_off: float) -> float:\n    return amount * (1 - percent_off / 100)\n\n\ndef calculate_total(subtotal: float, tax_rate: float) -> float:\n    \"\"\"Return the subtotal with tax applied.\"\"\"\n    return subtotal + tax_rate\n\n\ndef line_item_total(unit_price: float, quantity: int) -> float:\n    return unit_price * quantity",
+        "truncated": false,
+        "content_hash": "sha256:ea0280ba0827c100356b10e92682fd2697d5c2b58fa7ec2b16e0ac5462cd3620"
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_3b0c7fba1721",
+      "source_type": "github_file",
+      "source_path": "tests/test_billing.py",
+      "source_ref": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:b15ee947a5c44f07ae882b81958c7a12055dd0f42d21f3177e95a3296bdbf358",
+      "summary": "Read file tests/test_billing.py (lines 1-17)",
+      "payload": {
+        "path": "tests/test_billing.py",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "from invoicing.billing import apply_discount, calculate_total, line_item_total\n\n\ndef test_apply_discount():\n    assert apply_discount(100.0, 20) == 80.0\n\n\ndef test_line_item_total():\n    assert line_item_total(9.5, 3) == 28.5\n\n\ndef test_calculate_total_applies_tax_rate():\n    assert calculate_total(100.0, 0.20) == 120.0\n\n\ndef test_calculate_total_zero_tax():\n    assert calculate_total(50.0, 0) == 50.0",
+        "truncated": false,
+        "content_hash": "sha256:b15ee947a5c44f07ae882b81958c7a12055dd0f42d21f3177e95a3296bdbf358"
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (80 total tokens)"
+  ],
+  "runtime_ms": 29,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

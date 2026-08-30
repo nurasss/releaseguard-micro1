@@ -1,0 +1,642 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_02fa9a494b02",
+  "repository_url": "https://github.com/eval/case_07",
+  "requested_ref": "v2.1.0",
+  "commit_sha": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 1 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_02fa9a494b02",
+      "category": "release_metadata",
+      "title": "Version mismatch",
+      "severity": "critical",
+      "claim": "Manifest pyproject.toml declares version '2.0.3', which does not match requested ref 'v2.1.0' (expected '2.1.0').",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "E-005"
+      ],
+      "recommended_action": "Resolve the observed release-readiness gap and rerun the audit.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [
+    {
+      "finding_id": "F-001",
+      "status": "confirmed",
+      "confidence": 0.99,
+      "supporting_evidence": [
+        "E-005"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "The cited deterministic evidence supports the finding.",
+      "verifier_error": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:fffa329957ebf8d93cefcc1248768344703209864d41355152b608459d4e5c3d",
+      "summary": "Found 1 test file(s); no execution report available",
+      "payload": {
+        "test_files": [
+          "tests/test_tokens.py"
+        ],
+        "discovered_test_defs": 1
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:676f7adf986033faf16b3a3a14fc7ca6fbbf117a2b93fe32de923a6ae08ddd0a",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d58a60e41dc90042aa4bc63cc957bdd1e7643bd20fde4b97aafa0dbc81947377",
+      "summary": "Latest CI run for ref 'v2.1.0': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v2.1.0",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-25T14:30:00Z"
+        },
+        "requested_ref": "v2.1.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:a1bd40006d5be59ca69bdd4a8a3f60d8535b1bc78a08f60aaa34e8563914103a",
+      "summary": "Manifest version: '2.0.3'",
+      "payload": {
+        "manifest_version": "2.0.3",
+        "requested_ref": "v2.1.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:3a5fb48a5ad621c50cf0b1adbdf6302886248420a44d2be1244110050bb50253",
+      "summary": "No secret patterns detected across 11 scanned file(s)",
+      "payload": {
+        "files_scanned": 11
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:49107ebc86403dc3fcfd9dbe16f9b9c4845add8974db764bdf1d34befd8e8390",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Authentication and authorization microservice",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v2.0.0",
+          "v2.0.3",
+          "v2.1.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v2.1.0",
+            "name": "Release 2.1.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "auth",
+          "security",
+          "oauth2"
+        ]
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ceafa909f125c028f71a63c113685776ecaacede533de2c47e355e44a5186c27",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 358
+          },
+          {
+            "path": ".gitignore",
+            "size_bytes": 63
+          },
+          {
+            "path": "CHANGELOG.md",
+            "size_bytes": 333
+          },
+          {
+            "path": "LICENSE",
+            "size_bytes": 615
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 81
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 326
+          },
+          {
+            "path": "src/auth_service/__init__.py",
+            "size_bytes": 51
+          },
+          {
+            "path": "src/auth_service/config.py",
+            "size_bytes": 172
+          },
+          {
+            "path": "src/auth_service/main.py",
+            "size_bytes": 49
+          },
+          {
+            "path": "src/auth_service/tokens.py",
+            "size_bytes": 366
+          },
+          {
+            "path": "tests/test_tokens.py",
+            "size_bytes": 196
+          }
+        ],
+        "total_files": 11
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:a767dd8f4d33d40a71d597f319fbfdce7dc1f0a77c8ad692c851f18963e469b9",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v2.1.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-25T14:30:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 22,
+      "content_hash": "sha256:676f7adf986033faf16b3a3a14fc7ca6fbbf117a2b93fe32de923a6ae08ddd0a",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-22)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 22,
+        "total_lines": 22,
+        "content": "name: CI\non:\n  push:\n    branches:\n      - main\n    tags:\n      - \"v*\"\n  pull_request:\n    branches:\n      - main\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - name: Run tests\n        run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:676f7adf986033faf16b3a3a14fc7ca6fbbf117a2b93fe32de923a6ae08ddd0a"
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": ".gitignore",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 6,
+      "content_hash": "sha256:6dfba21fb3e12eeb7563cfff4ea3c0d9e3e2f02a0bd628291a9efc7b34e96a71",
+      "summary": "Read file .gitignore (lines 1-6)",
+      "payload": {
+        "path": ".gitignore",
+        "start_line": 1,
+        "end_line": 6,
+        "total_lines": 6,
+        "content": "__pycache__/\n*.py[cod]\n.pytest_cache/\ndist/\nbuild/\n*.egg-info/",
+        "truncated": false,
+        "content_hash": "sha256:6dfba21fb3e12eeb7563cfff4ea3c0d9e3e2f02a0bd628291a9efc7b34e96a71"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "CHANGELOG.md",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 15,
+      "content_hash": "sha256:a06323ab781fa7ed4f4caf3460912171cb9f26ccd109ccbc8e43dc1e0405cb8b",
+      "summary": "Read file CHANGELOG.md (lines 1-15)",
+      "payload": {
+        "path": "CHANGELOG.md",
+        "start_line": 1,
+        "end_line": 15,
+        "total_lines": 15,
+        "content": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n## [2.1.0] - 2026-08-25\n### Added\n- Support for OAuth2 PKCE flow.\n- Multi-tenant token verification.\n\n### Fixed\n- Token expiration edge cases during clock skew.\n\n## [2.0.3] - 2026-07-10\n### Fixed\n- Patch release fixing session cookie domain parsing.",
+        "truncated": false,
+        "content_hash": "sha256:a06323ab781fa7ed4f4caf3460912171cb9f26ccd109ccbc8e43dc1e0405cb8b"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "LICENSE",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:e4586a5f893af8d731c475ccad18c02f46606d700b66c01907bafc7359072d0a",
+      "summary": "Read file LICENSE (lines 1-13)",
+      "payload": {
+        "path": "LICENSE",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "MIT License\n\nCopyright (c) 2026 Auth Service Authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.",
+        "truncated": false,
+        "content_hash": "sha256:e4586a5f893af8d731c475ccad18c02f46606d700b66c01907bafc7359072d0a"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:a3776d131960cba4868c3e50aa1ec7e84451e4414d9b02e1e21ce3641b9ffab4",
+      "summary": "Read file README.md (lines 1-3)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "# Auth Service\n\nAuthentication microservice for OAuth2 and JWT token validation.",
+        "truncated": false,
+        "content_hash": "sha256:a3776d131960cba4868c3e50aa1ec7e84451e4414d9b02e1e21ce3641b9ffab4"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:a1bd40006d5be59ca69bdd4a8a3f60d8535b1bc78a08f60aaa34e8563914103a",
+      "summary": "Read file pyproject.toml (lines 1-13)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "[build-system]\nrequires = [\"setuptools>=61.0\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"auth-service\"\nversion = \"2.0.3\"\ndescription = \"Authentication and authorization microservice\"\nauthors = [{ name = \"Core Team\", email = \"team@example.com\" }]\ndependencies = [\n    \"pydantic>=2.0\",\n    \"fastapi>=0.100.0\"\n]",
+        "truncated": false,
+        "content_hash": "sha256:a1bd40006d5be59ca69bdd4a8a3f60d8535b1bc78a08f60aaa34e8563914103a"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "src/auth_service/__init__.py",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:2124946182b002bdbc31809b08ca844317dfdaa128d553524f976e3f09d0e82a",
+      "summary": "Read file src/auth_service/__init__.py (lines 1-3)",
+      "payload": {
+        "path": "src/auth_service/__init__.py",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "\"\"\"Auth service package.\"\"\"\n\n__version__ = \"2.0.3\"",
+        "truncated": false,
+        "content_hash": "sha256:2124946182b002bdbc31809b08ca844317dfdaa128d553524f976e3f09d0e82a"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "src/auth_service/config.py",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:d04635fc62ff1abd0ddddffe319b2bc5c31d2eda18d80dce9a849b7fb9484fbc",
+      "summary": "Read file src/auth_service/config.py (lines 1-7)",
+      "payload": {
+        "path": "src/auth_service/config.py",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "\"\"\"Configuration for auth service.\"\"\"\n\nimport os\n\nSECRET_KEY = os.getenv(\"AUTH_SECRET_KEY\", \"default-insecure-secret\")\nALGORITHM = \"HS256\"\nACCESS_TOKEN_EXPIRE_MINUTES = 60",
+        "truncated": false,
+        "content_hash": "sha256:d04635fc62ff1abd0ddddffe319b2bc5c31d2eda18d80dce9a849b7fb9484fbc"
+      }
+    },
+    {
+      "id": "E-022",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "src/auth_service/main.py",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 2,
+      "content_hash": "sha256:08b06beed824f1e153ed27d9d38302f04af98c91a09c7232da07751fe8238499",
+      "summary": "Read file src/auth_service/main.py (lines 1-2)",
+      "payload": {
+        "path": "src/auth_service/main.py",
+        "start_line": 1,
+        "end_line": 2,
+        "total_lines": 2,
+        "content": "def run():\n    print(\"Starting auth service...\")",
+        "truncated": false,
+        "content_hash": "sha256:08b06beed824f1e153ed27d9d38302f04af98c91a09c7232da07751fe8238499"
+      }
+    },
+    {
+      "id": "E-023",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "src/auth_service/tokens.py",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 11,
+      "content_hash": "sha256:65e3a110c725a2fca2a8738cb189a98750f06b6aeb3f0c73657cdfee206c5d7c",
+      "summary": "Read file src/auth_service/tokens.py (lines 1-11)",
+      "payload": {
+        "path": "src/auth_service/tokens.py",
+        "start_line": 1,
+        "end_line": 11,
+        "total_lines": 11,
+        "content": "\"\"\"JWT token handling utilities.\"\"\"\n\nimport base64\nimport json\n\n\ndef create_mock_jwt(payload: dict) -> str:\n    header = {\"alg\": \"HS256\", \"typ\": \"JWT\"}\n    h_b64 = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip(\"=\")\n    p_b64 = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip(\"=\")\n    return f\"{h_b64}.{p_b64}.mock_sig\"",
+        "truncated": false,
+        "content_hash": "sha256:65e3a110c725a2fca2a8738cb189a98750f06b6aeb3f0c73657cdfee206c5d7c"
+      }
+    },
+    {
+      "id": "E-024",
+      "audit_run_id": "aud_02fa9a494b02",
+      "source_type": "github_file",
+      "source_path": "tests/test_tokens.py",
+      "source_ref": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:0ab4de29ba31b93d3de5440a35a7c62cd1ed76345887489e2cae70a2ae9edbad",
+      "summary": "Read file tests/test_tokens.py (lines 1-7)",
+      "payload": {
+        "path": "tests/test_tokens.py",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "from src.auth_service.tokens import create_mock_jwt\n\n\ndef test_create_mock_jwt():\n    token = create_mock_jwt({\"sub\": \"user123\"})\n    assert token.startswith(\"eyJ\")\n    assert \"mock_sig\" in token",
+        "truncated": false,
+        "content_hash": "sha256:0ab4de29ba31b93d3de5440a35a7c62cd1ed76345887489e2cae70a2ae9edbad"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "pass",
+      "details": "Found 1 test file(s) (e.g. tests/test_tokens.py) and/or recognized test configuration. No test execution report was available to verify pass/fail status.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v2.1.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v2.1.0' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "fail",
+      "details": "Manifest pyproject.toml declares version '2.0.3', which does not match requested ref 'v2.1.0' (expected '2.1.0').",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 11 scanned text file(s).",
+      "evidence_ids": [
+        "E-007"
+      ]
+    }
+  ],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (154 total tokens)"
+  ],
+  "runtime_ms": 83,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

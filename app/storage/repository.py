@@ -16,6 +16,7 @@ from app.schemas.enums import (
 from app.schemas.evidence import Evidence
 from app.schemas.findings import Finding
 from app.schemas.verification import VerificationResult
+from app.security.redaction import redact, redact_evidence_payload
 
 
 class AuditRepository:
@@ -101,7 +102,7 @@ class AuditRepository:
                 if isinstance(ev.source_type, SourceType)
                 else ev.source_type
             )
-            payload_str = json.dumps(ev.payload)
+            payload_str = json.dumps(redact_evidence_payload(ev.source_path, ev.payload))
             self.conn.execute(
                 """
                 INSERT OR REPLACE INTO evidence (
@@ -183,12 +184,12 @@ class AuditRepository:
                     finding.id,
                     finding.audit_run_id,
                     category_val,
-                    finding.title,
+                    redact(finding.title),
                     severity_val,
-                    finding.claim,
+                    redact(finding.claim),
                     finding.confidence,
                     verification_status_val,
-                    finding.recommended_action,
+                    redact(finding.recommended_action),
                     finding.origin,
                 ),
             )

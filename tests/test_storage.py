@@ -307,6 +307,49 @@ def test_full_roundtrip_storage(tmp_path: Path) -> None:
     conn.close()
 
 
+def test_sqlite_evidence_boundary_redacts_sensitive_payload(tmp_path: Path) -> None:
+    db_file = tmp_path / "security.sqlite3"
+    conn = connect(db_file)
+    init_db(conn)
+    repo = AuditRepository(conn)
+    run_id = "run-secret-storage"
+    sha = "a" * 40
+    repo.save_run(
+        AuditRun(
+            id=run_id,
+            repository_url="https://github.com/example/public",
+            requested_ref="main",
+            commit_sha=sha,
+            status=RunStatus.completed,
+            final_decision=Decision.REVIEW,
+            started_at="2026-08-30T00:00:00Z",
+            finished_at="2026-08-30T00:00:01Z",
+            runtime_ms=1,
+            model_id="test",
+            prompt_version="test",
+            system_version="test",
+            mode="final",
+        )
+    )
+    secret = "db-password-without-provider-prefix"
+    evidence = Evidence(
+        id="E-001",
+        audit_run_id=run_id,
+        source_type=SourceType.github_file,
+        source_path=".env",
+        source_ref=sha,
+        content_hash=content_hash_of(secret),
+        summary="Secret file",
+        payload={"path": ".env", "content": f"PASSWORD={secret}"},
+    )
+    repo.save_evidence([evidence])
+    raw_payload = conn.execute("SELECT payload FROM evidence WHERE id = ?", ("E-001",)).fetchone()[0]
+    assert secret not in raw_payload
+    assert "PASSWORD=" not in raw_payload
+    assert "secret file contents omitted" in raw_payload
+    conn.close()
+
+
 def test_idempotent_writes(tmp_path: Path) -> None:
     db_file = tmp_path / "idempotent_writes.sqlite3"
     conn = connect(db_file)

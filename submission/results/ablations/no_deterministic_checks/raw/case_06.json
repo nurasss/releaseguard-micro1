@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_87ebc17780a2",
+  "repository_url": "https://github.com/eval/case_06",
+  "requested_ref": "v0.5.1",
+  "commit_sha": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+  "mode": "final",
+  "decision": "GO",
+  "executive_summary": "Analyzed 0 candidate finding(s) across 0 deterministic check(s). Decision: GO. 0 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:0304d08268a8c2848a4490e4f3851228cd45f5c614cacbb4fa7f504d25d8e8ab",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Exports application metrics in Prometheus format.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v0.5.0",
+          "v0.5.1"
+        ],
+        "releases": [
+          {
+            "tag_name": "v0.5.1",
+            "name": "Release 0.5.1",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "metrics",
+          "prometheus",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:6a09a718c6ab3f6fa85d4cd7dab9768cfb3c8f5af9b602ff610569af228cdafc",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 242
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 297
+          },
+          {
+            "path": "scripts/build_release.py",
+            "size_bytes": 406
+          },
+          {
+            "path": "src/metrics_exporter/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/metrics_exporter/exporter.py",
+            "size_bytes": 161
+          },
+          {
+            "path": "tests/test_exporter.py",
+            "size_bytes": 150
+          }
+        ],
+        "total_files": 7
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:bae52f613a9e97df5fb23bcf4baa0237a6dc733692e7597b0f16ba89fcd2add5",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v0.5.1",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-23T16:45:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:9fa02cf25530b42f8ba47613361131ce653e7c5d66b74f87dc11d27985515946",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": {
+          "command": "python scripts/build_release.py",
+          "exit_code": 1,
+          "stderr_tail": "Traceback (most recent call last):\n  File \"scripts/build_release.py\", line 10, in <module>\n    from metrics_exporter.packaging_utils import bundle_assets\nModuleNotFoundError: No module named 'metrics_exporter.packaging_utils'"
+        }
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923",
+      "summary": "Read file README.md (lines 1-17)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "# metrics-exporter\n\nExports application metrics in Prometheus format.\n\n## Testing\n\n```bash\npytest\n```\n\n## Release build\n\n```bash\npython scripts/build_release.py\n```\n\nThis bundles static assets and writes the distributable archive to `dist/`.",
+        "truncated": false,
+        "content_hash": "sha256:008c8fb7c9b5e63432dd62f233f82dd39742c5d0eb34bb0675cffa67c5165923"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 12,
+      "content_hash": "sha256:e301a0c39abf426d5cc18e2e906d73c6116cb2ad4f5b3119cfded3d96dfdda9c",
+      "summary": "Read file pyproject.toml (lines 1-12)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 12,
+        "total_lines": 12,
+        "content": "[project]\nname = \"metrics-exporter\"\nversion = \"0.5.1\"\ndescription = \"Exports application metrics in Prometheus format.\"\nrequires-python = \">=3.10\"\n\n[project.scripts]\nbuild-release = \"scripts.build_release:main\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:e301a0c39abf426d5cc18e2e906d73c6116cb2ad4f5b3119cfded3d96dfdda9c"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "scripts/build_release.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 18,
+      "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403",
+      "summary": "Read file scripts/build_release.py (lines 1-18)",
+      "payload": {
+        "path": "scripts/build_release.py",
+        "start_line": 1,
+        "end_line": 18,
+        "total_lines": 18,
+        "content": "\"\"\"Release build entry point.\n\nBundles static assets before packaging. This imports packaging_utils,\nwhich does not exist anywhere in the repository, so the build fails\nimmediately with ModuleNotFoundError.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom metrics_exporter.packaging_utils import bundle_assets\n\n\ndef main() -> None:\n    bundle_assets(output_dir=\"dist\")\n\n\nif __name__ == \"__main__\":\n    main()",
+        "truncated": false,
+        "content_hash": "sha256:1b52702dde605f1ae639ee2608d74af559b11261f2479a33c505940a07a21403"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "src/metrics_exporter/__init__.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:3d0bbd059e1466b23efba45cfacd118453cf116553a9d76b82c5a4c1897cedd2",
+      "summary": "Read file src/metrics_exporter/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/metrics_exporter/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"0.5.1\"",
+        "truncated": false,
+        "content_hash": "sha256:3d0bbd059e1466b23efba45cfacd118453cf116553a9d76b82c5a4c1897cedd2"
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "src/metrics_exporter/exporter.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:d53d83580dfb7568c594f4d2993d2c0876853ea2ea18f6a534d448c72edd3b76",
+      "summary": "Read file src/metrics_exporter/exporter.py (lines 1-7)",
+      "payload": {
+        "path": "src/metrics_exporter/exporter.py",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "\"\"\"Prometheus-format metric formatting.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef format_metric(name: str, value: float) -> str:\n    return f\"{name} {value}\"",
+        "truncated": false,
+        "content_hash": "sha256:d53d83580dfb7568c594f4d2993d2c0876853ea2ea18f6a534d448c72edd3b76"
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_87ebc17780a2",
+      "source_type": "github_file",
+      "source_path": "tests/test_exporter.py",
+      "source_ref": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:378752851e6bb9fe103dea0040da01f062e0642eb38d5769c62cbdab97a2e47c",
+      "summary": "Read file tests/test_exporter.py (lines 1-5)",
+      "payload": {
+        "path": "tests/test_exporter.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "from metrics_exporter.exporter import format_metric\n\n\ndef test_format_metric():\n    assert format_metric(\"requests_total\", 42) == \"requests_total 42\"",
+        "truncated": false,
+        "content_hash": "sha256:378752851e6bb9fe103dea0040da01f062e0642eb38d5769c62cbdab97a2e47c"
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (100 total tokens)"
+  ],
+  "runtime_ms": 27,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.evidence.store import EvidenceStore
 from app.llm.types import ToolCall
 from app.schemas.enums import SourceType
+from app.security.redaction import redact_file_content, redact_obj
 from app.sources.base import RepositorySource
 from app.sources.errors import (
     FileNotFoundInRepoError,
@@ -37,6 +38,31 @@ class ToolDispatcher:
         self.source = source
         self.evidence = evidence
 
+    def _record(
+        self,
+        *,
+        source_type: SourceType,
+        source_path: str,
+        summary: str,
+        payload: dict[str, Any],
+        line_start: int | None = None,
+        line_end: int | None = None,
+        content: str | bytes | None = None,
+    ) -> tuple[Any, dict[str, Any]]:
+        """Persist and return the same redacted payload to the model caller."""
+        ev = self.evidence.add(
+            source_type=source_type,
+            source_path=source_path,
+            summary=summary,
+            payload=payload,
+            line_start=line_start,
+            line_end=line_end,
+            content=content,
+        )
+        result = redact_obj(dict(ev.payload))
+        result["evidence_ids"] = [ev.id]
+        return ev, result
+
     def execute(self, call: ToolCall) -> ToolResult:
         start_time = time.perf_counter()
         tool_name = call.name
@@ -45,13 +71,12 @@ class ToolDispatcher:
         try:
             if tool_name == "get_repository_metadata":
                 metadata = dict(self.source.get_repository_metadata())
-                ev = self.evidence.add(
+                ev, metadata = self._record(
                     source_type=SourceType.repository_metadata,
                     source_path="repository_metadata.json",
                     summary="Repository metadata",
                     payload=metadata,
                 )
-                metadata["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -65,13 +90,12 @@ class ToolDispatcher:
                 tree = self.source.get_tree()
                 tree_dicts = [e.model_dump() for e in tree]
                 payload = {"tree": tree_dicts, "total_files": len(tree_dicts)}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.git_metadata,
                     source_path=".",
                     summary="Repository file tree",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -114,7 +138,8 @@ class ToolDispatcher:
 
                 slice_res = self.source.read_file(path=path, start_line=start_line, end_line=end_line)
                 slice_dict = slice_res.model_dump()
-                ev = self.evidence.add(
+                slice_dict["content"] = redact_file_content(path, slice_res.content)
+                ev, slice_dict = self._record(
                     source_type=SourceType.github_file,
                     source_path=path,
                     summary=f"Read file {path} (lines {slice_res.start_line}-{slice_res.end_line})",
@@ -123,7 +148,6 @@ class ToolDispatcher:
                     line_end=slice_res.end_line,
                     content=slice_res.content,
                 )
-                slice_dict["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -157,13 +181,12 @@ class ToolDispatcher:
                 hits = self.source.search_files(pattern=pattern, glob=glob)
                 hits_dicts = [h.model_dump() for h in hits]
                 payload = {"pattern": pattern, "glob": glob, "hits": hits_dicts, "total_hits": len(hits_dicts)}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.github_file,
                     source_path=".",
                     summary=f"Search pattern {pattern!r} in repository",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -176,13 +199,12 @@ class ToolDispatcher:
             elif tool_name == "get_workflow_files":
                 files = self.source.get_workflow_files()
                 payload = {"workflow_files": files, "count": len(files)}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.github_actions,
                     source_path=".github/workflows",
                     summary="GitHub Actions workflow configurations",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -195,13 +217,12 @@ class ToolDispatcher:
             elif tool_name == "get_workflow_runs":
                 runs = self.source.get_workflow_runs()
                 payload = {"workflow_runs": runs, "count": len(runs)}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.github_actions,
                     source_path="github_actions_runs.json",
                     summary="GitHub Actions workflow runs",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -214,13 +235,12 @@ class ToolDispatcher:
             elif tool_name == "get_test_report":
                 report = self.source.get_test_report()
                 payload = {"test_report": report}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.test_result,
                     source_path="test_report.json",
                     summary="Test execution report",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,
@@ -233,13 +253,12 @@ class ToolDispatcher:
             elif tool_name == "get_build_report":
                 report = self.source.get_build_report()
                 payload = {"build_report": report}
-                ev = self.evidence.add(
+                ev, payload = self._record(
                     source_type=SourceType.build_result,
                     source_path="build_report.json",
                     summary="Build and packaging report",
                     payload=payload,
                 )
-                payload["evidence_ids"] = [ev.id]
                 duration = int((time.perf_counter() - start_time) * 1000)
                 return ToolResult(
                     tool=tool_name,

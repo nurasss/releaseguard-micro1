@@ -10,6 +10,7 @@ def test_trajectory_logger_sequence_and_jsonl_output(tmp_path: Path) -> None:
     run_id = "aud_test123456"
     logger = TrajectoryLogger(audit_run_id=run_id, trajectories_dir=traj_dir)
 
+    dummy_secret = "gh" + "p_" + "123456789012345678901234567890123456"
     step1 = logger.log(
         component="baseline",
         state="init",
@@ -20,7 +21,7 @@ def test_trajectory_logger_sequence_and_jsonl_output(tmp_path: Path) -> None:
         component="baseline",
         state="tool_call",
         tool="get_tree",
-        input_data={"secret_token": "ghp_123456789012345678901234567890123456"},
+        input_data={"secret_token": dummy_secret},
         output_summary="Tree retrieved",
         evidence_created=["E-001"],
         duration_ms=120,
@@ -43,7 +44,7 @@ def test_trajectory_logger_sequence_and_jsonl_output(tmp_path: Path) -> None:
     assert lines[1]["evidence_created"] == ["E-001"]
     assert lines[1]["duration_ms"] == 120
     # Check secret redaction
-    assert "ghp_123456789012345678901234567890123456" not in jsonl_path.read_text(encoding="utf-8")
+    assert dummy_secret not in jsonl_path.read_text(encoding="utf-8")
     assert "[REDACTED:GitHub PAT (classic)]" in lines[1]["input_redacted"]["secret_token"]
 
 

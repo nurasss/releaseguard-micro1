@@ -1,0 +1,262 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_7c193e7c77c9",
+  "repository_url": "https://github.com/eval/case_04",
+  "requested_ref": "v1.0.0",
+  "commit_sha": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+  "mode": "baseline",
+  "decision": "GO",
+  "executive_summary": "Offline baseline observed only direct test, CI-run, and build signals.",
+  "findings": [],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:23a1372099105d76d4a91e5a7d769290dcb5034d4ed2d480725fe65727954b27",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Generates PDF summary reports from CSV input.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v1.0.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v1.0.0",
+            "name": "Release 1.0.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "reports",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:9eaf5db32350248c927ecdc63a7b795fe25c57176b766096ed7c48dd92dc8acd",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 291
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 171
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 223
+          },
+          {
+            "path": "src/reportgen/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/reportgen/summary.py",
+            "size_bytes": 309
+          }
+        ],
+        "total_files": 5
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ac14960498de035254575ddf2948fd2929061b566d2d4e03c6e213e5d7d6d26",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v1.0.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-18T13:00:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:5475bd3d4f4527c6777c799da576c7993d375371916107b1153515ebd2467449",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  lint:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install ruff\n      - run: ruff check src/",
+        "truncated": false,
+        "content_hash": "sha256:5475bd3d4f4527c6777c799da576c7993d375371916107b1153515ebd2467449"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": 1,
+      "line_end": 15,
+      "content_hash": "sha256:edb14e0ab9dc45c001e261344d73f0a9d9b82f36ff2f86b0464e6bc44b59d5c5",
+      "summary": "Read file README.md (lines 1-15)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 15,
+        "total_lines": 15,
+        "content": "# report-gen\n\nGenerates PDF summary reports from CSV input.\n\n## Installation\n\n```bash\npip install -e .\n```\n\n## Usage\n\n```bash\npython -m reportgen input.csv output.pdf\n```",
+        "truncated": false,
+        "content_hash": "sha256:edb14e0ab9dc45c001e261344d73f0a9d9b82f36ff2f86b0464e6bc44b59d5c5"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:992443adb8ab440bbebb95179594a1f2437494858e8ca02d645174446f608ce0",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"report-gen\"\nversion = \"1.0.0\"\ndescription = \"Generates PDF summary reports from CSV input.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:992443adb8ab440bbebb95179594a1f2437494858e8ca02d645174446f608ce0"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_file",
+      "source_path": "src/reportgen/__init__.py",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:023efb54bd5de4c764bbbb200a029098fb986af3e9007b99b89732e9bca04191",
+      "summary": "Read file src/reportgen/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/reportgen/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"1.0.0\"",
+        "truncated": false,
+        "content_hash": "sha256:023efb54bd5de4c764bbbb200a029098fb986af3e9007b99b89732e9bca04191"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_7c193e7c77c9",
+      "source_type": "github_file",
+      "source_path": "src/reportgen/summary.py",
+      "source_ref": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "line_start": 1,
+      "line_end": 14,
+      "content_hash": "sha256:8d11e1a8a23a8a35d806645a3a3498be318f08e8044aa05cdac1392a1ee3927d",
+      "summary": "Read file src/reportgen/summary.py (lines 1-14)",
+      "payload": {
+        "path": "src/reportgen/summary.py",
+        "start_line": 1,
+        "end_line": 14,
+        "total_lines": 14,
+        "content": "\"\"\"CSV summary helpers.\"\"\"\n\nfrom __future__ import annotations\n\nimport csv\nfrom io import StringIO\n\n\ndef parse_rows(csv_text: str) -> list[dict]:\n    return list(csv.DictReader(StringIO(csv_text)))\n\n\ndef total_column(rows: list[dict], column: str) -> float:\n    return sum(float(row[column]) for row in rows)",
+        "truncated": false,
+        "content_hash": "sha256:8d11e1a8a23a8a35d806645a3a3498be318f08e8044aa05cdac1392a1ee3927d"
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (75 total tokens)"
+  ],
+  "runtime_ms": 17,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

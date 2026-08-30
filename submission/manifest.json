@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "source": "local redacted artifacts selected by scripts/prepare_submission.py",
+  "baseline_result": {
+    "run_label": "baseline_20260830_213016",
+    "generated_at_utc": "2026-08-30T16:30:17.064349Z",
+    "mode": "baseline",
+    "ablation": "none",
+    "model_id": "releaseguard-offline-v1",
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "prompt_version": "offline-b1-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "final_result": {
+    "run_label": "final_20260830_213022",
+    "generated_at_utc": "2026-08-30T16:30:23.607523Z",
+    "mode": "final",
+    "ablation": "none",
+    "model_id": "releaseguard-offline-v1",
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "prompt_version": "offline-final-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "case_12_run_id": "aud_9f22bcd6e71e",
+  "required_artifacts": [
+    "results/baseline/results.json",
+    "results/final/results.json",
+    "results/comparison.json",
+    "results/comparison.md",
+    "results/quality_gates.json",
+    "results/ablations/comparison.json",
+    "trajectories/analyzer_case_12.jsonl",
+    "trajectories/verifier_case_12.jsonl",
+    "case_12/report.json",
+    "removed_experiment/README.md",
+    "video/releaseguard_demo.mp4"
+  ],
+  "live_provider_attempt": "results/live_provider_attempt/results.json"
+}

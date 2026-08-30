@@ -1,0 +1,673 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_623e606cce95",
+  "repository_url": "https://github.com/eval/case_10",
+  "requested_ref": "v3.0.0",
+  "commit_sha": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 1 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_623e606cce95",
+      "category": "migrations",
+      "title": "Database migration step missing",
+      "severity": "critical",
+      "claim": "Migration file(s) present (['migrations/0001_initial.sql', 'migrations/0002_add_user_roles.sql', 'migrations/0003_add_payment_methods.sql']) but no release/deploy documentation or workflow among ['.github/workflows/deploy.yml', 'README.md', 'RELEASE.md'] mentions executing migrations.",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "E-007"
+      ],
+      "recommended_action": "Resolve the observed release-readiness gap and rerun the audit.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:a655a70a4897fde8d23b05061ad0d11e4538ba23422fb25ac0047064dacbf53f",
+      "summary": "No test directory, test files, or test configuration found",
+      "payload": {
+        "test_files": [],
+        "has_test_config": false
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:33f81c3d0297f530a42b2977ac7172319cd0cff3f85e837d4be86056fd976de9",
+      "summary": "Found 2 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/deploy.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/deploy.yml",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:056b78a4748ab272a3b368ee8e9aa769f5ee286a1dfad4c1a150f481b6cf50d0",
+      "summary": "Parsed push trigger configuration for .github/workflows/deploy.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": null,
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:701b0a81a0fee3728cdd0ce1887085779ada80d75bd6caa50876e91a74538977",
+      "summary": "Latest CI run for ref 'v3.0.0': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v3.0.0",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-27T16:00:00Z"
+        },
+        "requested_ref": "v3.0.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:34aac40c3501fd101799c5d3028ca6ea3ead7e37c9021ae6ff28fd7e8ee58102",
+      "summary": "Manifest version: '3.0.0'",
+      "payload": {
+        "manifest_version": "3.0.0",
+        "requested_ref": "v3.0.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:50941b165f4ffd5a454009c45a694b1b52ca42991d7457716019286931332ddc",
+      "summary": "Found 3 migration file(s)",
+      "payload": {
+        "migration_files": [
+          "migrations/0001_initial.sql",
+          "migrations/0002_add_user_roles.sql",
+          "migrations/0003_add_payment_methods.sql"
+        ]
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:e4a7c4d71196d3b71b6bde59f06d6aafa0438f486d5992b33a88753fa67cb35a",
+      "summary": "No secret patterns detected across 12 scanned file(s)",
+      "payload": {
+        "files_scanned": 12
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:8ba3801af7add21db39e058bc218c99dc7b0658e0a72de6ea27b2c23f44b71d5",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Payment processing microservice",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v2.0.0",
+          "v2.1.0",
+          "v3.0.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v3.0.0",
+            "name": "Release 3.0.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "payments",
+          "service",
+          "database"
+        ]
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:7d028930c8fcfb9439bbfc00938eed2f92c5e5fc101de120994fa978d1466238",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 358
+          },
+          {
+            "path": ".github/workflows/deploy.yml",
+            "size_bytes": 477
+          },
+          {
+            "path": ".gitignore",
+            "size_bytes": 51
+          },
+          {
+            "path": "LICENSE",
+            "size_bytes": 618
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 103
+          },
+          {
+            "path": "RELEASE.md",
+            "size_bytes": 395
+          },
+          {
+            "path": "migrations/0001_initial.sql",
+            "size_bytes": 139
+          },
+          {
+            "path": "migrations/0002_add_user_roles.sql",
+            "size_bytes": 73
+          },
+          {
+            "path": "migrations/0003_add_payment_methods.sql",
+            "size_bytes": 224
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 228
+          },
+          {
+            "path": "src/payment_service/__init__.py",
+            "size_bytes": 54
+          },
+          {
+            "path": "src/payment_service/models.py",
+            "size_bytes": 171
+          }
+        ],
+        "total_files": 12
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:8485445ab43ba36679d27261cba754dcc703641701e8347a04de83938e3fb300",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/deploy.yml"
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:a0a0b39b1017f3065d20306705125f294888c518b6976c4dfbd8e495662d0a6d",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v3.0.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-27T16:00:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 22,
+      "content_hash": "sha256:676f7adf986033faf16b3a3a14fc7ca6fbbf117a2b93fe32de923a6ae08ddd0a",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-22)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 22,
+        "total_lines": 22,
+        "content": "name: CI\non:\n  push:\n    branches:\n      - main\n    tags:\n      - \"v*\"\n  pull_request:\n    branches:\n      - main\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - name: Run tests\n        run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:676f7adf986033faf16b3a3a14fc7ca6fbbf117a2b93fe32de923a6ae08ddd0a"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/deploy.yml",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 19,
+      "content_hash": "sha256:056b78a4748ab272a3b368ee8e9aa769f5ee286a1dfad4c1a150f481b6cf50d0",
+      "summary": "Read file .github/workflows/deploy.yml (lines 1-19)",
+      "payload": {
+        "path": ".github/workflows/deploy.yml",
+        "start_line": 1,
+        "end_line": 19,
+        "total_lines": 19,
+        "content": "name: Deploy\non:\n  push:\n    tags:\n      - \"v*\"\n\njobs:\n  deploy:\n    name: Deploy to Production\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n      - name: Build container image\n        run: docker build -t payment-service:${{ github.ref_name }} .\n      - name: Push container image\n        run: echo \"Pushing image to registry\"\n      - name: Deploy service\n        run: echo \"Triggering container update on cluster\"",
+        "truncated": false,
+        "content_hash": "sha256:056b78a4748ab272a3b368ee8e9aa769f5ee286a1dfad4c1a150f481b6cf50d0"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": ".gitignore",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:ddab924adaed77c7af5872deaf4a7ef11c8880ad5c2fbcb487091da3b8dc241f",
+      "summary": "Read file .gitignore (lines 1-5)",
+      "payload": {
+        "path": ".gitignore",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "__pycache__/\n*.py[cod]\n.pytest_cache/\ndist/\nbuild/",
+        "truncated": false,
+        "content_hash": "sha256:ddab924adaed77c7af5872deaf4a7ef11c8880ad5c2fbcb487091da3b8dc241f"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "LICENSE",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:811898f38638b5273ece7bc294cdd1386e05370b6920ec2541b41d678aa15456",
+      "summary": "Read file LICENSE (lines 1-13)",
+      "payload": {
+        "path": "LICENSE",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "MIT License\n\nCopyright (c) 2026 Payment Service Authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.",
+        "truncated": false,
+        "content_hash": "sha256:811898f38638b5273ece7bc294cdd1386e05370b6920ec2541b41d678aa15456"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 4,
+      "content_hash": "sha256:a023bc4003a20102cb87abfcab90edc5e9bf4a2c5eecd89dd92960836673711b",
+      "summary": "Read file README.md (lines 1-4)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 4,
+        "total_lines": 4,
+        "content": "# Payment Service\n\nPayment processing microservice.\nSee RELEASE.md for deployment and release details.",
+        "truncated": false,
+        "content_hash": "sha256:a023bc4003a20102cb87abfcab90edc5e9bf4a2c5eecd89dd92960836673711b"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "RELEASE.md",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:935d840f03ee1c1ba08e791ee2512d664e259354724153431324b7af58377a3f",
+      "summary": "Read file RELEASE.md (lines 1-7)",
+      "payload": {
+        "path": "RELEASE.md",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "# Release and Deployment Procedure\n\n## Standard Production Deployment (v3.0.0)\n1. Pull the released container image: `docker pull registry.example.com/payment-service:v3.0.0`\n2. Update environment configuration in `/etc/payment-service/config.env`\n3. Restart the service container: `docker-compose up -d --no-deps payment-service`\n4. Perform health check: `curl -f http://localhost:8080/health`",
+        "truncated": false,
+        "content_hash": "sha256:935d840f03ee1c1ba08e791ee2512d664e259354724153431324b7af58377a3f"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "migrations/0001_initial.sql",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:f07b42307a8d8ef61e45384331e68c7bbba938c2130e6f220b78018aed74289d",
+      "summary": "Read file migrations/0001_initial.sql (lines 1-5)",
+      "payload": {
+        "path": "migrations/0001_initial.sql",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "CREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    email VARCHAR(255) NOT NULL UNIQUE,\n    created_at TIMESTAMP NOT NULL DEFAULT NOW()\n);",
+        "truncated": false,
+        "content_hash": "sha256:f07b42307a8d8ef61e45384331e68c7bbba938c2130e6f220b78018aed74289d"
+      }
+    },
+    {
+      "id": "E-022",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "migrations/0002_add_user_roles.sql",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:e7703832f92d82d9384b80476d3a900c50852c253ef28b9a89bc7209c70fe9b6",
+      "summary": "Read file migrations/0002_add_user_roles.sql (lines 1-1)",
+      "payload": {
+        "path": "migrations/0002_add_user_roles.sql",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "ALTER TABLE users ADD COLUMN role VARCHAR(50) NOT NULL DEFAULT 'member';",
+        "truncated": false,
+        "content_hash": "sha256:e7703832f92d82d9384b80476d3a900c50852c253ef28b9a89bc7209c70fe9b6"
+      }
+    },
+    {
+      "id": "E-023",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "migrations/0003_add_payment_methods.sql",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 7,
+      "content_hash": "sha256:fb9e68ac08e00b57dede44ed72fd314517a3199115918cd336f85728b80428a0",
+      "summary": "Read file migrations/0003_add_payment_methods.sql (lines 1-7)",
+      "payload": {
+        "path": "migrations/0003_add_payment_methods.sql",
+        "start_line": 1,
+        "end_line": 7,
+        "total_lines": 7,
+        "content": "CREATE TABLE payment_methods (\n    id SERIAL PRIMARY KEY,\n    user_id INT NOT NULL REFERENCES users(id),\n    provider VARCHAR(50) NOT NULL,\n    token VARCHAR(255) NOT NULL,\n    created_at TIMESTAMP NOT NULL DEFAULT NOW()\n);",
+        "truncated": false,
+        "content_hash": "sha256:fb9e68ac08e00b57dede44ed72fd314517a3199115918cd336f85728b80428a0"
+      }
+    },
+    {
+      "id": "E-024",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 11,
+      "content_hash": "sha256:34aac40c3501fd101799c5d3028ca6ea3ead7e37c9021ae6ff28fd7e8ee58102",
+      "summary": "Read file pyproject.toml (lines 1-11)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 11,
+        "total_lines": 11,
+        "content": "[build-system]\nrequires = [\"setuptools>=61.0\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"payment-service\"\nversion = \"3.0.0\"\ndescription = \"Payment processing microservice\"\ndependencies = [\n    \"pydantic>=2.0\"\n]",
+        "truncated": false,
+        "content_hash": "sha256:34aac40c3501fd101799c5d3028ca6ea3ead7e37c9021ae6ff28fd7e8ee58102"
+      }
+    },
+    {
+      "id": "E-025",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "src/payment_service/__init__.py",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:cf25628142812c9604b5014623c3d111415f78b8e09d194ddd46ce3b1018e98a",
+      "summary": "Read file src/payment_service/__init__.py (lines 1-3)",
+      "payload": {
+        "path": "src/payment_service/__init__.py",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "\"\"\"Payment service package.\"\"\"\n\n__version__ = \"3.0.0\"",
+        "truncated": false,
+        "content_hash": "sha256:cf25628142812c9604b5014623c3d111415f78b8e09d194ddd46ce3b1018e98a"
+      }
+    },
+    {
+      "id": "E-026",
+      "audit_run_id": "aud_623e606cce95",
+      "source_type": "github_file",
+      "source_path": "src/payment_service/models.py",
+      "source_ref": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "line_start": 1,
+      "line_end": 10,
+      "content_hash": "sha256:d8ea6ebbfa287968e62bea7025e7aa04b2abeafcd6df552a5fe474deedf3f228",
+      "summary": "Read file src/payment_service/models.py (lines 1-10)",
+      "payload": {
+        "path": "src/payment_service/models.py",
+        "start_line": 1,
+        "end_line": 10,
+        "total_lines": 10,
+        "content": "\"\"\"Database models for payment service.\"\"\"\n\nfrom pydantic import BaseModel\n\n\nclass PaymentMethod(BaseModel):\n    id: int\n    user_id: int\n    provider: str\n    token: str",
+        "truncated": false,
+        "content_hash": "sha256:d8ea6ebbfa287968e62bea7025e7aa04b2abeafcd6df552a5fe474deedf3f228"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "warn",
+      "details": "No tests/ directory, test_*.py / *_test.py files, or recognized test configuration (pytest.ini, tox.ini, [tool.pytest] section) were found in the repository tree. Test coverage cannot be verified.",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 2 workflow file(s): ['.github/workflows/ci.yml', '.github/workflows/deploy.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/deploy.yml'] are configured to trigger for ref 'v3.0.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v3.0.0' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '3.0.0' matches requested ref 'v3.0.0'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "fail",
+      "details": "Migration file(s) present (['migrations/0001_initial.sql', 'migrations/0002_add_user_roles.sql', 'migrations/0003_add_payment_methods.sql']) but no release/deploy documentation or workflow among ['.github/workflows/deploy.yml', 'README.md', 'RELEASE.md'] mentions executing migrations.",
+      "evidence_ids": [
+        "E-007"
+      ]
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 12 scanned text file(s).",
+      "evidence_ids": [
+        "E-008"
+      ]
+    }
+  ],
+  "limitations": [
+    "Ablation 'no_verifier': every critical/high finding was trusted as confirmed without running the Verifier.",
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (108 total tokens)"
+  ],
+  "runtime_ms": 67,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

@@ -6,6 +6,7 @@ from typing import Any
 
 from app.schemas.enums import SourceType
 from app.schemas.evidence import Evidence, content_hash_of
+from app.security.redaction import redact, redact_evidence_payload
 
 
 class EvidenceStore:
@@ -30,10 +31,11 @@ class EvidenceStore:
         self._counter += 1
         evidence_id = f"E-{self._counter:03d}"
 
+        safe_payload = redact_evidence_payload(source_path, payload)
         if content is not None:
             c_hash = content_hash_of(content)
         else:
-            c_hash = content_hash_of(json.dumps(payload, sort_keys=True))
+            c_hash = content_hash_of(json.dumps(safe_payload, sort_keys=True, default=str))
 
         typed_source_type = (
             source_type if isinstance(source_type, SourceType) else SourceType(source_type)
@@ -45,11 +47,11 @@ class EvidenceStore:
             source_ref=self.commit_sha,
             source_type=typed_source_type,
             source_path=source_path,
-            summary=summary,
+            summary=redact(summary),
             content_hash=c_hash,
             line_start=line_start,
             line_end=line_end,
-            payload=payload,
+            payload=safe_payload,
         )
         self._items.append(item)
         return item

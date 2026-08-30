@@ -1,0 +1,43 @@
+# Mirrors .gitignore's exclusions, plus Docker-specific entries. Keeps
+# secrets, VCS metadata, caches, and runtime output out of the build context
+# and image.
+
+# Local secrets — never committed, never shipped
+.env
+
+# Python build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# ReleaseGuard runtime output (leading slash: repo-root only, so
+# eval/cases/*/artifacts/ frozen fixtures are still copied in)
+/runs/
+/trajectories/
+/artifacts/
+
+# Local databases
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# VCS metadata
+.git/
+.gitattributes
+.gitignore
+
+# Docker's own files
+Dockerfile
+.dockerignore
+compose.yaml
+
+# Packaging output
+dist/
+/eval/results/
+/submission/
+
+# Test / editor / packaging cruft not needed in the image
+tests/
+*.egg-info/
+.DS_Store

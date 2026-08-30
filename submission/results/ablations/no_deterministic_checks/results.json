@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "run_label": "ablation_no_deterministic_checks_20260830_213029",
+    "generated_at_utc": "2026-08-30T16:30:33.734544Z",
+    "mode": "final",
+    "ablation": "no_deterministic_checks",
+    "model_id": "releaseguard-offline-v1",
+    "execution_mode": "offline_fixture",
+    "provider": "local-deterministic-fixture",
+    "prompt_version": "offline-final-v1",
+    "system_version": "releaseguard-v1",
+    "spec_version": "1.0",
+    "frozen_at": "2026-08-29",
+    "cases_total": 12,
+    "timeout_s": 300
+  },
+  "per_case": [
+    {
+      "case_id": "case_01",
+      "mode": "final",
+      "commit_sha": "d58d6fffe6692b4c503b8d3d6305c28f75dd25b1",
+      "audit_run_id": "aud_1d38971f16ee",
+      "decision_expected": "GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 0,
+      "runtime_ms": 32,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_02",
+      "mode": "final",
+      "commit_sha": "ab6dcc2145466d5fd8fce1d8aa8c7e6424d2b94d",
+      "audit_run_id": "aud_f19ec90e2500",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "failing_unit_test"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 23,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_03",
+      "mode": "final",
+      "commit_sha": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "ci_run_failed"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 25,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_04",
+      "mode": "final",
+      "commit_sha": "7fc1786a8fc760fba6754df3f7decd3514d3adcf",
+      "audit_run_id": "aud_97ad2a7a2656",
+      "decision_expected": "REVIEW",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "tests_absent"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 0,
+      "runtime_ms": 19,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_05",
+      "mode": "final",
+      "commit_sha": "268ba643673c9c69fac52a077b621bc239bc0c11",
+      "audit_run_id": "aud_c8e58bd2cf86",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "required_env_var_undocumented"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 29,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_06",
+      "mode": "final",
+      "commit_sha": "98ff097c80be659a5a7f5f0b52581ef89024f394",
+      "audit_run_id": "aud_87ebc17780a2",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "release_build_script_fails"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 27,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_07",
+      "mode": "final",
+      "commit_sha": "dd6f7a7abcfd940346d5166ae3966f8a962e3683",
+      "audit_run_id": "aud_061367201f72",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "version_metadata_mismatch"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 35,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_08",
+      "mode": "final",
+      "commit_sha": "6dda57ed606d6ce0672f09e588e6b095f529aba8",
+      "audit_run_id": "aud_bfd7f0aab895",
+      "decision_expected": "REVIEW",
+      "decision_actual": "REVIEW",
+      "matched_blockers": [
+        "stale_generated_openapi_spec"
+      ],
+      "missed_blockers": [],
+      "false_positives": [],
+      "evidence_coverage": 1.0,
+      "critical_evidence_coverage": 1.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 0,
+      "runtime_ms": 38,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_09",
+      "mode": "final",
+      "commit_sha": "b5c58dcd75ad6147f876dfb791243022a9bcb4c6",
+      "audit_run_id": "aud_d4d95d330b68",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "ci_release_trigger_missing"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 31,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_10",
+      "mode": "final",
+      "commit_sha": "234dfa80102c9f370f3e201ffe2528fd3dc1e24f",
+      "audit_run_id": "aud_8426052c8b09",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "database_migration_step_missing"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 39,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_11",
+      "mode": "final",
+      "commit_sha": "b7630cf1c126078f73acb3912bf5e3e877bd817c",
+      "audit_run_id": "aud_9fe8a825365a",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "ci_test_failure_despite_readme_claim"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 46,
+      "estimated_cost": 0.0,
+      "status": "success"
+    },
+    {
+      "case_id": "case_12",
+      "mode": "final",
+      "commit_sha": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "audit_run_id": "aud_f35c72b97215",
+      "decision_expected": "NO-GO",
+      "decision_actual": "GO",
+      "matched_blockers": [],
+      "missed_blockers": [
+        "integration_tests_excluded_from_ci"
+      ],
+      "false_positives": [],
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical": 0,
+      "trap_hits": 0,
+      "blockers_total": 1,
+      "runtime_ms": 38,
+      "estimated_cost": 0.0,
+      "status": "success"
+    }
+  ],
+  "aggregate": {
+    "development": {
+      "cbr": 0.0,
+      "high_blocker_recall": 0.5,
+      "precision": 1.0,
+      "f1": 0.0,
+      "decision_accuracy": 0.25,
+      "evidence_coverage": 1.0,
+      "critical_evidence_coverage": 1.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 1.0,
+      "total_runtime_ms": 228,
+      "total_cost": 0.0
+    },
+    "held_out": {
+      "cbr": 0.0,
+      "high_blocker_recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "decision_accuracy": 0.0,
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 1.0,
+      "total_runtime_ms": 154,
+      "total_cost": 0.0
+    },
+    "all": {
+      "cbr": 0.0,
+      "high_blocker_recall": 0.5,
+      "precision": 1.0,
+      "f1": 0.0,
+      "decision_accuracy": 0.1667,
+      "evidence_coverage": 1.0,
+      "critical_evidence_coverage": 1.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 1.0,
+      "total_runtime_ms": 382,
+      "total_cost": 0.0
+    }
+  }
+}

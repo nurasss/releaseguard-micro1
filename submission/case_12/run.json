@@ -1,0 +1,16 @@
+{
+  "id": "aud_9f22bcd6e71e",
+  "repository_url": "https://github.com/eval/case_12",
+  "requested_ref": "v4.0.0",
+  "commit_sha": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+  "status": "completed",
+  "final_decision": "NO-GO",
+  "started_at": "2026-08-30T16:30:39Z",
+  "finished_at": "2026-08-30T16:30:39Z",
+  "runtime_ms": 61,
+  "estimated_cost_usd": 0.0,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "system_version": "0.1.0",
+  "mode": "final"
+}

@@ -111,6 +111,7 @@ class LocalFixtureSource(RepositorySource):
             branches.insert(0, default_branch)
 
         return {
+            "private": bool(raw.get("private", False)),
             "default_branch": default_branch,
             "description": raw.get("description", ""),
             "branches": branches,

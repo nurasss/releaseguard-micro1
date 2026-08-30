@@ -1,0 +1,295 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_fa2c15738d1f",
+  "repository_url": "https://github.com/eval/case_03",
+  "requested_ref": "v3.0.0",
+  "commit_sha": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+  "mode": "final",
+  "decision": "GO",
+  "executive_summary": "Analyzed 0 candidate finding(s) across 0 deterministic check(s). Decision: GO. 0 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [],
+  "rejected_findings": [],
+  "verifications": [],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:28c4a97b73a8c272d3556d6ead345850e6e77fca190eec5a778daecbc53193e8",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "Synchronizes records between two data stores.",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v2.9.0",
+          "v3.0.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v3.0.0",
+            "name": "Release 3.0.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "sync",
+          "python"
+        ]
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:b38a879ddd74ab43805c36ac9cb4c78fd931232394a2c801a7bd94087027b94d",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 282
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 91
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 222
+          },
+          {
+            "path": "src/datasync/__init__.py",
+            "size_bytes": 22
+          },
+          {
+            "path": "src/datasync/merge.py",
+            "size_bytes": 282
+          },
+          {
+            "path": "tests/test_merge.py",
+            "size_bytes": 252
+          }
+        ],
+        "total_files": 6
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:fa2ceb2994d67b7c72dd0829c722e4ff0781d9b4b7b802d9e9ddba6383f61d3c",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v3.0.0",
+            "event": "push",
+            "conclusion": "failure",
+            "created_at": "2026-08-22T11:05:00Z"
+          },
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "main",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-21T08:40:00Z"
+          }
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:4ca8bf06bfa8866061a040a5cf9a5945f9eac70ad7b5e246b87387ab3eecaf87",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": null
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 17,
+      "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-17)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 17,
+        "total_lines": 17,
+        "content": "name: CI\n\non:\n  push:\n    branches: [main]\n    tags: [\"v*\"]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - run: pip install -e .\n      - run: pytest",
+        "truncated": false,
+        "content_hash": "sha256:4d82aa1b7d40ff3b3eda0cdf5ae5f6337b36ab1f758f9af5adb2df2689026a0e"
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:25ab0e7d40aa6f9e7c936605c94cdfceff7e59cfe96cfd0481c2192042bacf95",
+      "summary": "Read file README.md (lines 1-9)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "# data-sync\n\nSynchronizes records between two data stores.\n\n## Testing\n\n```bash\npytest\n```",
+        "truncated": false,
+        "content_hash": "sha256:25ab0e7d40aa6f9e7c936605c94cdfceff7e59cfe96cfd0481c2192042bacf95"
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:6c2f5a601cb8df207b56eb28c4c59c2e49bfe3f4c368088808e1ba366e6e505e",
+      "summary": "Read file pyproject.toml (lines 1-9)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "[project]\nname = \"data-sync\"\nversion = \"3.0.0\"\ndescription = \"Synchronizes records between two data stores.\"\nrequires-python = \">=3.10\"\n\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"",
+        "truncated": false,
+        "content_hash": "sha256:6c2f5a601cb8df207b56eb28c4c59c2e49bfe3f4c368088808e1ba366e6e505e"
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": "src/datasync/__init__.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 1,
+      "content_hash": "sha256:a40ecd363bbdd73718907fd7c75f9cfea8c94f721c919c6a9b913e553670ed46",
+      "summary": "Read file src/datasync/__init__.py (lines 1-1)",
+      "payload": {
+        "path": "src/datasync/__init__.py",
+        "start_line": 1,
+        "end_line": 1,
+        "total_lines": 1,
+        "content": "__version__ = \"3.0.0\"",
+        "truncated": false,
+        "content_hash": "sha256:a40ecd363bbdd73718907fd7c75f9cfea8c94f721c919c6a9b913e553670ed46"
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": "src/datasync/merge.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:73f64107ec2bfad16e4d36eb3a47374aa439c82194f56c9b9adf29560c84a672",
+      "summary": "Read file src/datasync/merge.py (lines 1-13)",
+      "payload": {
+        "path": "src/datasync/merge.py",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "\"\"\"Record merge utilities.\"\"\"\n\nfrom __future__ import annotations\n\n\ndef merge_records(source: dict, target: dict) -> dict:\n    merged = dict(target)\n    merged.update(source)\n    return merged\n\n\ndef diff_keys(source: dict, target: dict) -> set:\n    return set(source) - set(target)",
+        "truncated": false,
+        "content_hash": "sha256:73f64107ec2bfad16e4d36eb3a47374aa439c82194f56c9b9adf29560c84a672"
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_fa2c15738d1f",
+      "source_type": "github_file",
+      "source_path": "tests/test_merge.py",
+      "source_ref": "e0f28df6e77c8a88563becb5d1ca0a64b63fe0da",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:57f78e31fcd6f816b5d89fa305f3724b9af053724242dc34bd3afc7914783a41",
+      "summary": "Read file tests/test_merge.py (lines 1-9)",
+      "payload": {
+        "path": "tests/test_merge.py",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "from datasync.merge import diff_keys, merge_records\n\n\ndef test_merge_records_overrides_target():\n    assert merge_records({\"a\": 1}, {\"a\": 0, \"b\": 2}) == {\"a\": 1, \"b\": 2}\n\n\ndef test_diff_keys():\n    assert diff_keys({\"a\": 1, \"c\": 3}, {\"a\": 1}) == {\"c\"}",
+        "truncated": false,
+        "content_hash": "sha256:57f78e31fcd6f816b5d89fa305f3724b9af053724242dc34bd3afc7914783a41"
+      }
+    }
+  ],
+  "deterministic_checks": [],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (100 total tokens)"
+  ],
+  "runtime_ms": 25,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}

@@ -6,12 +6,15 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+*.egg-info/
 
 # ReleaseGuard runtime output. Leading slash matters: without it these patterns
 # would also swallow eval/cases/*/artifacts/, which is frozen benchmark data.
 /runs/
 /trajectories/
 /artifacts/
+/eval/results/
+/dist/
 
 # Local databases
 *.sqlite3

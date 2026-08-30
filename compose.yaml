@@ -1,0 +1,12 @@
+services:
+  releaseguard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./runs:/app/runs
+      - ./trajectories:/app/trajectories
+      - ./artifacts:/app/artifacts

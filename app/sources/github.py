@@ -127,7 +127,7 @@ class GitHubSource(RepositorySource):
         tag_res = self._get(f"git/ref/tags/{ref}")
         if tag_res.status_code == 200:
             tag_data = tag_res.json()
-            commit_sha = tag_data.get("object", {}).get("sha", "")
+            commit_sha = self._resolve_tag_object(tag_data)
             self._resolved_commit_sha = commit_sha
             self._resolved_ref_name = ref
             return ResolvedRef(
@@ -143,7 +143,7 @@ class GitHubSource(RepositorySource):
             tag_name = rel_data.get("tag_name", ref)
             tag_lookup = self._get(f"git/ref/tags/{tag_name}")
             if tag_lookup.status_code == 200:
-                commit_sha = tag_lookup.json().get("object", {}).get("sha", "")
+                commit_sha = self._resolve_tag_object(tag_lookup.json())
                 self._resolved_commit_sha = commit_sha
                 self._resolved_ref_name = ref
                 return ResolvedRef(
@@ -167,11 +167,41 @@ class GitHubSource(RepositorySource):
 
         raise UnknownRefError(f"Ref {ref!r} not found in GitHub repository {self.owner}/{self.repo}")
 
+    def _resolve_tag_object(self, tag_data: dict, _seen: set[str] | None = None) -> str:
+        """Resolve lightweight and annotated tags to the underlying commit SHA."""
+        obj = tag_data.get("object", {}) if isinstance(tag_data, dict) else {}
+        sha = str(obj.get("sha", ""))
+        obj_type = obj.get("type")
+        if obj_type != "tag":
+            return sha
+        seen = _seen or set()
+        if not sha or sha in seen:
+            raise GitHubAPIError("Annotated Git tag contains a cycle or empty target")
+        seen.add(sha)
+        tag_res = self._get(f"git/tags/{sha}")
+        if tag_res.status_code != 200:
+            raise GitHubAPIError(f"Failed to resolve annotated Git tag object: status {tag_res.status_code}")
+        return self._resolve_tag_object(tag_res.json(), seen)
+
     def get_repository_metadata(self) -> dict:
         repo_res = self._get("")
         if repo_res.status_code != 200:
             raise GitHubAPIError(f"Failed to fetch repository metadata: status {repo_res.status_code}")
         repo_data = repo_res.json()
+        is_private = bool(repo_data.get("private", False))
+        if is_private:
+            # Do not enumerate refs or request any repository content for a
+            # private target. The runner turns this metadata signal into a
+            # rejected audit.
+            return {
+                "private": True,
+                "default_branch": repo_data.get("default_branch", "main"),
+                "description": repo_data.get("description") or "",
+                "branches": [],
+                "tags": [],
+                "releases": [],
+                "topics": [],
+            }
 
         # Fetch branches
         branches_res = self._get("branches")
@@ -206,6 +236,7 @@ class GitHubSource(RepositorySource):
             branches.insert(0, default_branch)
 
         return {
+            "private": bool(repo_data.get("private", False)),
             "default_branch": default_branch,
             "description": repo_data.get("description") or "",
             "branches": branches,

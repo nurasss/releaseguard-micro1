@@ -249,6 +249,28 @@ def test_github_source_binds_all_content_queries_to_resolved_commit_sha() -> Non
     assert slice_res.content == "print('hi')"
 
 
+def test_github_source_dereferences_annotated_tag() -> None:
+    tag_object_sha = "a" * 40
+    commit_sha = "b" * 40
+
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        path = str(request.url.path).rstrip("/")
+        if path.endswith("/git/ref/tags/v2.0.0"):
+            return httpx.Response(200, json={"object": {"sha": tag_object_sha, "type": "tag"}})
+        if path.endswith(f"/git/tags/{tag_object_sha}"):
+            return httpx.Response(200, json={"object": {"sha": commit_sha, "type": "commit"}})
+        return httpx.Response(404, json={})
+
+    source = GitHubSource(
+        repo_url="https://github.com/octocat/Hello-World",
+        transport=httpx.MockTransport(mock_handler),
+    )
+    resolved = source.resolve_ref("v2.0.0")
+
+    assert resolved.ref_type == "tag"
+    assert resolved.commit_sha == commit_sha
+
+
 def test_github_source_resolve_ref_branch_priority() -> None:
     branch_sha = "1111111111111111111111111111111111111111"
     commit_sha = "2222222222222222222222222222222222222222"

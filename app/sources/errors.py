@@ -24,3 +24,7 @@ class InvalidPathError(SourceError):
 
 class GitHubAPIError(SourceError):
     """Raised when the GitHub API returns an error or unexpected status."""
+
+
+class PrivateRepositoryError(SourceError):
+    """Raised when an audit target is not publicly readable."""

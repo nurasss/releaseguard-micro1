@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     llm_provider: Literal["google"] = "google"
     # Model frozen due to latency requirement: gemini-2.5-flash (1.3s) vs gemini-3.7-flash (23.3s) to satisfy NFR-08 (<=5min per fixture).
     model_id: str = "gemini-2.5-flash"
+    offline_mode: bool = False
+    offline_model_id: str = "releaseguard-offline-v1"
     api_key: str | None = Field(
         default=None,
         validation_alias=AliasChoices("GEMINI_API_KEY", "RG_API_KEY"),
@@ -45,6 +47,7 @@ class Settings(BaseSettings):
         return (
             f"Settings(llm_provider={self.llm_provider!r}, "
             f"model_id={self.model_id!r}, "
+            f"offline_mode={self.offline_mode!r}, "
             f"api_key={masked_api_key!r}, "
             f"github_token={masked_github_token!r}, "
             f"min_request_interval_ms={self.min_request_interval_ms!r}, "

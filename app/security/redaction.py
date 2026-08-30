@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from pathlib import PurePosixPath
 from typing import Any
 
 
@@ -20,6 +21,39 @@ SECRET_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     # Slack Tokens (xoxb-, xoxp-, xoxa-, xoxr-, xoxs-)
     (re.compile(r"\bxox[baprs]-[0-9A-Za-z]{10,}\b"), "Slack Token"),
 ]
+
+# A filename is itself a security signal. Secret files often contain values
+# that do not use a recognisable provider prefix (for example ``PASSWORD=x``),
+# so pattern matching alone is not sufficient before an evidence payload is
+# persisted or sent to a model.
+SAFE_TEMPLATE_NAMES = {".env.example", ".env.sample", ".env.template"}
+SENSITIVE_BASENAMES = {
+    ".env",
+    ".env.local",
+    ".env.production",
+    ".env.development",
+    ".env.test",
+    "credentials",
+    "credentials.json",
+    "secrets.json",
+    "secret.json",
+    "id_rsa",
+    "id_dsa",
+    "id_ecdsa",
+    "id_ed25519",
+}
+SENSITIVE_SUFFIXES = {
+    ".pem",
+    ".key",
+    ".p12",
+    ".pfx",
+    ".jks",
+    ".kdbx",
+}
+SENSITIVE_NAME_RE = re.compile(
+    r"(?:^|[-_.])(secret|secrets|credential|credentials|password|passwd|token|private[-_.]?key)(?:$|[-_.])",
+    re.IGNORECASE,
+)
 
 
 def find_secrets(text: str) -> list[tuple[int, str, str]]:
@@ -49,6 +83,26 @@ def redact(text: str) -> str:
     return redacted_text
 
 
+def is_sensitive_path(path: str) -> bool:
+    """Return whether a repository path should be treated as a secret file."""
+    if not isinstance(path, str) or not path:
+        return False
+    name = PurePosixPath(path.replace("\\", "/")).name.lower()
+    if name in SAFE_TEMPLATE_NAMES:
+        return False
+    if name in SENSITIVE_BASENAMES or name.endswith(tuple(SENSITIVE_SUFFIXES)):
+        return True
+    return bool(SENSITIVE_NAME_RE.search(name))
+
+
+def redact_file_content(path: str, content: str) -> str:
+    """Redact file text, omitting the complete body for secret-looking files."""
+    if is_sensitive_path(path):
+        line_count = len(content.splitlines())
+        return f"[REDACTED:secret file contents omitted; lines={line_count}]"
+    return redact(content)
+
+
 def redact_obj(obj: Any) -> Any:
     """Recursively redact string values in dicts and lists. Keys remain untouched."""
     if isinstance(obj, str):
@@ -62,3 +116,29 @@ def redact_obj(obj: Any) -> Any:
     elif isinstance(obj, set):
         return {redact_obj(elem) for elem in obj}
     return obj
+
+
+def redact_evidence_payload(source_path: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Return a persistence-safe evidence payload.
+
+    This helper is intentionally reusable at both the in-memory EvidenceStore
+    boundary and the SQLite repository boundary, so a caller cannot bypass the
+    secret-file omission by constructing an Evidence object directly.
+    """
+    safe_payload = redact_obj(payload)
+    if not is_sensitive_path(source_path):
+        return safe_payload
+
+    structural_keys = {
+        "path",
+        "start_line",
+        "end_line",
+        "total_lines",
+        "truncated",
+        "content_hash",
+        "evidence_ids",
+    }
+    return {
+        key: value if key in structural_keys else "[REDACTED:secret file contents omitted]"
+        for key, value in safe_payload.items()
+    }

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "baseline": {
+    "run_label": "baseline_20260830_213016",
+    "mode": "baseline",
+    "results_file": "results/baseline/results.json"
+  },
+  "final": {
+    "run_label": "final_20260830_213022",
+    "mode": "final"
+  },
+  "deltas": {
+    "development": {
+      "cbr": 0.4,
+      "high_blocker_recall": 1.0,
+      "precision": 0.0,
+      "f1": 0.25,
+      "decision_accuracy": 0.5,
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 0.0,
+      "total_runtime_ms": 127,
+      "total_cost": 0.0
+    },
+    "held_out": {
+      "cbr": 0.75,
+      "high_blocker_recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.6,
+      "decision_accuracy": 0.75,
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 0.0,
+      "total_runtime_ms": 124,
+      "total_cost": 0.0
+    },
+    "all": {
+      "cbr": 0.5556,
+      "high_blocker_recall": 1.0,
+      "precision": 0.0,
+      "f1": 0.38460000000000005,
+      "decision_accuracy": 0.5832999999999999,
+      "evidence_coverage": 0.0,
+      "critical_evidence_coverage": 0.0,
+      "unsupported_critical_total": 0,
+      "trap_hits_total": 0,
+      "successful_run_rate": 0.0,
+      "total_runtime_ms": 251,
+      "total_cost": 0.0
+    }
+  }
+}

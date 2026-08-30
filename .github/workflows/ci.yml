@@ -1,0 +1,42 @@
+name: ReleaseGuard CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --disable-pip-version-check --requirement requirements.lock
+          .venv/bin/python -m pip install --disable-pip-version-check --no-build-isolation --no-deps --editable ".[dev]"
+
+      - name: Secret scan
+        run: .venv/bin/python scripts/secret_scan.py
+
+      - name: Validate frozen evaluation data
+        run: |
+          .venv/bin/python eval/validate_gold.py
+          .venv/bin/python eval/check_probes.py
+
+      - name: Unit and integration tests
+        run: .venv/bin/python -m pytest -q
+
+      - name: Evaluation smoke test
+        env:
+          RG_OFFLINE_MODE: "1"
+        run: .venv/bin/python -m eval.run --mode final --cases case_01,case_12 --label ci_smoke
+
+      - name: Docker build
+        run: docker build --tag releaseguard:ci .

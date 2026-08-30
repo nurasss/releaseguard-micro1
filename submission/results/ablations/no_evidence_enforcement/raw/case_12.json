@@ -1,0 +1,654 @@
+{
+  "schema_version": "1.0",
+  "audit_run_id": "aud_48770c0d8fc0",
+  "repository_url": "https://github.com/eval/case_12",
+  "requested_ref": "v4.0.0",
+  "commit_sha": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+  "mode": "final",
+  "decision": "NO-GO",
+  "executive_summary": "Analyzed 1 candidate finding(s) across 10 deterministic check(s). Decision: NO-GO. 1 confirmed critical, 0 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "findings": [
+    {
+      "id": "F-001",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "category": "tests",
+      "title": "Integration tests not run",
+      "severity": "critical",
+      "claim": "Integration tests are not run by the configured CI test command; the integration path is untested.",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "E-001"
+      ],
+      "recommended_action": "Resolve the observed release-readiness gap and rerun the audit.",
+      "verification_status": "confirmed",
+      "origin": "analyzer"
+    }
+  ],
+  "rejected_findings": [],
+  "verifications": [
+    {
+      "finding_id": "F-001",
+      "status": "confirmed",
+      "confidence": 0.99,
+      "supporting_evidence": [
+        "E-001"
+      ],
+      "contradicting_evidence": [],
+      "reason_summary": "The cited deterministic evidence supports the finding.",
+      "verifier_error": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-001",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "test_result",
+      "source_path": "test_report",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:2621d90d51855a1a34a3ee870d9cd3f455e670861b45f0c722ed58fd96e0d0d4",
+      "summary": "Test report: 4/4 passed, 0 failed",
+      "payload": {
+        "report": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "failures": []
+        },
+        "test_files": [
+          "tests/test_payment_gateway_integration.py",
+          "tests/test_unit.py"
+        ],
+        "discovered_test_defs": 6
+      }
+    },
+    {
+      "id": "E-002",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:d8824afe8bc7ff7cf742ef341845e3afe32e6a34d27b5963cd0894b928036591",
+      "summary": "Found 1 workflow file(s)",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "E-003",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:1a69fac6e379837d8728ebadc0389faeac011ab5b36578791bd81d664a1657ac",
+      "summary": "Parsed push trigger configuration for .github/workflows/ci.yml",
+      "payload": {
+        "triggers": {
+          "has_push": true,
+          "push_branches": [
+            "main",
+            "release/**"
+          ],
+          "push_tags": [
+            "v*"
+          ]
+        }
+      }
+    },
+    {
+      "id": "E-004",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:f2eebd1ee982246745a43d074c95e2be1b32d35d252e76a2418287453ae219ae",
+      "summary": "Latest CI run for ref 'v4.0.0': conclusion='success'",
+      "payload": {
+        "latest_run": {
+          "workflow_name": "CI",
+          "path": ".github/workflows/ci.yml",
+          "head_branch": "v4.0.0",
+          "event": "push",
+          "conclusion": "success",
+          "created_at": "2026-08-28T18:00:00Z"
+        },
+        "requested_ref": "v4.0.0"
+      }
+    },
+    {
+      "id": "E-005",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "manifest",
+      "source_path": "pyproject.toml",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:ef0bb5f9b92515639900080b9473691ce1324568dfd9b722ff40f21b3130b03c",
+      "summary": "Manifest version: '4.0.0'",
+      "payload": {
+        "manifest_version": "4.0.0",
+        "requested_ref": "v4.0.0"
+      }
+    },
+    {
+      "id": "E-006",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:44a521f258d6bbc149ce9929ef7a3fe14949d9fb69c035f0efe9070b43d3620c",
+      "summary": "No lockfile found for dependency manifest",
+      "payload": {
+        "manifest_present": true
+      }
+    },
+    {
+      "id": "E-007",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "deterministic_check",
+      "source_path": "<repository tree>",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:3a5fb48a5ad621c50cf0b1adbdf6302886248420a44d2be1244110050bb50253",
+      "summary": "No secret patterns detected across 11 scanned file(s)",
+      "payload": {
+        "files_scanned": 11
+      }
+    },
+    {
+      "id": "E-008",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "repository_metadata",
+      "source_path": "repository_metadata.json",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:f28faf37b5719cd6bb23bc3bc967f8e9f1f8337e861d9d74eca1a0d7c584521d",
+      "summary": "Repository metadata",
+      "payload": {
+        "private": false,
+        "default_branch": "main",
+        "description": "High throughput financial settlement engine",
+        "branches": [
+          "main"
+        ],
+        "tags": [
+          "v3.9.0",
+          "v4.0.0"
+        ],
+        "releases": [
+          {
+            "tag_name": "v4.0.0",
+            "name": "Release 4.0.0",
+            "draft": false,
+            "prerelease": false
+          }
+        ],
+        "topics": [
+          "finance",
+          "settlement",
+          "transactions"
+        ]
+      }
+    },
+    {
+      "id": "E-009",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "git_metadata",
+      "source_path": ".",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:9baca9392ffeac8646fe41bcf6dac25c477cedf7f9aa9139cae5bf12e573c0dc",
+      "summary": "Repository file tree",
+      "payload": {
+        "tree": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "size_bytes": 563
+          },
+          {
+            "path": ".gitignore",
+            "size_bytes": 51
+          },
+          {
+            "path": "LICENSE",
+            "size_bytes": 620
+          },
+          {
+            "path": "README.md",
+            "size_bytes": 77
+          },
+          {
+            "path": "pyproject.toml",
+            "size_bytes": 402
+          },
+          {
+            "path": "src/settlement/__init__.py",
+            "size_bytes": 55
+          },
+          {
+            "path": "src/settlement/engine.py",
+            "size_bytes": 91
+          },
+          {
+            "path": "src/settlement/models.py",
+            "size_bytes": 161
+          },
+          {
+            "path": "src/settlement/validators.py",
+            "size_bytes": 123
+          },
+          {
+            "path": "tests/test_payment_gateway_integration.py",
+            "size_bytes": 183
+          },
+          {
+            "path": "tests/test_unit.py",
+            "size_bytes": 180
+          }
+        ],
+        "total_files": 11
+      }
+    },
+    {
+      "id": "E-010",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_actions",
+      "source_path": ".github/workflows",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:57f233adfd7933cf2e0935db1f57b0abf2bc22c3374b05216997a33a7babf666",
+      "summary": "GitHub Actions workflow configurations",
+      "payload": {
+        "workflow_files": [
+          ".github/workflows/ci.yml"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-011",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_actions",
+      "source_path": "github_actions_runs.json",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:943aad789a669f677ed1dc90922d4f9e3f71de343f882852a5479ce1952cba30",
+      "summary": "GitHub Actions workflow runs",
+      "payload": {
+        "workflow_runs": [
+          {
+            "workflow_name": "CI",
+            "path": ".github/workflows/ci.yml",
+            "head_branch": "v4.0.0",
+            "event": "push",
+            "conclusion": "success",
+            "created_at": "2026-08-28T18:00:00Z"
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "E-012",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:521a3640732eca381c612f9bfe2d2265112e8c2101bfdf15574a9f78af3abdbf",
+      "summary": "Test execution report",
+      "payload": {
+        "test_report": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "E-013",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "build_result",
+      "source_path": "build_report.json",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": null,
+      "line_end": null,
+      "content_hash": "sha256:557f5a661e7e58ced2ae67daaec9e5af06fd633341f4d399372d51713c2d64f8",
+      "summary": "Build and packaging report",
+      "payload": {
+        "build_report": null
+      }
+    },
+    {
+      "id": "E-014",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": ".github/workflows/ci.yml",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 27,
+      "content_hash": "sha256:1a69fac6e379837d8728ebadc0389faeac011ab5b36578791bd81d664a1657ac",
+      "summary": "Read file .github/workflows/ci.yml (lines 1-27)",
+      "payload": {
+        "path": ".github/workflows/ci.yml",
+        "start_line": 1,
+        "end_line": 27,
+        "total_lines": 27,
+        "content": "name: CI\non:\n  push:\n    branches:\n      - main\n      - \"release/**\"\n    tags:\n      - \"v*\"\n  pull_request:\n    branches:\n      - main\n\njobs:\n  test:\n    name: Test Suite\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n      - name: Install dependencies\n        run: pip install -e .[test]\n      - name: Run Test Suite\n        run: pytest -v -m \"not integration\" --junitxml=reports/junit.xml",
+        "truncated": false,
+        "content_hash": "sha256:1a69fac6e379837d8728ebadc0389faeac011ab5b36578791bd81d664a1657ac"
+      }
+    },
+    {
+      "id": "E-015",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": ".gitignore",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:ddab924adaed77c7af5872deaf4a7ef11c8880ad5c2fbcb487091da3b8dc241f",
+      "summary": "Read file .gitignore (lines 1-5)",
+      "payload": {
+        "path": ".gitignore",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "__pycache__/\n*.py[cod]\n.pytest_cache/\ndist/\nbuild/",
+        "truncated": false,
+        "content_hash": "sha256:ddab924adaed77c7af5872deaf4a7ef11c8880ad5c2fbcb487091da3b8dc241f"
+      }
+    },
+    {
+      "id": "E-016",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "LICENSE",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 13,
+      "content_hash": "sha256:667e9868a6f253b69926368f3b69d469f7ba2ba36b73d69b8f0181264680d3c9",
+      "summary": "Read file LICENSE (lines 1-13)",
+      "payload": {
+        "path": "LICENSE",
+        "start_line": 1,
+        "end_line": 13,
+        "total_lines": 13,
+        "content": "MIT License\n\nCopyright (c) 2026 Settlement Engine Authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.",
+        "truncated": false,
+        "content_hash": "sha256:667e9868a6f253b69926368f3b69d469f7ba2ba36b73d69b8f0181264680d3c9"
+      }
+    },
+    {
+      "id": "E-017",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "README.md",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:e580b500d2c0227c909cac8b2132332f2250468d61c5d8a4a72542e6e0fd3036",
+      "summary": "Read file README.md (lines 1-3)",
+      "payload": {
+        "path": "README.md",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "# Settlement Engine\n\nFinancial settlement and transaction processing engine.",
+        "truncated": false,
+        "content_hash": "sha256:e580b500d2c0227c909cac8b2132332f2250468d61c5d8a4a72542e6e0fd3036"
+      }
+    },
+    {
+      "id": "E-018",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "pyproject.toml",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 21,
+      "content_hash": "sha256:ef0bb5f9b92515639900080b9473691ce1324568dfd9b722ff40f21b3130b03c",
+      "summary": "Read file pyproject.toml (lines 1-21)",
+      "payload": {
+        "path": "pyproject.toml",
+        "start_line": 1,
+        "end_line": 21,
+        "total_lines": 21,
+        "content": "[build-system]\nrequires = [\"setuptools>=61.0\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"settlement-engine\"\nversion = \"4.0.0\"\ndescription = \"High throughput financial settlement engine\"\ndependencies = [\n    \"pydantic>=2.0\"\n]\n\n[project.optional-dependencies]\ntest = [\n    \"pytest>=8.0\"\n]\n\n[tool.pytest.ini_options]\nmarkers = [\n    \"integration: marks tests as slow integration tests\"\n]",
+        "truncated": false,
+        "content_hash": "sha256:ef0bb5f9b92515639900080b9473691ce1324568dfd9b722ff40f21b3130b03c"
+      }
+    },
+    {
+      "id": "E-019",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "src/settlement/__init__.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 3,
+      "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018",
+      "summary": "Read file src/settlement/__init__.py (lines 1-3)",
+      "payload": {
+        "path": "src/settlement/__init__.py",
+        "start_line": 1,
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "\"\"\"Settlement engine module.\"\"\"\n\n__version__ = \"4.0.0\"",
+        "truncated": false,
+        "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018"
+      }
+    },
+    {
+      "id": "E-020",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "src/settlement/engine.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 2,
+      "content_hash": "sha256:6243dbb2fc41bb720e19ad9e7e4c9ed7235ac88ebf36892d32915c4e233fc2e3",
+      "summary": "Read file src/settlement/engine.py (lines 1-2)",
+      "payload": {
+        "path": "src/settlement/engine.py",
+        "start_line": 1,
+        "end_line": 2,
+        "total_lines": 2,
+        "content": "def execute_settlement(batch):\n    return {\"processed\": len(batch), \"status\": \"completed\"}",
+        "truncated": false,
+        "content_hash": "sha256:6243dbb2fc41bb720e19ad9e7e4c9ed7235ac88ebf36892d32915c4e233fc2e3"
+      }
+    },
+    {
+      "id": "E-021",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "src/settlement/models.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 9,
+      "content_hash": "sha256:e7f3e43297218035f9800b377301ae5f1a93d86410a2ed9c8885d8d6b1db763c",
+      "summary": "Read file src/settlement/models.py (lines 1-9)",
+      "payload": {
+        "path": "src/settlement/models.py",
+        "start_line": 1,
+        "end_line": 9,
+        "total_lines": 9,
+        "content": "\"\"\"Models for settlement engine.\"\"\"\n\nfrom pydantic import BaseModel\n\n\nclass TransactionRecord(BaseModel):\n    tx_id: str\n    amount_cents: int\n    currency: str",
+        "truncated": false,
+        "content_hash": "sha256:e7f3e43297218035f9800b377301ae5f1a93d86410a2ed9c8885d8d6b1db763c"
+      }
+    },
+    {
+      "id": "E-022",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "src/settlement/validators.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 5,
+      "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db",
+      "summary": "Read file src/settlement/validators.py (lines 1-5)",
+      "payload": {
+        "path": "src/settlement/validators.py",
+        "start_line": 1,
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "\"\"\"Transaction validators.\"\"\"\n\n\ndef validate_currency(curr: str) -> bool:\n    return curr.upper() in {\"USD\", \"EUR\", \"GBP\"}",
+        "truncated": false,
+        "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db"
+      }
+    },
+    {
+      "id": "E-023",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "tests/test_payment_gateway_integration.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 11,
+      "content_hash": "sha256:2a3766a7797d83bcdad68ff85c6ddcb4dfaf6d5369413263c5b11e89028ab3b6",
+      "summary": "Read file tests/test_payment_gateway_integration.py (lines 1-11)",
+      "payload": {
+        "path": "tests/test_payment_gateway_integration.py",
+        "start_line": 1,
+        "end_line": 11,
+        "total_lines": 11,
+        "content": "import pytest\n\n\n@pytest.mark.integration\ndef test_full_payment_settlement_flow():\n    assert True\n\n\n@pytest.mark.integration\ndef test_reconciliation_clearing_cycle():\n    assert True",
+        "truncated": false,
+        "content_hash": "sha256:2a3766a7797d83bcdad68ff85c6ddcb4dfaf6d5369413263c5b11e89028ab3b6"
+      }
+    },
+    {
+      "id": "E-024",
+      "audit_run_id": "aud_48770c0d8fc0",
+      "source_type": "github_file",
+      "source_path": "tests/test_unit.py",
+      "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+      "line_start": 1,
+      "line_end": 14,
+      "content_hash": "sha256:74f1174b6c93184f54b5530a6ab1ae53540bf902e2476a07d578dd39421da282",
+      "summary": "Read file tests/test_unit.py (lines 1-14)",
+      "payload": {
+        "path": "tests/test_unit.py",
+        "start_line": 1,
+        "end_line": 14,
+        "total_lines": 14,
+        "content": "def test_config_parser():\n    assert True\n\n\ndef test_payload_formatter():\n    assert True\n\n\ndef test_validation_rule():\n    assert True\n\n\ndef test_batch_slicing():\n    assert True",
+        "truncated": false,
+        "content_hash": "sha256:74f1174b6c93184f54b5530a6ab1ae53540bf902e2476a07d578dd39421da282"
+      }
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "check_id": "DC-01",
+      "name": "Test configuration and execution",
+      "status": "warn",
+      "details": "Repository contains 6 test function(s) across 2 test file(s) (['tests/test_payment_gateway_integration.py', 'tests/test_unit.py']), but the latest test report only accounts for 4 test(s). Some tests may be excluded from execution (e.g. by a marker filter).",
+      "evidence_ids": [
+        "E-001"
+      ]
+    },
+    {
+      "check_id": "DC-02",
+      "name": "CI workflow presence",
+      "status": "pass",
+      "details": "Found 1 workflow file(s): ['.github/workflows/ci.yml'].",
+      "evidence_ids": [
+        "E-002"
+      ]
+    },
+    {
+      "check_id": "DC-03",
+      "name": "CI release-ref trigger configuration",
+      "status": "pass",
+      "details": "Workflow(s) ['.github/workflows/ci.yml'] are configured to trigger for ref 'v4.0.0'.",
+      "evidence_ids": [
+        "E-003"
+      ]
+    },
+    {
+      "check_id": "DC-04",
+      "name": "Latest CI run status for release ref",
+      "status": "pass",
+      "details": "Latest recorded CI run for ref 'v4.0.0' has conclusion=success.",
+      "evidence_ids": [
+        "E-004"
+      ]
+    },
+    {
+      "check_id": "DC-05",
+      "name": "Release version metadata consistency",
+      "status": "pass",
+      "details": "Manifest pyproject.toml version '4.0.0' matches requested ref 'v4.0.0'.",
+      "evidence_ids": [
+        "E-005"
+      ]
+    },
+    {
+      "check_id": "DC-06",
+      "name": "Lockfile presence",
+      "status": "warn",
+      "details": "A dependency manifest is present but no recognized lockfile was found; reproducible installs are not guaranteed.",
+      "evidence_ids": [
+        "E-006"
+      ]
+    },
+    {
+      "check_id": "DC-07",
+      "name": "Build/release command",
+      "status": "not_applicable",
+      "details": "No build/release command declared (no matching pyproject.toml [project.scripts], package.json scripts, or Makefile 'build' target) and no build report available.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-08",
+      "name": "Required environment variable documentation",
+      "status": "not_applicable",
+      "details": "No required (default-less) environment variable access detected in source.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-09",
+      "name": "Migration execution coverage",
+      "status": "not_applicable",
+      "details": "No migration directory or migration files found in repository.",
+      "evidence_ids": []
+    },
+    {
+      "check_id": "DC-10",
+      "name": "Secret scan",
+      "status": "pass",
+      "details": "No known secret patterns detected across 11 scanned text file(s).",
+      "evidence_ids": [
+        "E-007"
+      ]
+    }
+  ],
+  "limitations": [
+    "Model releaseguard-offline-v1 pricing is not configured; cost is tracked via tokens (153 total tokens)"
+  ],
+  "runtime_ms": 63,
+  "model_id": "releaseguard-offline-v1",
+  "prompt_version": "p1",
+  "estimated_cost_usd": 0.0
+}
