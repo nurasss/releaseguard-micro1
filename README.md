@@ -54,7 +54,7 @@ The number `0.7500` happens to coincide with the trivial "always NO-GO" majority
 floor (9 of 12 benchmark cases are NO-GO). The split between development and
 held-out reveals why:
 - **Development (01--08): `0.5000` -> `1.0000` (+50.00 pp).** B1 failed cases 01, 04,
-  07, and 08 due to uncalibrated over-claiming of blockers. The It9 severity contract
+  05, and 08 — over-claiming on 01/04/08 and under-claiming on 05. The It9 severity contract
   completely eliminated false alarms, achieving a perfect 8/8 decisions (clean GO on
   case 01, correct REVIEW on 04/08, and correct NO-GO on failure modes 02, 03, 05, 06, 07).
 - **Held-out (09--12): `0.7500` -> `0.2500` (−50.00 pp).** All 4 held-out cases are
@@ -99,18 +99,13 @@ and an adversarial Verifier are designed around that failure mode.
 **Hot take & Measured Verifier Ablation.** The valuable unit is a trustworthy
 evidence boundary, not unbounded agent orchestration. We executed the full 12-case
 live `no_verifier` ablation on xAI `grok-4.6`:
-- **Verifier ON (`final-v2`):** CBR `0.8889`, Precision `0.4762`, Decision Accuracy `0.7500`, **Trap hits `1`**, Runtime `758.6 s`, Cost `$1.1836`.
-- **Verifier OFF (`no_verifier`):** CBR `0.8889`, Precision `0.5417`, Decision Accuracy `0.7500`, **Trap hits `2`**, Runtime `507.4 s`, Cost `$0.6592`.
+- **Verifier ON (`final-v2`):** CBR `0.8889`, Precision `0.4762`, Decision Accuracy `0.7500`, Critical Evidence `1.0000`, Unsupported Critical `0`, FP count `11`, Trap hits `1`, Runtime `758.6 s`, Cost `$1.1836`.
+- **Verifier OFF (`no_verifier`):** CBR `0.8889`, Precision `0.5417`, Decision Accuracy `0.7500`, Critical Evidence `1.0000`, Unsupported Critical `0`, FP count `11`, Trap hits `2`, Runtime `507.4 s`, Cost `$0.6592`.
 
-This empirical comparison yields two concrete insights:
-1. *Measurable trap suppression:* Verifier ON successfully neutralized a false-positive
-   trap hit (reducing total trap hits from 2 to 1) by challenging ungrounded claims.
-2. *Precision attribution & Cost trade-off:* The primary precision lift over baseline
-   (B1 `0.2812` -> Final `0.4762`) was driven upstream by the It9 structured severity
-   contract and deterministic evidence, rather than downstream rejections. Verifier
-   adds a defensive falsification layer at a `+49.5%` runtime and `+79.5%` cost trade-off.
-   Conversely, the removed It5 extra-subagents experiment proved that adding more
-   orchestrated subagents degraded CBR to `0.5556`.
+This empirical comparison yields three rigorous conclusions:
+1. *Zero measured quality contribution:* The Verifier confirmed all `21` critical/high candidates in the final run and rejected `0`. Because nothing was removed, it cannot account for any metric difference between the two runs. CBR (`0.8889`), decision accuracy (`0.7500`), critical evidence coverage (`1.0000`), unsupported critical (`0`), and total false-positive count (`11`) are identical with it ON and OFF.
+2. *Run-to-run variance, not effect:* The apparent differences — precision `0.4762` vs `0.5417`, trap hits `1` vs `2` — come from the Analyzer sampling `21` versus `24` critical/high findings in two single runs of a nondeterministic model. Read causally they would credit the Verifier with a precision *regression*; both readings are sampling noise on n=1 per arm. Upstream It9 severity calibration and deterministic checks drove all real precision gains over B1 (`0.2812` -> `0.4762`).
+3. *Overhead:* Verification added `251.2 s` (+49.5%) runtime and `$0.5244` (+79.5%) cost for no measured quality change. On this benchmark the Verifier is a defensive guardrail whose value remains unmeasured on non-adversarial cases, not a demonstrated lift. The removed It5 extra-subagents experiment reinforces this: adding more specialized subagents actually degraded CBR to `0.5556`.
 
 ## Security boundary
 

@@ -93,14 +93,9 @@ is `$0.0000` because no provider call is made.
     Trap hits `2`, Critical Evidence `1.0000`, Runtime `507.4s`, Cost `$0.6592`.
 
   **Key takeaways:**
-  1. *Trap suppression:* Verifier ON cut trap hits from 2 to 1, successfully suppressing
-     a false trap in the evaluation suite.
-  2. *Overhead:* Adversarial verification added `251.2 s` (+49.5%) of runtime and
-     `$0.5244` (+79.5%) of reasoning cost across the 12 cases.
-  3. *Recall & Decision invariance:* Core recall (CBR `0.8889`) and decision accuracy
-     (`0.7500`) remained identical, demonstrating that the primary precision gains
-     stem from the upstream It9 severity contract and deterministic checks rather
-     than wholesale rejection by the Verifier. Verification remains a defensive guardrail.
+  1. *Zero measured quality contribution:* The Verifier confirmed all `21` critical/high candidates in the final run and rejected `0`. Because nothing was removed, it cannot account for any metric difference between the two runs. CBR (`0.8889`), decision accuracy (`0.7500`), critical evidence coverage (`1.0000`), unsupported critical (`0`), and total false-positive count (`11`) are identical with it ON and OFF.
+  2. *Run-to-run variance, not effect:* The apparent differences — precision `0.4762` vs `0.5417`, trap hits `1` vs `2` — come from the Analyzer sampling `21` versus `24` critical/high findings in two single runs of a nondeterministic model. Read causally they would credit the Verifier with a precision *regression*; both readings are sampling noise on n=1 per arm.
+  3. *Overhead:* Verification added `251.2 s` (+49.5%) runtime and `$0.5244` (+79.5%) cost for no measured quality change. On this benchmark the Verifier is a defensive guardrail whose value remains unmeasured on non-adversarial cases, not a demonstrated lift. The removed It5 extra-subagents experiment carries the same lesson: more orchestration is not automatically more reliable.
 
 ## Stage It4 - Evidence-enforcement ablation
 
