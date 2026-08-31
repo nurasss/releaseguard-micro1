@@ -156,6 +156,21 @@ locations are in [docs/REPRODUCE.md](docs/REPRODUCE.md).
 .venv/bin/python -m app.cli audit --case eval/cases/case_12 --mode final
 ```
 
+### Web UI
+
+The FastAPI process also serves the ReleaseGuard browser client at the root
+URL. Start it locally with:
+
+```bash
+make api
+# open http://127.0.0.1:8000/
+```
+
+The **Try demo repository** action runs a local fixture through the complete
+New Audit → Running Audit → Report flow, including the evidence drawer. A live
+audit submitted from the same form uses `POST /api/v1/audits` and loads its
+report, findings, and trajectory from the existing API endpoints.
+
 
 ## Results, provenance, and quality gates
 

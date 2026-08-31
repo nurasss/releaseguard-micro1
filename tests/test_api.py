@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from app.api.deps import get_repository, get_runner, get_settings
 from app.api.main import app
+from app.api.schemas import CreateAuditRequest
 from app.config import Settings
 from app.orchestration.runner import AuditRunner
 from app.sources.fixture import LocalFixtureSource
@@ -127,6 +128,9 @@ def test_create_audit_and_fetch_it(client: TestClient) -> None:
             "repository_url": "https://github.com/eval/case_01",
             "ref": "v1.4.0",
             "profile": "default-release",
+            # Explicit: the scripted fake LLM below covers the B1 call sequence.
+            # The default-mode contract is asserted in test_default_audit_mode_is_final.
+            "mode": "baseline",
         },
     )
     assert create_resp.status_code == 200
@@ -254,3 +258,14 @@ def test_create_audit_final_mode_runs_end_to_end(
             assert body["status"] == "completed"
     finally:
         app.dependency_overrides.clear()
+
+
+def test_default_audit_mode_is_final() -> None:
+    """A caller that omits `mode` must get the product, not the B1 control.
+
+    B1 is the deliberately weakened baseline kept for evaluation; serving it by
+    default would misrepresent the system to any API or UI client.
+    """
+    request = CreateAuditRequest(repository_url="https://github.com/eval/case_01")
+
+    assert request.mode == "final"

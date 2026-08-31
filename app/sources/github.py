@@ -49,7 +49,10 @@ class GitHubSource(RepositorySource):
         transport: httpx.BaseTransport | None = None,
     ) -> None:
         self.repo_url = repo_url
-        self.token = token
+        # A token copied into .env often carries surrounding whitespace. Sending
+        # it verbatim produces a malformed Authorization header and a 401 that
+        # looks like a missing repository, so normalise it to empty here.
+        self.token = token.strip() if token else token
         self.owner, self.repo = self._parse_repo_url(repo_url)
         self._resolved_commit_sha: str | None = None
         self._resolved_ref_name: str | None = None
@@ -100,7 +103,12 @@ class GitHubSource(RepositorySource):
     def _get(self, endpoint: str, params: dict | None = None) -> httpx.Response:
         """Perform a read-only HTTP GET request against the GitHub API."""
         clean_endpoint = endpoint.lstrip("/")
-        full_path = f"/repos/{self.owner}/{self.repo}/{clean_endpoint}"
+        # The repository endpoint itself is addressed with an empty endpoint.
+        # It must not carry a trailing slash: GitHub answers /repos/o/r with 200
+        # and /repos/o/r/ with 404, which fails every live audit on its first call.
+        full_path = f"/repos/{self.owner}/{self.repo}"
+        if clean_endpoint:
+            full_path = f"{full_path}/{clean_endpoint}"
         try:
             response = self._client.get(full_path, params=params)
         except Exception as exc:
@@ -203,33 +211,26 @@ class GitHubSource(RepositorySource):
                 "topics": [],
             }
 
-        # Fetch branches
-        branches_res = self._get("branches")
-        branches = (
-            [b["name"] for b in branches_res.json() if isinstance(b, dict) and "name" in b]
-            if branches_res.status_code == 200
-            else []
-        )
+        # Each of the three listings below answers 200 with an empty array when
+        # the repository genuinely has none. A non-200 therefore carries no
+        # information about absence, and substituting [] would let a rate limit
+        # become a finding such as "no tags or releases" (SPEC 24, NFR-10).
+        def _listing(endpoint: str) -> list:
+            res = self._get(endpoint)
+            if res.status_code != 200:
+                raise GitHubAPIError(
+                    f"Failed to fetch repository {endpoint}: status {res.status_code}"
+                )
+            payload = res.json()
+            return payload if isinstance(payload, list) else []
 
-        # Fetch tags
-        tags_res = self._get("tags")
-        tags = (
-            [t["name"] for t in tags_res.json() if isinstance(t, dict) and "name" in t]
-            if tags_res.status_code == 200
-            else []
-        )
+        branches = [b["name"] for b in _listing("branches") if isinstance(b, dict) and "name" in b]
 
-        # Fetch releases
-        releases_res = self._get("releases")
-        releases = (
-            [
-                r.get("tag_name", r.get("name", ""))
-                for r in releases_res.json()
-                if isinstance(r, dict)
-            ]
-            if releases_res.status_code == 200
-            else []
-        )
+        tags = [t["name"] for t in _listing("tags") if isinstance(t, dict) and "name" in t]
+
+        releases = [
+            r.get("tag_name", r.get("name", "")) for r in _listing("releases") if isinstance(r, dict)
+        ]
 
         default_branch = repo_data.get("default_branch", "main")
         if default_branch not in branches:
@@ -252,7 +253,14 @@ class GitHubSource(RepositorySource):
 
         tree_res = self._get(f"git/trees/{self._resolved_commit_sha}", params={"recursive": "1"})
         if tree_res.status_code != 200:
-            return []
+            # An API failure must never be reported as "this repository has no
+            # files": that turns a rate limit or an outage into a confident
+            # negative finding such as "no CI workflows exist" (SPEC 24, NFR-10).
+            # GitHub answers an genuinely empty tree with 200 and an empty list.
+            raise GitHubAPIError(
+                f"Failed to fetch repository tree at {self._resolved_commit_sha[:7]}: "
+                f"status {tree_res.status_code}"
+            )
 
         tree_data = tree_res.json().get("tree", [])
         entries: list[TreeEntry] = []
@@ -410,7 +418,11 @@ class GitHubSource(RepositorySource):
             # Fallback without branch parameter
             runs_res = self._get("actions/runs", params={"per_page": 50})
             if runs_res.status_code != 200:
-                return []
+                # Same rule as get_tree: an unavailable Actions API is not
+                # evidence that no CI run exists (SPEC 24, NFR-10).
+                raise GitHubAPIError(
+                    f"Failed to fetch GitHub Actions runs: status {runs_res.status_code}"
+                )
 
         data = runs_res.json()
         runs = data.get("workflow_runs", [])

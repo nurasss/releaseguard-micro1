@@ -20,3 +20,8 @@ __pycache__/
 *.sqlite3
 *.sqlite3-wal
 *.sqlite3-shm
+
+# Local secret variants and macOS noise
+.env.*
+!.env.example
+.DS_Store

@@ -15,7 +15,10 @@ class CreateAuditRequest(BaseModel):
     # Profile selection is reserved for a future policy registry; this request
     # field is accepted for compatibility and currently uses default behavior.
     profile: str = "default-release"
-    mode: Literal["baseline", "final"] = "baseline"
+    # The product is the final Analyzer -> Verifier pipeline. B1 is the
+    # deliberately weakened control kept for evaluation, so a caller that omits
+    # the field must not silently receive it.
+    mode: Literal["baseline", "final"] = "final"
 
 
 class CreateAuditResponse(BaseModel):

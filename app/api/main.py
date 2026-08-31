@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi.staticfiles import StaticFiles
 
 from app.api.deps import get_repository, get_runner, get_settings
 from app.api.schemas import (
@@ -183,3 +184,11 @@ def get_evaluation(evaluation_id: str) -> dict:
             detail=f"Evaluation {evaluation_id!r} not found",
         )
     return json.loads(results_file.read_text(encoding="utf-8"))
+
+
+# Keep the API and the browser client in one deployable process. API routes are
+# registered above this mount, so they continue to take precedence over the
+# static fallback at the root path.
+FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")

@@ -21,6 +21,7 @@ COPY requirements.lock ./
 COPY app/ ./app/
 COPY prompts/ ./prompts/
 COPY eval/ ./eval/
+COPY frontend/ ./frontend/
 COPY .env.example ./
 
 RUN pip install --no-cache-dir --requirement requirements.lock \
