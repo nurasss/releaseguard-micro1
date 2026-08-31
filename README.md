@@ -37,18 +37,51 @@ but the official improvement gate failed: CBR moved from `0.7778` to `0.8889`
 both the successful live pair and the failed gate without substituting fixture
 metrics.
 
+**Case 12 evaluation breakdown.** In the flagship held-out case (`case_12`),
+the model correctly discovered the exact root cause: *"CI runs pytest -v -m 'not integration',
+which excludes the two @pytest.mark.integration tests in tests/test_payment_gateway_integration.py"*.
+The case still scored as a miss. Two of the three causes are measurement
+artifacts and the third is a real model shortcoming:
+1. *Exact token mismatch (artifact, caused the CBR miss):* The frozen gold matcher
+   required the specific token `excluded` (e.g. `["integration", "tests", "excluded"]`),
+   but the model emitted the active verb `excludes`. All 11 frozen keyword sets
+   failed on that single word-form; each was otherwise one token from matching.
+2. *False trap hit (artifact):* The finding mentioned *"accounts for only 4 passed tests"*
+   alongside *"integration"*, which accidentally satisfied the forbidden trap set
+   `["integration", "tests", "passed"]` — a set meant to catch the opposite claim,
+   that integration tests ran successfully.
+3. *Severity calibration (a real miss, not an artifact):* The finding was graded
+   `HIGH` rather than `CRITICAL`, which produced `REVIEW` instead of the expected
+   `NO-GO`. This did not cause the CBR miss — the matcher accepts `high` for a
+   critical gold blocker — but it is a genuine calibration failure that the It9
+   severity contract did not close on held-out data.
+Rather than retroactively altering the frozen gold matcher (which would violate
+evaluation protocol §10/§21), this failure is preserved and reported as an honest
+insight into the brittleness of keyword-based benchmark evaluation.
+
 **Main failure mode.** The dangerous errors are unsupported or missed blockers:
 an agent can turn a plausible signal into a critical claim, or overlook a
 cross-file contradiction. Evidence IDs, deterministic checks, immutable input,
 and an adversarial Verifier are designed around that failure mode.
 
 **Hot take.** The valuable unit is a trustworthy evidence boundary, not another
-agent. On these frozen, non-adversarial fixtures Verifier ON and OFF produce the
-same metrics; that is a useful negative result, not proof that verification has
-no value. It says the next evaluation needs contradictory evidence and
-false-positive traps that can actually exercise falsification. The executed
-extra-subagents experiment supports the same lesson: more orchestration is not
-automatically more reliable.
+agent. Two independent measurements say the same thing. On the frozen offline
+fixtures Verifier ON and OFF produce identical metrics. In the live xAI final
+run the Verifier confirmed all `21` critical/high candidates and rejected `0`,
+so its measured contribution to precision on this data is zero. That is a
+useful negative result, not proof that verification has no value: it says the
+evaluation needs contradictory evidence and false-positive traps that can
+actually exercise falsification.
+
+Where the live precision gain actually came from is measurable and is not the
+Verifier. B1 emitted `32` critical/high findings across the 12 cases and the
+final system emitted `21`; precision moved from `0.2812` to `0.4762` (held-out
+`0.2308` to `0.3750`) because the severity contract introduced in It9 stopped
+the Analyzer from grading weak signals as blockers, not because anything was
+rejected downstream. Attributing that delta to the Verifier would credit the
+component that provably did nothing here. The removed It5 extra-subagents
+experiment carries the same lesson from the other direction: more orchestration
+is not automatically more reliable, and it degraded CBR to `0.5556`.
 
 ## Security boundary
 
@@ -87,6 +120,18 @@ make demo CASE=case_12
 All project commands use `.venv/bin/python`; dependencies are installed from
 the exact pins in `requirements.lock`. Full reproduction details and artifact
 locations are in [docs/REPRODUCE.md](docs/REPRODUCE.md).
+
+### CLI usage (§32)
+
+```bash
+# Direct CLI binary:
+.venv/bin/releaseguard audit --repo https://github.com/owner/repo --ref v1.0.0 --mode final
+.venv/bin/releaseguard audit --case eval/cases/case_12 --mode final
+
+# Or via Python module:
+.venv/bin/python -m app.cli audit --case eval/cases/case_12 --mode final
+```
+
 
 ## Results, provenance, and quality gates
 

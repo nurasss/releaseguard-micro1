@@ -82,10 +82,20 @@ is `$0.0000` because no provider call is made.
   evidence coverage `1.0000`; unsupported critical `0`; runtime `782 ms`;
   cost `$0.0000`.
 - **Decision:** **KEEP, REVISE evaluation**.
-- **Learning:** there is no measured metric lift on these non-adversarial
-  fixtures. Verification remains a safety guardrail, but future cases must
-  contain contradictory evidence and false-positive traps to test its stated
-  contribution.
+- **Learning:** there is no measured metric lift on the offline non-adversarial
+  fixtures (both achieve precision `1.0000` because the synthetic offline model
+  emits no ungrounded claims). The live run does not rescue the component
+  either: in `final_xai_20260831_023235` the Verifier returned `confirmed` for
+  all `21` critical/high candidates and `rejected` for `0`, so its measured
+  contribution to live precision is also zero. No live `no_verifier` ablation
+  was executed, so no live ON/OFF claim is made at all.
+  The live precision gain from `0.2812` to `0.4762` belongs to the It9 severity
+  contract, not to verification: B1 emitted `32` critical/high findings against
+  the final system's `21`, and the reduction happened at the Analyzer boundary
+  before the Verifier ran. Verification is retained as a safety guardrail whose
+  value is still unmeasured; future benchmark iterations must incorporate
+  explicitly contradictory fixture branches and hallucination traps that can
+  exercise falsification.
 
 ## Stage It4 - Evidence-enforcement ablation
 
@@ -213,8 +223,21 @@ does not justify a quality claim about context normalization.
 - **Decision:** **KEEP** the clearer severity contract for decision quality, but
   do not claim the required CBR improvement.
 - **Learning:** explicit calibration fixed development decisions and improved
-  overall decision accuracy, but did not close the held-out CBR miss. The
-  frozen FAIL is retained rather than tuning on held-out case 12.
+  overall decision accuracy (0.4167 -> 0.7500), but did not close the held-out CBR miss.
+  A detailed post-run autopsy of the flagship held-out case (`case_12`) revealed:
+  1. *Substantive success vs matcher failure:* Grok-4.6 identified the exact blocker:
+     *"CI runs pytest -v -m 'not integration', which excludes the two @pytest.mark.integration tests..."*.
+     However, the frozen gold matcher required the specific token `excluded`
+     (e.g., `["integration", "tests", "excluded"]`), whereas the model emitted `excludes`.
+     All 11 match sets missed due to this single morphological token difference.
+  2. *False-positive trap activation:* The phrase *"accounts for only 4 passed tests"*
+     alongside *"integration"* inadvertently triggered the forbidden trap set
+     `["integration", "tests", "passed"]`.
+  3. *Severity grading:* Grok labeled F-001 `HIGH` instead of `CRITICAL`, leading to
+     a `REVIEW` decision rather than `NO-GO`.
+  4. *Benchmark discipline:* Under evaluation protocol §10 and §21, gold matchers
+     are frozen. Rather than post-hoc modifying the gold schema to force a passing score,
+     the result is documented as an authentic evaluation insight into keyword-matching limitations.
 
 ## Summary decision
 

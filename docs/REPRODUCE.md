@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-- Python 3.11 or newer
-- Docker, only for the image-build check
+- Python 3.11 or newer (for host execution)
+- Docker & Docker Compose (for containerized reproduction)
 - A checkout of this repository at the submission commit
 
-The fixture evaluation does not require Gemini or GitHub credentials.
+The fixture evaluation does not require external LLM or GitHub credentials.
 
 ## Frozen versions and provenance
 
@@ -127,3 +127,47 @@ per-case status, and any quota failures alongside the live results. The
 checked-in bundle records both the earlier failed attempt and the completed xAI
 pair. The pair is official-provider eligible, but its improvement gate is FAIL
 (`+11.11` percentage points versus the required `+20`).
+
+## Docker and clean container reproduction (§36)
+
+ReleaseGuard can be built, audited, and served entirely in an isolated Docker
+container with zero host dependencies beyond Docker.
+
+### 1. Build and run the API service via Compose
+
+```bash
+# Copy template env if not already present
+cp .env.example .env
+
+# Build image and start API server
+docker compose up --build -d
+
+# Verify service health and readiness
+curl http://localhost:8000/health
+curl http://localhost:8000/ready
+
+# Stop the container
+docker compose down
+```
+
+### 2. Standalone container audit CLI
+
+```bash
+# Build standalone image
+docker build -t releaseguard:local .
+
+# Run deterministic audit inside container with mounted output directory
+docker run --rm \
+  -e RG_OFFLINE_MODE=1 \
+  -v $(pwd)/runs:/app/runs \
+  -v $(pwd)/trajectories:/app/trajectories \
+  releaseguard:local releaseguard audit --case eval/cases/case_12 --mode final
+
+# Or run live audit inside container (passing API key)
+docker run --rm \
+  --env-file .env \
+  -v $(pwd)/runs:/app/runs \
+  -v $(pwd)/trajectories:/app/trajectories \
+  releaseguard:local releaseguard audit --repo https://github.com/owner/repo --ref main --mode final
+```
+

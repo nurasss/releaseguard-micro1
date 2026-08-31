@@ -22,10 +22,15 @@ dev = [
     "pytest-cov",
 ]
 
+[project.scripts]
+releaseguard = "app.cli:main"
+
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["app*"]
+include = ["app*", "eval*"]
+
