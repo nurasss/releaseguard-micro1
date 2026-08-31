@@ -236,6 +236,11 @@ def prepare_submission(
             json.dumps(live_gate_report, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
+        try:
+            live_no_verifier = _latest_result(results_dir, "final", "no_verifier", execution_mode="live_provider")
+            _copy_result_tree(live_no_verifier, output_dir / "results" / "live_provider" / "ablation_no_verifier")
+        except FileNotFoundError:
+            pass
 
     ablation_names = (
         "no_verifier",
@@ -251,7 +256,7 @@ def prepare_submission(
     }
     for ablation in ablation_names:
         try:
-            ablation_file = _latest_result(results_dir, "final", ablation)
+            ablation_file = _latest_result(results_dir, "final", ablation, execution_mode="offline_fixture")
         except FileNotFoundError:
             continue
         _copy_result_tree(ablation_file, output_dir / "results" / "ablations" / ablation)
