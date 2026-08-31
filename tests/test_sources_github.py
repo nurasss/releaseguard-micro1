@@ -11,7 +11,7 @@ failure is never reported as an empty repository.
 import httpx
 import pytest
 
-from app.sources.errors import GitHubAPIError
+from app.sources.errors import GitHubAPIError, UnknownRefError
 from app.sources.github import GitHubSource
 
 REPO_URL = "https://github.com/octocat/Hello-World"
@@ -163,3 +163,56 @@ def test_empty_repository_still_yields_an_empty_tree() -> None:
     source.resolve_ref("main")
 
     assert source.get_tree() == []
+
+
+def _rate_limited(request: httpx.Request) -> httpx.Response:
+    return httpx.Response(
+        403,
+        json={"message": "API rate limit exceeded"},
+        headers={
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Limit": "60",
+            "X-RateLimit-Reset": "1767225600",
+        },
+    )
+
+
+def test_rate_limit_is_named_and_gives_the_operator_a_next_step() -> None:
+    """A bare "status 403" cannot be told apart from a missing repository."""
+    with pytest.raises(GitHubAPIError) as excinfo:
+        _source(_rate_limited).get_repository_metadata()
+
+    message = str(excinfo.value)
+    assert "rate limit exceeded" in message
+    assert "60 requests/hour" in message
+    assert "GITHUB_TOKEN" in message
+    assert "resets at" in message
+
+
+def test_rate_limited_ref_lookup_does_not_claim_the_ref_is_missing() -> None:
+    """Under a quota failure the lookups never ran, so absence is unproven."""
+    with pytest.raises(GitHubAPIError) as excinfo:
+        _source(_rate_limited).resolve_ref("main")
+
+    assert "rate limit exceeded" in str(excinfo.value)
+
+
+def test_invalid_credential_is_reported_as_such() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(401, json={"message": "Bad credentials"})
+
+    with pytest.raises(GitHubAPIError) as excinfo:
+        _source(handler, token="ghp_stale").get_repository_metadata()
+
+    assert "401" in str(excinfo.value)
+    assert "GITHUB_TOKEN" in str(excinfo.value)
+
+
+def test_absent_ref_is_still_reported_as_unknown() -> None:
+    """A genuine 404 on every lookup must keep its precise error type."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(404, json={})
+
+    with pytest.raises(UnknownRefError):
+        _source(handler).resolve_ref("nope")

@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import fnmatch
 import re
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 import httpx
@@ -115,6 +116,39 @@ class GitHubSource(RepositorySource):
             raise GitHubAPIError(f"GitHub API connection error: {exc}") from exc
         return response
 
+    def _api_error(self, what: str, response: httpx.Response) -> GitHubAPIError:
+        """Describe a failed GitHub call in terms the operator can act on.
+
+        A bare status code is not actionable: the most common live failure is
+        the 60-requests-per-hour anonymous quota, which a reader cannot
+        distinguish from a missing repository (NFR-10).
+        """
+        status = response.status_code
+        remaining = response.headers.get("X-RateLimit-Remaining")
+        if status in (403, 429) and remaining == "0":
+            reset_note = ""
+            reset_at = response.headers.get("X-RateLimit-Reset")
+            if reset_at and reset_at.isdigit():
+                reset_utc = datetime.fromtimestamp(int(reset_at), tz=timezone.utc)
+                reset_note = f" The quota resets at {reset_utc:%H:%M} UTC."
+            limit = response.headers.get("X-RateLimit-Limit", "60")
+            hint = (
+                "Set GITHUB_TOKEN to raise the limit to 5000 requests per hour"
+                if not self.token
+                else "Wait for the reset or use a token with more remaining quota"
+            )
+            return GitHubAPIError(
+                f"{what}: GitHub API rate limit exceeded "
+                f"({limit} requests/hour for this credential).{reset_note} {hint}."
+            )
+        if status == 401:
+            return GitHubAPIError(
+                f"{what}: GitHub rejected the credential (401). "
+                "Clear GITHUB_TOKEN to read public repositories anonymously, "
+                "or replace it with a valid token."
+            )
+        return GitHubAPIError(f"{what}: status {status}")
+
     def resolve_ref(self, ref: str) -> ResolvedRef:
         # S2: Priority order: branches -> tags -> releases -> commits
 
@@ -173,6 +207,13 @@ class GitHubSource(RepositorySource):
                 ref_type="commit",
             )
 
+        # A 404 on every lookup means the ref is absent. A quota or credential
+        # failure means the lookups never happened, and reporting that as
+        # "ref not found" sends the operator hunting a nonexistent typo.
+        for probe in (branch_res, tag_res, rel_res, commit_res):
+            if probe.status_code in (401, 403, 429):
+                raise self._api_error(f"Failed to resolve ref {ref!r}", probe)
+
         raise UnknownRefError(f"Ref {ref!r} not found in GitHub repository {self.owner}/{self.repo}")
 
     def _resolve_tag_object(self, tag_data: dict, _seen: set[str] | None = None) -> str:
@@ -194,7 +235,7 @@ class GitHubSource(RepositorySource):
     def get_repository_metadata(self) -> dict:
         repo_res = self._get("")
         if repo_res.status_code != 200:
-            raise GitHubAPIError(f"Failed to fetch repository metadata: status {repo_res.status_code}")
+            raise self._api_error("Failed to fetch repository metadata", repo_res)
         repo_data = repo_res.json()
         is_private = bool(repo_data.get("private", False))
         if is_private:
@@ -218,9 +259,7 @@ class GitHubSource(RepositorySource):
         def _listing(endpoint: str) -> list:
             res = self._get(endpoint)
             if res.status_code != 200:
-                raise GitHubAPIError(
-                    f"Failed to fetch repository {endpoint}: status {res.status_code}"
-                )
+                raise self._api_error(f"Failed to fetch repository {endpoint}", res)
             payload = res.json()
             return payload if isinstance(payload, list) else []
 
@@ -257,9 +296,8 @@ class GitHubSource(RepositorySource):
             # files": that turns a rate limit or an outage into a confident
             # negative finding such as "no CI workflows exist" (SPEC 24, NFR-10).
             # GitHub answers an genuinely empty tree with 200 and an empty list.
-            raise GitHubAPIError(
-                f"Failed to fetch repository tree at {self._resolved_commit_sha[:7]}: "
-                f"status {tree_res.status_code}"
+            raise self._api_error(
+                f"Failed to fetch repository tree at {self._resolved_commit_sha[:7]}", tree_res
             )
 
         tree_data = tree_res.json().get("tree", [])
@@ -292,7 +330,7 @@ class GitHubSource(RepositorySource):
         if res.status_code == 404:
             raise FileNotFoundInRepoError(f"File not found on GitHub at {self._resolved_commit_sha[:7]}: {path}")
         if res.status_code != 200:
-            raise GitHubAPIError(f"GitHub contents error ({res.status_code}) for {path}")
+            raise self._api_error(f"GitHub contents error for {path}", res)
 
         data = res.json()
         if data.get("type") != "file":
@@ -420,9 +458,7 @@ class GitHubSource(RepositorySource):
             if runs_res.status_code != 200:
                 # Same rule as get_tree: an unavailable Actions API is not
                 # evidence that no CI run exists (SPEC 24, NFR-10).
-                raise GitHubAPIError(
-                    f"Failed to fetch GitHub Actions runs: status {runs_res.status_code}"
-                )
+                raise self._api_error("Failed to fetch GitHub Actions runs", runs_res)
 
         data = runs_res.json()
         runs = data.get("workflow_runs", [])
