@@ -1,20 +1,20 @@
 {
   "schema_version": "1.0",
-  "audit_run_id": "aud_13cc5036cae8",
+  "audit_run_id": "aud_edc9bab77e69",
   "repository_url": "https://github.com/eval/case_12",
   "requested_ref": "v4.0.0",
   "commit_sha": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
   "mode": "final",
   "decision": "REVIEW",
-  "executive_summary": "Analyzed 8 candidate finding(s) across 10 deterministic check(s). Decision: REVIEW. 0 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.",
+  "executive_summary": "Analyzed 9 candidate finding(s) across 10 deterministic check(s). Decision: REVIEW. 0 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.",
   "findings": [
     {
       "id": "F-001",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "category": "tests",
       "title": "CI excludes integration tests from the required test job",
       "severity": "high",
-      "claim": "The repository defines 6 test functions in 2 files, but the latest test report accounts for only 4 passed tests. CI runs `pytest -v -m \"not integration\"`, which excludes the two `@pytest.mark.integration` tests in tests/test_payment_gateway_integration.py. No other required job was observed that executes those tests.",
+      "claim": "The repository defines 6 test functions in 2 files, but CI runs pytest with -m \"not integration\" and the latest test report accounts for only 4 passing tests. The two tests in tests/test_payment_gateway_integration.py are marked @pytest.mark.integration and are therefore not executed on the release ref.",
       "confidence": 0.95,
       "evidence_ids": [
         "E-001",
@@ -23,17 +23,49 @@
         "E-017",
         "E-018"
       ],
-      "recommended_action": "Run integration tests in a required CI job on the release ref (or document and gate them as a required check) so all defined tests are executed before release.",
+      "recommended_action": "Run integration tests in a required CI job for release tags (or document and gate them equivalently) so all defined tests are accounted for before shipping v4.0.0.",
       "verification_status": "confirmed",
       "origin": "analyzer"
     },
     {
       "id": "F-002",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "dependencies",
+      "title": "No lockfile for declared Python dependencies",
+      "severity": "medium",
+      "claim": "pyproject.toml declares runtime and test dependencies (pydantic>=2.0, pytest>=8.0) but no recognized lockfile is present, so installs for this release are not pinned to exact versions.",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "E-006",
+        "E-015"
+      ],
+      "recommended_action": "Add and commit a lockfile (e.g. uv.lock, poetry.lock, or pip-tools requirements.txt) generated from the v4.0.0 dependency set and install from it in CI.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-003",
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "docs",
+      "title": "Release documentation is minimal and lacks changelog or install/upgrade guidance",
+      "severity": "low",
+      "claim": "README.md is a three-line description with no changelog, install, or upgrade notes for tag v4.0.0, despite a GitHub release named Release 4.0.0.",
+      "confidence": 0.85,
+      "evidence_ids": [
+        "E-016",
+        "E-008"
+      ],
+      "recommended_action": "Document install steps, version 4.0.0 changes, and upgrade notes in README or CHANGELOG aligned with the GitHub release.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-004",
+      "audit_run_id": "aud_edc9bab77e69",
       "category": "ci",
-      "title": "CI is present and succeeded on the release ref",
+      "title": "CI workflow exists and latest run on v4.0.0 succeeded",
       "severity": "info",
-      "claim": "A workflow at .github/workflows/ci.yml is configured to trigger for tag v4.0.0, and the latest recorded CI run for that ref concluded success.",
+      "claim": "One workflow .github/workflows/ci.yml is configured to trigger on v* tags including v4.0.0; the latest recorded run for that ref concluded success.",
       "confidence": 0.95,
       "evidence_ids": [
         "E-002",
@@ -43,103 +75,84 @@
         "E-011",
         "E-014"
       ],
-      "recommended_action": "Keep the tag trigger and required test job; add coverage for currently excluded integration tests.",
-      "verification_status": "pending",
-      "origin": "analyzer"
-    },
-    {
-      "id": "F-003",
-      "audit_run_id": "aud_13cc5036cae8",
-      "category": "release_metadata",
-      "title": "Version metadata matches v4.0.0",
-      "severity": "info",
-      "claim": "pyproject.toml version 4.0.0 and src/settlement/__init__.py __version__ 4.0.0 match the audited tag v4.0.0; a GitHub release named Release 4.0.0 exists for that tag.",
-      "confidence": 0.95,
-      "evidence_ids": [
-        "E-005",
-        "E-008",
-        "E-015",
-        "E-020"
-      ],
-      "recommended_action": "No change required for version alignment.",
-      "verification_status": "pending",
-      "origin": "analyzer"
-    },
-    {
-      "id": "F-004",
-      "audit_run_id": "aud_13cc5036cae8",
-      "category": "dependencies",
-      "title": "No lockfile for reproducible installs",
-      "severity": "medium",
-      "claim": "A dependency manifest is present (pyproject.toml with pydantic and optional pytest) but no recognized lockfile was found, so release installs are not guaranteed to be reproducible.",
-      "confidence": 0.9,
-      "evidence_ids": [
-        "E-006",
-        "E-015"
-      ],
-      "recommended_action": "Add and commit a lockfile (e.g. pip-tools/uv lock) and install from it in CI.",
+      "recommended_action": "Keep the tag trigger; expand the test job so excluded markers do not leave release-critical tests unverified.",
       "verification_status": "pending",
       "origin": "analyzer"
     },
     {
       "id": "F-005",
-      "audit_run_id": "aud_13cc5036cae8",
-      "category": "build",
-      "title": "No declared build/release command or build report",
-      "severity": "low",
-      "claim": "Deterministic checks found no matching build/release command and no build report; inspection of pyproject.toml shows a setuptools build-system but no [project.scripts] or other packaging/release script.",
-      "confidence": 0.85,
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "release_metadata",
+      "title": "Package version matches tag v4.0.0",
+      "severity": "info",
+      "claim": "pyproject.toml version 4.0.0 and src/settlement/__init__.py __version__ 4.0.0 match requested ref v4.0.0; a non-draft GitHub release exists for that tag.",
+      "confidence": 0.95,
       "evidence_ids": [
-        "E-013",
-        "E-015"
+        "E-005",
+        "E-015",
+        "E-022",
+        "E-008"
       ],
-      "recommended_action": "Declare and run a packaging step in CI (e.g. python -m build) and retain a build report for the release ref.",
+      "recommended_action": "No version-alignment change required.",
       "verification_status": "pending",
       "origin": "analyzer"
     },
     {
       "id": "F-006",
-      "audit_run_id": "aud_13cc5036cae8",
-      "category": "docs",
-      "title": "Release documentation is minimal",
-      "severity": "low",
-      "claim": "README.md is a three-line description with no install, test, or release reproduction steps.",
-      "confidence": 0.9,
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "build",
+      "title": "No declared build/release command or build report",
+      "severity": "info",
+      "claim": "Deterministic checks found no matching build/release command and no build report; inspection also found no Makefile or package scripts beyond setuptools metadata.",
+      "confidence": 0.8,
       "evidence_ids": [
-        "E-016"
+        "E-013"
       ],
-      "recommended_action": "Document install, test markers, and how to cut a v* release.",
+      "recommended_action": "If artifacts are published, add an explicit build/publish job and retain a build report for the release ref.",
       "verification_status": "pending",
       "origin": "analyzer"
     },
     {
       "id": "F-007",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "category": "security",
       "title": "No secret patterns detected in scanned files",
       "severity": "info",
-      "claim": "Secret scan of 11 tracked text files reported no known secret patterns.",
+      "claim": "Secret scan of 11 text files reported no known secret patterns.",
       "confidence": 0.85,
       "evidence_ids": [
         "E-007",
         "E-009"
       ],
-      "recommended_action": "Keep scanning on the release path; consider adding a dependency audit job.",
+      "recommended_action": "Continue scanning on future releases.",
       "verification_status": "pending",
       "origin": "analyzer"
     },
     {
       "id": "F-008",
-      "audit_run_id": "aud_13cc5036cae8",
-      "category": "migrations",
-      "title": "No database migrations in repository",
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "config",
+      "title": "No default-less required environment variables detected",
       "severity": "info",
-      "claim": "No migration directory or migration files were found; this check is not applicable to the current tree.",
-      "confidence": 0.9,
+      "claim": "Checks reported no required environment variable access without defaults in source.",
+      "confidence": 0.8,
+      "evidence_ids": [],
+      "recommended_action": "None for this ref.",
+      "verification_status": "pending",
+      "origin": "analyzer"
+    },
+    {
+      "id": "F-009",
+      "audit_run_id": "aud_edc9bab77e69",
+      "category": "migrations",
+      "title": "No database migrations in the repository",
+      "severity": "info",
+      "claim": "No migration directory or migration files were found.",
+      "confidence": 0.85,
       "evidence_ids": [
         "E-009"
       ],
-      "recommended_action": "None unless a datastore is introduced.",
+      "recommended_action": "None unless a datastore is introduced later.",
       "verification_status": "pending",
       "origin": "analyzer"
     }
@@ -158,14 +171,14 @@
         "E-018"
       ],
       "contradicting_evidence": [],
-      "reason_summary": "Cited files show six test defs (four unmarked in test_unit.py, two @pytest.mark.integration in test_payment_gateway_integration.py). The only workflow (.github/workflows/ci.yml) runs pytest -m \"not integration\", matching the 4/4 test report. Repo search found no other pytest/CI job that would run the integration tests.",
+      "reason_summary": "ci.yml runs pytest -m \"not integration\" as the only test job. test_payment_gateway_integration.py has two @pytest.mark.integration tests; test_unit.py has four unmarked tests. Reports show 4/4 passed matching the filter. No other workflow or config runs the integration tests.",
       "verifier_error": null
     }
   ],
   "evidence": [
     {
       "id": "E-001",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "test_result",
       "source_path": "test_report",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -189,7 +202,7 @@
     },
     {
       "id": "E-002",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -205,7 +218,7 @@
     },
     {
       "id": "E-003",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": ".github/workflows/ci.yml",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -228,7 +241,7 @@
     },
     {
       "id": "E-004",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": "github_actions_runs",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -250,7 +263,7 @@
     },
     {
       "id": "E-005",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "manifest",
       "source_path": "pyproject.toml",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -265,7 +278,7 @@
     },
     {
       "id": "E-006",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "deterministic_check",
       "source_path": "<repository tree>",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -279,7 +292,7 @@
     },
     {
       "id": "E-007",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "deterministic_check",
       "source_path": "<repository tree>",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -293,7 +306,7 @@
     },
     {
       "id": "E-008",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "repository_metadata",
       "source_path": "repository_metadata.json",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -329,7 +342,7 @@
     },
     {
       "id": "E-009",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "git_metadata",
       "source_path": ".",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -389,7 +402,7 @@
     },
     {
       "id": "E-010",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -406,7 +419,7 @@
     },
     {
       "id": "E-011",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": "github_actions_runs.json",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -430,7 +443,7 @@
     },
     {
       "id": "E-012",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "test_result",
       "source_path": "test_report.json",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -449,7 +462,7 @@
     },
     {
       "id": "E-013",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "build_result",
       "source_path": "build_report.json",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -463,7 +476,7 @@
     },
     {
       "id": "E-014",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": ".github/workflows/ci.yml",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -483,7 +496,7 @@
     },
     {
       "id": "E-015",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "pyproject.toml",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -503,7 +516,7 @@
     },
     {
       "id": "E-016",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "README.md",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -523,7 +536,7 @@
     },
     {
       "id": "E-017",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "tests/test_payment_gateway_integration.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -543,7 +556,7 @@
     },
     {
       "id": "E-018",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "tests/test_unit.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -563,7 +576,7 @@
     },
     {
       "id": "E-019",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "src/settlement/engine.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -583,27 +596,27 @@
     },
     {
       "id": "E-020",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
-      "source_path": "src/settlement/__init__.py",
+      "source_path": "src/settlement/validators.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
       "line_start": 1,
-      "line_end": 3,
-      "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018",
-      "summary": "Read file src/settlement/__init__.py (lines 1-3)",
+      "line_end": 5,
+      "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db",
+      "summary": "Read file src/settlement/validators.py (lines 1-5)",
       "payload": {
-        "path": "src/settlement/__init__.py",
+        "path": "src/settlement/validators.py",
         "start_line": 1,
-        "end_line": 3,
-        "total_lines": 3,
-        "content": "\"\"\"Settlement engine module.\"\"\"\n\n__version__ = \"4.0.0\"",
+        "end_line": 5,
+        "total_lines": 5,
+        "content": "\"\"\"Transaction validators.\"\"\"\n\n\ndef validate_currency(curr: str) -> bool:\n    return curr.upper() in {\"USD\", \"EUR\", \"GBP\"}",
         "truncated": false,
-        "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018"
+        "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db"
       }
     },
     {
       "id": "E-021",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": "src/settlement/models.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -623,27 +636,27 @@
     },
     {
       "id": "E-022",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
-      "source_path": "src/settlement/validators.py",
+      "source_path": "src/settlement/__init__.py",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
       "line_start": 1,
-      "line_end": 5,
-      "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db",
-      "summary": "Read file src/settlement/validators.py (lines 1-5)",
+      "line_end": 3,
+      "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018",
+      "summary": "Read file src/settlement/__init__.py (lines 1-3)",
       "payload": {
-        "path": "src/settlement/validators.py",
+        "path": "src/settlement/__init__.py",
         "start_line": 1,
-        "end_line": 5,
-        "total_lines": 5,
-        "content": "\"\"\"Transaction validators.\"\"\"\n\n\ndef validate_currency(curr: str) -> bool:\n    return curr.upper() in {\"USD\", \"EUR\", \"GBP\"}",
+        "end_line": 3,
+        "total_lines": 3,
+        "content": "\"\"\"Settlement engine module.\"\"\"\n\n__version__ = \"4.0.0\"",
         "truncated": false,
-        "content_hash": "sha256:bc4d30e857b5a0685a36e932332a404b714dcedad24aee6695fa6d09f37ba1db"
+        "content_hash": "sha256:c397c1254cc09d6cf2e3697fc8ea5bee75639f2803bc0a888f23b71ca0e5a018"
       }
     },
     {
       "id": "E-023",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_actions",
       "source_path": ".github/workflows",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
@@ -660,115 +673,38 @@
     },
     {
       "id": "E-024",
-      "audit_run_id": "aud_13cc5036cae8",
+      "audit_run_id": "aud_edc9bab77e69",
       "source_type": "github_file",
       "source_path": ".",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
       "line_start": null,
       "line_end": null,
-      "content_hash": "sha256:caff2b0cda148c115ba3d4ac86eeea5a4b3afb50f83e4ed24658959412a7721e",
-      "summary": "Search pattern 'pytest' in repository",
+      "content_hash": "sha256:8df5c1961f52cb5421e9fa6ec30c665fb0b10443238fe45544468cb106aca2f9",
+      "summary": "Search pattern 'integration' in repository",
       "payload": {
-        "pattern": "pytest",
-        "glob": null,
-        "hits": [
-          {
-            "path": ".github/workflows/ci.yml",
-            "line_number": 27,
-            "line": "        run: pytest -v -m \"not integration\" --junitxml=reports/junit.xml"
-          },
-          {
-            "path": ".gitignore",
-            "line_number": 3,
-            "line": ".pytest_cache/"
-          },
-          {
-            "path": "pyproject.toml",
-            "line_number": 15,
-            "line": "    \"pytest>=8.0\""
-          },
-          {
-            "path": "pyproject.toml",
-            "line_number": 18,
-            "line": "[tool.pytest.ini_options]"
-          },
-          {
-            "path": "tests/test_payment_gateway_integration.py",
-            "line_number": 1,
-            "line": "import pytest"
-          },
-          {
-            "path": "tests/test_payment_gateway_integration.py",
-            "line_number": 4,
-            "line": "@pytest.mark.integration"
-          },
-          {
-            "path": "tests/test_payment_gateway_integration.py",
-            "line_number": 9,
-            "line": "@pytest.mark.integration"
-          }
-        ],
-        "total_hits": 7
+        "pattern": "integration",
+        "glob": "*.{yml,yaml,toml,cfg,ini,md}",
+        "hits": [],
+        "total_hits": 0
       }
     },
     {
       "id": "E-025",
-      "audit_run_id": "aud_13cc5036cae8",
-      "source_type": "git_metadata",
-      "source_path": ".",
+      "audit_run_id": "aud_edc9bab77e69",
+      "source_type": "test_result",
+      "source_path": "test_report.json",
       "source_ref": "fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
       "line_start": null,
       "line_end": null,
-      "content_hash": "sha256:9baca9392ffeac8646fe41bcf6dac25c477cedf7f9aa9139cae5bf12e573c0dc",
-      "summary": "Repository file tree",
+      "content_hash": "sha256:521a3640732eca381c612f9bfe2d2265112e8c2101bfdf15574a9f78af3abdbf",
+      "summary": "Test execution report",
       "payload": {
-        "tree": [
-          {
-            "path": ".github/workflows/ci.yml",
-            "size_bytes": 563
-          },
-          {
-            "path": ".gitignore",
-            "size_bytes": 51
-          },
-          {
-            "path": "LICENSE",
-            "size_bytes": 620
-          },
-          {
-            "path": "README.md",
-            "size_bytes": 77
-          },
-          {
-            "path": "pyproject.toml",
-            "size_bytes": 402
-          },
-          {
-            "path": "src/settlement/__init__.py",
-            "size_bytes": 55
-          },
-          {
-            "path": "src/settlement/engine.py",
-            "size_bytes": 91
-          },
-          {
-            "path": "src/settlement/models.py",
-            "size_bytes": 161
-          },
-          {
-            "path": "src/settlement/validators.py",
-            "size_bytes": 123
-          },
-          {
-            "path": "tests/test_payment_gateway_integration.py",
-            "size_bytes": 183
-          },
-          {
-            "path": "tests/test_unit.py",
-            "size_bytes": 180
-          }
-        ],
-        "total_files": 11
+        "test_report": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "failures": []
+        }
       }
     }
   ],
@@ -859,8 +795,8 @@
     }
   ],
   "limitations": [],
-  "runtime_ms": 58509,
+  "runtime_ms": 50800,
   "model_id": "grok-4.6",
   "prompt_version": "final-v2",
-  "estimated_cost_usd": 0.083552
+  "estimated_cost_usd": 0.079464
 }

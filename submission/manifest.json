@@ -31,7 +31,7 @@
     "cases_total": 12,
     "timeout_s": 300
   },
-  "case_12_run_id": "aud_13cc5036cae8",
+  "case_12_run_id": "aud_edc9bab77e69",
   "required_artifacts": [
     "results/baseline/results.json",
     "results/final/results.json",

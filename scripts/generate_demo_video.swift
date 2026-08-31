@@ -25,121 +25,115 @@ let fps: Int32 = 24
 let secondsPerSlide = 10
 let slides = [
     Slide(
-        title: "ReleaseGuard",
+        title: "ReleaseGuard Overview",
         lines: [
             "SUBMISSION WALKTHROUGH / 01",
-            "Persona: Tech Lead or Release Engineer",
-            "Bottleneck: release evidence is scattered across CI, tests, builds, and docs",
-            "Value: a redacted, evidence-backed GO / REVIEW / NO-GO in minutes",
-            "Scope: read-only public repository audit, bound to an immutable commit SHA",
+            "Persona: Tech Lead or Release Engineer cutting a production release",
+            "Bottleneck: release signals scattered across CI, tests, locks, migrations & workflows",
+            "Value: evidence-backed GO / REVIEW / NO-GO report bound to immutable commit SHA",
+            "Architecture: Deterministic Checks -> Analyzer -> Verifier -> Decision Policy",
         ],
         accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
     ),
     Slide(
-        title: "The fair baseline",
+        title: "Live Execution: Case 12",
         lines: [
             "SUBMISSION WALKTHROUGH / 02",
-            "$ make baseline",
-            "12 identical frozen cases / same output contract",
-            "B1: one direct general-purpose path, no checklist or Verifier",
-            "CBR 0.4444   decision accuracy 0.4167   runtime 0.449s",
-            "OfflineFixtureLLM simulation, not official Gemini",
+            "$ releaseguard audit --case eval/cases/case_12 --mode final",
+            "Target: https://github.com/eval/case_12 | Requested ref: v4.0.0",
+            "Resolved immutable commit SHA: fc00d35fc5c809b82e27fcd01df6e714c3efa9a1",
+            "Provider: live xAI grok-4.6 | Prompt: final-v2 | Mode: final (50.8s runtime)",
         ],
         accent: CGColor(red: 0.98, green: 0.55, blue: 0.30, alpha: 1.0)
     ),
     Slide(
-        title: "What the baseline misses",
+        title: "Deterministic Pre-flight",
         lines: [
             "SUBMISSION WALKTHROUGH / 03",
-            "case_05  required production environment setting -> missed",
-            "case_07  release ref and manifest version conflict -> missed",
-            "case_09  release workflow excludes the release branch -> missed",
-            "case_12  green CI does not exercise the critical integration path",
-            "Failure mode: no structured coverage across cross-file signals",
+            "DC-01 Test execution [WARN]: 6 tests found, test report accounts for only 4",
+            "DC-02 CI workflow [PASS]: Found .github/workflows/ci.yml configured for v4.0.0",
+            "DC-04 CI status [PASS]: Latest recorded CI run for v4.0.0 is 'success'",
+            "DC-05 Release version [PASS]: pyproject.toml '4.0.0' matches requested tag",
+            "DC-10 Secret scan [PASS]: 0 secrets detected across 11 scanned text files",
         ],
         accent: CGColor(red: 0.95, green: 0.35, blue: 0.35, alpha: 1.0)
     ),
     Slide(
-        title: "Final workflow",
+        title: "Analyzer Phase: Finding F-001",
         lines: [
             "SUBMISSION WALKTHROUGH / 04",
-            "$ make evaluate",
-            "resolve SHA -> snapshot -> deterministic checks",
-            "AuditPlan -> Analyzer -> Verifier falsification",
-            "evidence IDs -> policy -> JSON + Markdown + trajectory",
-            "All 12 fixture runs completed successfully",
+            "Tool call: read_file('.github/workflows/ci.yml') -> Evidence E-014",
+            "Tool call: read_file('tests/test_payment_gateway_integration.py') -> Evidence E-017",
+            "Finding F-001 (HIGH): CI runs pytest -v -m 'not integration', which excludes",
+            "the two integration tests in tests/test_payment_gateway_integration.py",
+            "Evidence: E-001 (test report), E-014 (ci.yml), E-017 (integration tests)",
         ],
         accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
     ),
     Slide(
-        title: "Realistic execution: case 12",
+        title: "Verifier: Falsification Attempt",
         lines: [
             "SUBMISSION WALKTHROUGH / 05",
-            "$ make demo CASE=case_12",
-            "snapshot: immutable fixture SHA / CI conclusion: success",
-            "Analyzer: integration tests are not run for the release path",
-            "Verifier: confirms the cited workflow and test evidence",
-            "Policy: NO-GO | report.json + report.md + snapshot.json saved",
+            "Routing: candidate F-001 sent to independent Verifier agent to search refutations",
+            "Verifier queries workflow configs: checks for secondary/release test jobs",
+            "Result: No overriding job found; claim verified against immutable tree",
+            "Verification status: CONFIRMED | Confidence: 0.95",
         ],
         accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
     ),
     Slide(
-        title: "Evidence before persistence",
+        title: "Audit Report: runs/<id>/report.md",
         lines: [
             "SUBMISSION WALKTHROUGH / 06",
-            "read_file(.env) -> [REDACTED: secret file contents omitted]",
-            "EvidenceStore -> redacted payload -> SQLite/report/trajectory",
-            "private repository -> reject before ref or content access",
-            "critical/high finding -> evidence IDs -> independent falsification",
-            "No raw secret body is shipped in report.json or SQLite",
+            "Final Decision: REVIEW (0 critical, 1 confirmed high-risk blocker)",
+            "Confirmed finding: F-001 integration tests excluded from CI on release ref",
+            "Action: Run integration tests in a required CI job before shipping v4.0.0",
+            "Artifacts persisted: report.md, report.json, snapshot.json, releaseguard.sqlite3",
         ],
         accent: CGColor(red: 0.98, green: 0.55, blue: 0.30, alpha: 1.0)
     ),
     Slide(
-        title: "Experiments that earned their place",
+        title: "Security Redaction & Trajectory",
         lines: [
             "SUBMISSION WALKTHROUGH / 07",
-            "Verifier ON CBR 1.0000 | OFF 1.0000 -> no lift on frozen cases",
-            "Evidence ON/OFF -> same metrics; adversarial cases are still needed",
-            "No deterministic checks -> CBR 0.0000 / decision accuracy 0.1667",
-            "It5 CI + Security + Test subagents -> CBR 0.5556 -> REMOVE",
-            "More agents are not a substitute for an evidence boundary",
+            "Inspection: trajectories/<id>.jsonl (Analyzer + Verifier steps logged)",
+            "Security: .env & secret bodies omitted; only structural hashes persisted",
+            "Evidence integrity: every finding references immutable SHA fc00d35... evidence",
+            "Read-only safety: GET-only GitHub adapter; private repos rejected",
         ],
-        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
+        accent: CGColor(red: 0.98, green: 0.55, blue: 0.30, alpha: 1.0)
     ),
     Slide(
-        title: "Measured result and boundary",
+        title: "Live Results: Grok-4.6 vs B1",
         lines: [
             "SUBMISSION WALKTHROUGH / 08",
-            "OFFLINE FIXTURE SIMULATION / same frozen 12 cases",
-            "B1 CBR 0.4444 -> Final CBR 1.0000 (+55.56 pp)",
-            "Final: precision 1.0000 / critical evidence 100% / unsupported 0",
-            "Final: successful run rate 100% / fixture cost $0.0000",
-            "Official LLM baseline + final: UNAVAILABLE after provider HTTP 429",
+            "Critical Blocker Recall (CBR): 0.7778 -> 0.8889 (+11.11 percentage points)",
+            "Precision: 0.2812 -> 0.4762 (+19.50 percentage points; held-out +14.42 pp)",
+            "Development Decision Accuracy: 0.5000 -> 1.0000 (+50.00 pp, perfect 8/8)",
+            "Critical Evidence Coverage: 100.0% (0 unsupported critical claims)",
         ],
         accent: CGColor(red: 0.45, green: 0.82, blue: 0.38, alpha: 1.0)
     ),
     Slide(
-        title: "Reproduce and package",
+        title: "Live Verifier Ablation: ON vs OFF",
         lines: [
             "SUBMISSION WALKTHROUGH / 09",
-            "$ make setup && make test",
-            "$ make baseline && make evaluate && make ablations",
-            "$ make demo CASE=case_12",
-            "$ .venv/bin/python scripts/package_submission.py",
-            "$ .venv/bin/python scripts/verify_submission_zip.py dist/releaseguard_submission.zip",
+            "Full 12-case live ablation: Verifier ON vs Verifier OFF (no_verifier)",
+            "Zero quality delta: CBR 0.8889 = 0.8889 | Decision Accuracy 0.7500 = 0.7500",
+            "False positive count: 11 (ON) vs 11 (OFF) | Verifier confirmed 21/21 candidates",
+            "Overhead: +49.5% runtime (758.6s vs 507.4s) and +79.5% API cost ($1.18 vs $0.66)",
+            "Quantitative negative result: Precision gain belongs to upstream It9 rubric",
         ],
-        accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
+        accent: CGColor(red: 0.68, green: 0.50, blue: 0.95, alpha: 1.0)
     ),
     Slide(
-        title: "ReleaseGuard in one line",
+        title: "Key Takeaways & Governance",
         lines: [
             "SUBMISSION WALKTHROUGH / 10",
-            "The user gets a release decision they can inspect and challenge",
-            "The system does not deploy, push, merge, or access private repositories",
-            "Analyzer proposes; Verifier tries to falsify; policy stays deterministic",
-            "Offline numbers are labelled simulation until a live LLM pair exists",
-            "Evidence is the boundary. Human approval remains the release gate.",
+            "The valuable unit is a trustworthy evidence boundary, not extra agent layers",
+            "Honest benchmark governance: we publish measured negative results openly",
+            "Full reproduction: $ make setup && make test && make baseline && make evaluate",
+            "ReleaseGuard: human Tech Lead retains full ownership with verified evidence",
         ],
         accent: CGColor(red: 0.22, green: 0.78, blue: 0.78, alpha: 1.0)
     ),

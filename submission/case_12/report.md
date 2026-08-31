@@ -7,7 +7,7 @@ Decision: REVIEW
 
 ## Executive summary
 
-Analyzed 8 candidate finding(s) across 10 deterministic check(s). Decision: REVIEW. 0 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.
+Analyzed 9 candidate finding(s) across 10 deterministic check(s). Decision: REVIEW. 0 confirmed critical, 1 confirmed high, 0 finding(s) require human review, 0 rejected.
 
 ## Confirmed blockers
 
@@ -16,7 +16,7 @@ None.
 ## High-risk warnings
 
 ### F-001 — HIGH
-The repository defines 6 test functions in 2 files, but the latest test report accounts for only 4 passed tests. CI runs `pytest -v -m "not integration"`, which excludes the two `@pytest.mark.integration` tests in tests/test_payment_gateway_integration.py. No other required job was observed that executes those tests.
+The repository defines 6 test functions in 2 files, but CI runs pytest with -m "not integration" and the latest test report accounts for only 4 passing tests. The two tests in tests/test_payment_gateway_integration.py are marked @pytest.mark.integration and are therefore not executed on the release ref.
 
 Evidence:
 E-001 — test_report — Test report: 4/4 passed, 0 failed
@@ -29,7 +29,7 @@ Verification: CONFIRMED
 Confidence: 0.95
 
 Recommended action:
-Run integration tests in a required CI job on the release ref (or document and gate them as a required check) so all defined tests are executed before release.
+Run integration tests in a required CI job for release tags (or document and gate them equivalently) so all defined tests are accounted for before shipping v4.0.0.
 
 
 ## Uncertain findings (needs human review)
@@ -54,8 +54,34 @@ Other results:
 
 ## Other findings
 
-### F-002 — INFO
-A workflow at .github/workflows/ci.yml is configured to trigger for tag v4.0.0, and the latest recorded CI run for that ref concluded success.
+### F-002 — MEDIUM
+pyproject.toml declares runtime and test dependencies (pydantic>=2.0, pytest>=8.0) but no recognized lockfile is present, so installs for this release are not pinned to exact versions.
+
+Evidence:
+E-006 — <repository tree> — No lockfile found for dependency manifest
+E-015 — pyproject.toml:1-21 — Read file pyproject.toml (lines 1-21)
+
+Verification: PENDING
+Confidence: 0.90
+
+Recommended action:
+Add and commit a lockfile (e.g. uv.lock, poetry.lock, or pip-tools requirements.txt) generated from the v4.0.0 dependency set and install from it in CI.
+
+### F-003 — LOW
+README.md is a three-line description with no changelog, install, or upgrade notes for tag v4.0.0, despite a GitHub release named Release 4.0.0.
+
+Evidence:
+E-016 — README.md:1-3 — Read file README.md (lines 1-3)
+E-008 — repository_metadata.json — Repository metadata
+
+Verification: PENDING
+Confidence: 0.85
+
+Recommended action:
+Document install steps, version 4.0.0 changes, and upgrade notes in README or CHANGELOG aligned with the GitHub release.
+
+### F-004 — INFO
+One workflow .github/workflows/ci.yml is configured to trigger on v* tags including v4.0.0; the latest recorded run for that ref concluded success.
 
 Evidence:
 E-002 — .github/workflows — Found 1 workflow file(s)
@@ -69,63 +95,37 @@ Verification: PENDING
 Confidence: 0.95
 
 Recommended action:
-Keep the tag trigger and required test job; add coverage for currently excluded integration tests.
+Keep the tag trigger; expand the test job so excluded markers do not leave release-critical tests unverified.
 
-### F-003 — INFO
-pyproject.toml version 4.0.0 and src/settlement/__init__.py __version__ 4.0.0 match the audited tag v4.0.0; a GitHub release named Release 4.0.0 exists for that tag.
+### F-005 — INFO
+pyproject.toml version 4.0.0 and src/settlement/__init__.py __version__ 4.0.0 match requested ref v4.0.0; a non-draft GitHub release exists for that tag.
 
 Evidence:
 E-005 — pyproject.toml — Manifest version: '4.0.0'
-E-008 — repository_metadata.json — Repository metadata
 E-015 — pyproject.toml:1-21 — Read file pyproject.toml (lines 1-21)
-E-020 — src/settlement/__init__.py:1-3 — Read file src/settlement/__init__.py (lines 1-3)
+E-022 — src/settlement/__init__.py:1-3 — Read file src/settlement/__init__.py (lines 1-3)
+E-008 — repository_metadata.json — Repository metadata
 
 Verification: PENDING
 Confidence: 0.95
 
 Recommended action:
-No change required for version alignment.
+No version-alignment change required.
 
-### F-004 — MEDIUM
-A dependency manifest is present (pyproject.toml with pydantic and optional pytest) but no recognized lockfile was found, so release installs are not guaranteed to be reproducible.
-
-Evidence:
-E-006 — <repository tree> — No lockfile found for dependency manifest
-E-015 — pyproject.toml:1-21 — Read file pyproject.toml (lines 1-21)
-
-Verification: PENDING
-Confidence: 0.90
-
-Recommended action:
-Add and commit a lockfile (e.g. pip-tools/uv lock) and install from it in CI.
-
-### F-005 — LOW
-Deterministic checks found no matching build/release command and no build report; inspection of pyproject.toml shows a setuptools build-system but no [project.scripts] or other packaging/release script.
+### F-006 — INFO
+Deterministic checks found no matching build/release command and no build report; inspection also found no Makefile or package scripts beyond setuptools metadata.
 
 Evidence:
 E-013 — build_report.json — Build and packaging report
-E-015 — pyproject.toml:1-21 — Read file pyproject.toml (lines 1-21)
 
 Verification: PENDING
-Confidence: 0.85
+Confidence: 0.80
 
 Recommended action:
-Declare and run a packaging step in CI (e.g. python -m build) and retain a build report for the release ref.
-
-### F-006 — LOW
-README.md is a three-line description with no install, test, or release reproduction steps.
-
-Evidence:
-E-016 — README.md:1-3 — Read file README.md (lines 1-3)
-
-Verification: PENDING
-Confidence: 0.90
-
-Recommended action:
-Document install, test markers, and how to cut a v* release.
+If artifacts are published, add an explicit build/publish job and retain a build report for the release ref.
 
 ### F-007 — INFO
-Secret scan of 11 tracked text files reported no known secret patterns.
+Secret scan of 11 text files reported no known secret patterns.
 
 Evidence:
 E-007 — <repository tree> — No secret patterns detected across 11 scanned file(s)
@@ -135,19 +135,31 @@ Verification: PENDING
 Confidence: 0.85
 
 Recommended action:
-Keep scanning on the release path; consider adding a dependency audit job.
+Continue scanning on future releases.
 
 ### F-008 — INFO
-No migration directory or migration files were found; this check is not applicable to the current tree.
+Checks reported no required environment variable access without defaults in source.
+
+Evidence:
+(no evidence cited)
+
+Verification: PENDING
+Confidence: 0.80
+
+Recommended action:
+None for this ref.
+
+### F-009 — INFO
+No migration directory or migration files were found.
 
 Evidence:
 E-009 — . — Repository file tree
 
 Verification: PENDING
-Confidence: 0.90
+Confidence: 0.85
 
 Recommended action:
-None unless a datastore is introduced.
+None unless a datastore is introduced later.
 
 
 ## Findings rejected by Verifier
@@ -156,7 +168,7 @@ None.
 
 ## Recommended human actions
 
-- F-001: Run integration tests in a required CI job on the release ref (or document and gate them as a required check) so all defined tests are executed before release.
+- F-001: Run integration tests in a required CI job for release tags (or document and gate them equivalently) so all defined tests are accounted for before shipping v4.0.0.
 
 ## Limitations
 
@@ -164,7 +176,7 @@ None noted.
 
 ## Run metadata
 
-Runtime: 58509 ms
+Runtime: 50800 ms
 Model: grok-4.6
 Prompt version: final-v2
-Estimated LLM cost: $0.0836
+Estimated LLM cost: $0.0795
